@@ -1,8 +1,8 @@
-'''Convential commits parser in Python.'''
+'''Convenience tools to manage Git projects with Python.'''
 # -*- coding: utf-8 -*-
 
 __author__ = 'Jesse P. Johnson'
-__title__ = 'convential_commits_parser'
+__title__ = 'git_tools'
 __version__ = '0.1.0'
 __license__ = 'Apache-2.0'
 

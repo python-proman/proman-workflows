@@ -1,11 +1,12 @@
 [tool.poetry]
-name = "convential_commits_parser"
+name = "git_tools"
 version = "0.1.0"
 description = "Convential commits parser in Python."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
+argufy = {version = "^0.1.1-alpha.5", allow-prereleases = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -23,13 +24,16 @@ mkdocs-material = "^5.4.0"
 flit = "^2.3.0"
 
 [tool.flit.metadata]
-module = "convential_commits_parser"
+module = "git_tools"
 author = "Jesse P. Johnson"
 author-email = "jpj6652@gmail.com"
 home-page = "https://github.com/kuwv/python-convential-commits-parser"
 requires = []
 
 classifiers = ["License :: OSI Approved :: Apache Software License"]
+
+[tool.flit.scripts]
+git-tools = "git_tools.__main__:main"
 
 [tool.black]
 include = '\.pyi?$'

@@ -2,7 +2,7 @@
 from invoke import call, task  # type: ignore
 
 
-from convential_commits_parser import __version__
+from git_tools import __version__
 
 
 if 'dev' in __version__ or 'rc' in __version__:
@@ -54,13 +54,13 @@ def unit_test(ctx, capture=None):
 def static_analysis(ctx):
     '''Perform static code analysis on imports.'''
     ctx.run('safety check')
-    ctx.run('bandit -r convential_commits_parser')
+    ctx.run('bandit -r git_tools')
 
 
 @task
 def coverage(ctx, report=None):
     '''Perform coverage checks for tests.'''
-    args = ['--cov=convential_commits_parser']
+    args = ['--cov=git_tools']
     if report:
         args.append('--cov-report={}'.format(report))
     ctx.run("pytest {} ./tests/".format(' '.join(args)))
@@ -133,6 +133,6 @@ def clean(ctx):
     paths = ['dist', 'logs']
     paths.append('**/__pycache__')
     paths.append('**/*.pyc')
-    paths.append('convential_commits_parser.egg-info')
+    paths.append('git_tools.egg-info')
     for path in paths:
         ctx.run("rm -rf {}".format(path))
