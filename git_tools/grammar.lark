@@ -1,0 +1,24 @@
+//
+// Base elements
+//
+scope: "(" STRING ")"
+type: STRING [scope]
+description: STRING
+issue: "#" [STRING "-" NUMBER]
+
+//
+// Message format
+//
+// <type>[optional scope]: <description>
+//
+// [optional body]
+//
+// [optional footer]
+title: type ":" description
+
+?body: description
+
+?footer: description [issue]
+
+%import common.WS
+%ignore WS
