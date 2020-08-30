@@ -1,0 +1,19 @@
+#!/usr/sbin/python
+'''Test git hooks pipeline.'''
+from pypyr import log, pipelinerunner
+
+
+log.logger.set_root_logger(
+    log_level={{ hooks_log_level }},
+    log_path={% if hooks_log_path %}'{{ hooks_log_path }}'{% else %}None{% endif %}
+)
+
+
+pipelinerunner.main(
+    pipeline_name='.git-hooks.yaml',
+    pipeline_context_input='{{ hooks_pipeline_context_input }}',
+    working_dir='{{ hooks_working_dir }}',
+    groups=[{% for group in hooks_groups %}'{{ group }}'{% if not loop.last %},{% endif %}{% endfor %}],
+    success_group='{{ hooks_success_group }}',
+    failure_group='{{ hooks_failure_group }}'
+)

@@ -24,20 +24,20 @@ exec git submodule update
 '''
 
 
-def setup(ctx):
+def setup():
     '''Do setup for post checkout hooks.'''
-    path = os.getcwd() + '/.git/hooks/post-checkout'
+    path = os.path.join(os.getcwd(), '.git', 'hooks', 'post-checkout')
     with open(path, 'w') as f:
         f.write(post_commit)
 
 
-def index(ctx):
+def index():
     '''List submodules with project.'''
     for sm in repo.submodules:
         print(sm)
 
 
-def view(ctx, name=None):
+def view(name=None):
     '''View project info.'''
     if name:
         sm = repo.submodule(name)
@@ -46,13 +46,13 @@ def view(ctx, name=None):
         print('No module name provided')
 
 
-def add(ctx, module=None, url=None, branch='master', path=None):
+def add(module=None, url=None, branch='master', path=None):
     '''Add submodule to project.'''
     repo.create_submodule(module, path, url=url, branch=branch)
     repo.index.commit(f'Added {module} submodule')
 
 
-def update(ctx, name=None):
+def update(name=None):
     '''Update submodule within project.'''
     if name:
         sm = repo.submodule(name)
@@ -61,7 +61,7 @@ def update(ctx, name=None):
         repo.submodule_update(recursive=False)
 
 
-def remove(ctx, name=None, module=True, force=True, configuration=True):
+def remove(name=None, module=True, force=True, configuration=True):
     '''Remove submodule from repository.
 
     Parameters

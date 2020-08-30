@@ -1,0 +1,18 @@
+---
+pre-commit:
+  - name: pypyr.steps.cmd
+    description: test
+    in:
+      cmd: echo 'check'
+
+# pre-commit-success:
+#   - name: pypyr.steps.echo
+#     description: test
+#     in:
+#       echo: success
+
+# pre-commit-failure:
+#   - name: pypyr.steps.echo
+#     description: test
+#     in:
+#       echo: failed

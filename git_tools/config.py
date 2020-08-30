@@ -3,10 +3,11 @@
 # license: Apache 2.0, see LICENSE for more details.
 '''Provide CLI for git-tools.'''
 
+import git
 import os
 from configparser import ConfigParser
 
-git_repo = git.Repo('.git', search_parent_directories=True
+git_repo = git.Repo('.git', search_parent_directories=True)
 git_root_path = git_repo.git.rev_parse('--show-toplevel')
 git_hooks_path = os.path.join(git_root_path, '.git', 'hooks')
 config_path = os.path.join(git_root_path, '.git-tools')
