@@ -6,10 +6,10 @@ authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-argufy = "0.1.1.dev4"
 compendium = "^0.1.1-alpha.63"
 pypyr = "^4.0.0"
 jinja2 = "^2.11.2"
+argufy = "^0.1.1-alpha.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

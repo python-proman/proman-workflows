@@ -13,6 +13,7 @@ def main():
     parser = Parser()
     parser.add_subcommands(hooks)
     # parser.add_subcommands(submodule)
+    hooks.test = 'test'
     parser.dispatch()
 
 
