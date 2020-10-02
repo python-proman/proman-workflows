@@ -1,24 +1,45 @@
 //
-// Base elements
-//
-scope: "(" STRING ")"
-type: STRING [scope]
-description: STRING
-issue: "#" [STRING "-" NUMBER]
-
-//
 // Message format
 //
 // <type>[optional scope]: <description>
 //
 // [optional body]
 //
-// [optional footer]
-title: type ":" description
+// [optional footer(s)]
+//
+message: title [body] [footer]
 
-?body: description
+title: TYPE SEP SHORT_DESCRIPTION
 
-?footer: description [issue]
+// ?body: DESCRIPTION
+?body: (NEWLINE | CNAME | NUMBER)+
 
+?footer: NEWLINE ([BREAKING_CHANGE SEP] SHORT_DESCRIPTION [ISSUE])+
+
+TYPE: TYPES SCOPE? BREAK?
+BREAK: "!"
+SCOPE: "(" CNAME ")"
+TYPES: "fix"
+     | "feat"
+     | "build"
+     | "chore"
+     | "ci"
+     | "docs"
+     | "style"
+     | "refactor"
+     | "perf"
+     | "test"
+SHORT_DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
+// DESCRIPTION: (NEWLINE | CNAME | NUMBER)+
+BREAKING_CHANGE: "BREAKING CHANGE"
+ISSUE: CNAME " #" [CNAME "-"] INT
+SEP: ": "
+
+%import common.CNAME
+%import common.ESCAPED_STRING
+%import common.INT
+%import common.NEWLINE
+%import common.NUMBER
 %import common.WS
-%ignore WS
+%import common.WS_INLINE
+%ignore WS_INLINE
