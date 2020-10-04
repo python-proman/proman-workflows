@@ -9,14 +9,14 @@
 //
 message: title [body] [footer]
 
-title: TYPE SEP SHORT_DESCRIPTION
+title: TYPES SCOPE? BREAK? ": " SHORT_DESCRIPTION
 
 // ?body: DESCRIPTION
-?body: (NEWLINE | CNAME | NUMBER)+
+?body: (_NL | SHORT_DESCRIPTION)+
 
-?footer: NEWLINE ([BREAKING_CHANGE SEP] SHORT_DESCRIPTION [ISSUE])+
+?footer: (_NL [BREAKING_CHANGE | TRAILER | ISSUE])+
 
-TYPE: TYPES SCOPE? BREAK?
+// TYPE: TYPES SCOPE? BREAK?
 BREAK: "!"
 SCOPE: "(" CNAME ")"
 TYPES: "fix"
@@ -30,16 +30,16 @@ TYPES: "fix"
      | "perf"
      | "test"
 SHORT_DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
-// DESCRIPTION: (NEWLINE | CNAME | NUMBER)+
-BREAKING_CHANGE: "BREAKING CHANGE"
+// DESCRIPTION: (_NL | CNAME | NUMBER)+
+BREAKING_CHANGE: "BREAKING CHANGE" ": " SHORT_DESCRIPTION
 ISSUE: CNAME " #" [CNAME "-"] INT
-SEP: ": "
+TRAILER: CNAME ": " CNAME "<" CNAME ">"
 
 %import common.CNAME
-%import common.ESCAPED_STRING
+%import common.ESCAPED_STRING -> STRING
 %import common.INT
-%import common.NEWLINE
+%import common.NEWLINE -> _NL
 %import common.NUMBER
 %import common.WS
 %import common.WS_INLINE
-%ignore WS_INLINE
+%ignore WS

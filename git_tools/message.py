@@ -12,8 +12,11 @@ grammar_path = os.path.join('git_tools', 'grammars', 'conventional_commits.lark'
 
 message = '''fix(example): test a message
 
-test body of comment 1 test
+test body of comment test
 test body of comment 2 test
+
+Refs #123
+BREAKING CHANGE: This could change things
 '''
 
 parser = Lark.open(grammar_path, start='message', debug=True)
