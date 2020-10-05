@@ -35,7 +35,7 @@ description = "Inspection based parser based on argparse."
 name = "argufy"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.1.1.dev7"
+version = "0.1.1.dev11"
 
 [package.dependencies]
 argparse_color_formatter = ">=1.2.2,<2.0.0"
@@ -168,8 +168,8 @@ category = "main"
 description = ""
 name = "docstring-parser"
 optional = false
-python-versions = "~=3.6"
-version = "0.7.2"
+python-versions = "~=3.5"
+version = "0.7.3"
 
 [[package]]
 category = "dev"
@@ -951,7 +951,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "2b336d4f7bd869001220681d14f9289a7b089d393196225d092446192579e23b"
+content-hash = "50ece2c5319c3812fe4668bff6ac979f50ca8b7db8360de3cbba78e98029632b"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -969,8 +969,8 @@ argparse-color-formatter = [
     {file = "argparse_color_formatter-1.2.2.post2-py3-none-any.whl", hash = "sha256:9861f2aac9ee8c6154d8486c3d6e9c500ebaea6dd89fdca0dbb2612a6ba184b3"},
 ]
 argufy = [
-    {file = "argufy-0.1.1.dev7-py3-none-any.whl", hash = "sha256:b511a90f16ffda9382b76908f0b71a0c433d6c598ed6fda3e5f7f08a7f541768"},
-    {file = "argufy-0.1.1.dev7.tar.gz", hash = "sha256:adb7d13ed7431eac0dbf1b53d3ca5b68388e32be20c6cad2592e4574c6634b38"},
+    {file = "argufy-0.1.1.dev11-py3-none-any.whl", hash = "sha256:56a641fe7cda5a3ed8205fef7d0d53f8e25d7269225252d22c1cf282f78c5ad1"},
+    {file = "argufy-0.1.1.dev11.tar.gz", hash = "sha256:b1dfc538a797bc794c5039231c9240a81db716d73b3608e6354a3e02958b15de"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -1049,7 +1049,7 @@ docstr-coverage = [
     {file = "docstr_coverage-1.2.0.tar.gz", hash = "sha256:850cd492487ca494ea43c16bc68f75594f0cef1e8b699bf053d029064c41fe7f"},
 ]
 docstring-parser = [
-    {file = "docstring_parser-0.7.2.tar.gz", hash = "sha256:8ef4dd7122a0a8a2e057c400968f920628cec8bda207a7355d8f3a05672ffd8d"},
+    {file = "docstring_parser-0.7.3.tar.gz", hash = "sha256:cde5fbf8b846433dfbde1e0f96b7f909336a634d5df34a38cb75050c7346734a"},
 ]
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
