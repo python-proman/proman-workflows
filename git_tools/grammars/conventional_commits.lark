@@ -9,16 +9,17 @@
 //
 message: title [body] [footer]
 
-title: TYPES SCOPE? BREAK? ": " SHORT_DESCRIPTION
+title: type scope? break? ": " description
 
-// ?body: DESCRIPTION
-?body: (_NL | SHORT_DESCRIPTION)+
+?body: (_NL | DESCRIPTION)+
 
-?footer: (_NL [BREAKING_CHANGE | TRAILER | ISSUE])+
+?footer: (_NL [breaking_change | trailer | issue])+
 
-// TYPE: TYPES SCOPE? BREAK?
-BREAK: "!"
-SCOPE: "(" CNAME ")"
+// title
+type: TYPES
+break: "!"
+scope: "(" CNAME ")"
+description: DESCRIPTION
 TYPES: "fix"
      | "feat"
      | "build"
@@ -29,11 +30,26 @@ TYPES: "fix"
      | "refactor"
      | "perf"
      | "test"
-SHORT_DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
-// DESCRIPTION: (_NL | CNAME | NUMBER)+
-BREAKING_CHANGE: "BREAKING CHANGE" ": " SHORT_DESCRIPTION
-ISSUE: CNAME " #" [CNAME "-"] INT
-TRAILER: CNAME ": " CNAME "<" CNAME ">"
+
+// footer
+breaking_change: "BREAKING CHANGE: " DESCRIPTION
+issue: ISSUES " #" [CNAME "-"] INT
+ISSUES: "Refs"
+      | "Fix"
+trailer: token ": " name [email]
+token: TOKENS
+TOKENS: "Acked-by"
+      | "Cc"
+      | "Reviewed-by"
+      | "Reported-by"
+      | "Signed-off-by"
+      | "Tested-by"
+name: DESCRIPTION
+email: "<" EMAIL ">"
+EMAIL: CNAME "@" CNAME "." CNAME
+
+// body
+DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
 
 %import common.CNAME
 %import common.ESCAPED_STRING -> STRING
@@ -42,4 +58,4 @@ TRAILER: CNAME ": " CNAME "<" CNAME ">"
 %import common.NUMBER
 %import common.WS
 %import common.WS_INLINE
-%ignore WS
+// %ignore WS
