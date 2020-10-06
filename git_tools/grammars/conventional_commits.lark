@@ -1,24 +1,60 @@
 //
-// Base elements
-//
-scope: "(" STRING ")"
-type: STRING [scope]
-description: STRING
-issue: "#" [STRING "-" NUMBER]
-
-//
 // Message format
 //
 // <type>[optional scope]: <description>
 //
 // [optional body]
 //
-// [optional footer]
-title: type ":" description
+// [optional footer(s)]
+//
+message: title [body] [footer]
 
-?body: description
+title: type scope? break? ": " description
 
-?footer: description [issue]
+?body: (_NL | DESCRIPTION)+
 
+?footer: (_NL [breaking_change | trailer | issue])+
+
+// title
+type: TYPES
+break: "!"
+scope: "(" CNAME ")"
+description: DESCRIPTION
+TYPES: "fix"
+     | "feat"
+     | "build"
+     | "chore"
+     | "ci"
+     | "docs"
+     | "style"
+     | "refactor"
+     | "perf"
+     | "test"
+
+// footer
+breaking_change: "BREAKING CHANGE: " DESCRIPTION
+issue: ISSUES " #" [CNAME "-"] INT
+ISSUES: "Refs"
+      | "Fix"
+trailer: TOKENS ": " DESCRIPTION ["<" EMAIL ">"]
+TOKENS: "Acked-by"
+      | "Cc"
+      | "Reviewed-by"
+      | "Reported-by"
+      | "Signed-off-by"
+      | "Tested-by"
+name: DESCRIPTION
+email: "<" EMAIL ">"
+EMAIL: CNAME "@" CNAME "." CNAME
+
+// body
+DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
+
+%import common.CNAME
+%import common.ESCAPED_STRING -> STRING
+%import common.INT
+%import common.NEWLINE -> _NL
+%import common.NUMBER
 %import common.WS
-%ignore WS
+%import common.WS_INLINE
+// %ignore WS

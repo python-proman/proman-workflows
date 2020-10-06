@@ -395,6 +395,18 @@ format = ["idna", "jsonpointer (>1.13)", "rfc3987", "strict-rfc3339", "webcolors
 format_nongpl = ["idna", "jsonpointer (>1.13)", "webcolors", "rfc3986-validator (>0.1.0)", "rfc3339-validator"]
 
 [[package]]
+category = "main"
+description = "a modern parsing library"
+name = "lark-parser"
+optional = false
+python-versions = "*"
+version = "0.10.0"
+
+[package.extras]
+nearley = ["js2py"]
+regex = ["regex"]
+
+[[package]]
 category = "dev"
 description = "Python LiveReload is an awesome tool for web developers"
 name = "livereload"
@@ -951,7 +963,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "50ece2c5319c3812fe4668bff6ac979f50ca8b7db8360de3cbba78e98029632b"
+content-hash = "44e70f6173931eef3223df0b3286bee4651b2730b399be910bf55d421f9fecbd"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -1121,6 +1133,9 @@ joblib = [
 jsonschema = [
     {file = "jsonschema-3.2.0-py2.py3-none-any.whl", hash = "sha256:4e5b3cf8216f577bee9ce139cbe72eca3ea4f292ec60928ff24758ce626cd163"},
     {file = "jsonschema-3.2.0.tar.gz", hash = "sha256:c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"},
+]
+lark-parser = [
+    {file = "lark_parser-0.10.0-py2.py3-none-any.whl", hash = "sha256:f7044d3a4ad42c07e853da590727d5f1e5f9c36e5795bdeb05227fe0bace2344"},
 ]
 livereload = [
     {file = "livereload-2.6.3.tar.gz", hash = "sha256:776f2f865e59fde56490a56bcc6773b6917366bce0c267c60ee8aaf1a0959869"},
