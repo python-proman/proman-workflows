@@ -8,32 +8,38 @@ import os
 
 from lark import Lark, logger, Transformer
 
-grammar_path = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
+grammar = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
 
-message = '''fix(example): test a message
 
-test body of comment test
-test body of comment 2 test
+class MessageParser:
+    def __init__(self, grammar=grammar, start='message', **options):
+        self.__parser = Lark.open(grammar, start=start, **options)
 
-Reviewed-by: Jesse <jpj6652@gmail.com>
-Refs #123
-Refs #124
-BREAKING CHANGE: This could change things
-'''
+    def parse(self, text, start=None, on_error=None):
+        self.__tree = self.__parser.parse(text, start, on_error)
 
-class MessageTransformer(Transformer):
-    def title(self, args):
+    def _get_section(self, name):
+        for arg in self.__tree.children:
+            if arg.data == name:
+                return arg
+        return None
+
+    @property
+    def title(self):
         title = {}
-        for arg in args:
-            title[arg.data] = next((x for x in arg.children), True)
+        for arg in self._get_section('title').children:
+            title[arg.data] = next((x.value for x in arg.children), True)
         return title
 
-    def body(self, args=None):
-        return [arg.value for arg in args]
+    @property
+    def body(self):
+        section = self._get_section('body')
+        return [arg.value for arg in section.children]
 
-    def footer(self, args=None):
+    @property
+    def footer(self):
         footer = {'issues': []}
-        for arg in args:
+        for arg in self._get_section('footer').children:
             if arg.data == 'trailer':
                 footer['trailer'] = {}
                 for x, y in enumerate(arg.children):
@@ -43,17 +49,13 @@ class MessageTransformer(Transformer):
                         footer['trailer']['name'] = y.value
                     if x == 2:
                         footer['trailer']['email'] = y.value
-                    # print(x.data, [arg for arg in args][0])
-                    # footer['trailer'][x.data] = [arg for arg in args][0]
             if arg.data == 'issue':
                 footer['issues'].append(
-                    {arg.children[1].value, arg.children[0].value}
+                    {arg.children[0].value: arg.children[1].value}
                 )
             if arg.data == 'breaking_change':
-                footer['breaking_change'] = arg.children
-        return args
-
-parser = Lark.open(grammar_path, start='message', debug=True)
-print(parser.parse(message).pretty())
-tree = parser.parse(message)
-MessageTransformer().transform(tree)
+                footer['breaking_change'] = next(
+                    (x.value for x in arg.children),
+                    'Unknown'
+                )
+        return footer

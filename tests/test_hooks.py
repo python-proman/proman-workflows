@@ -2,7 +2,8 @@
 from pypyr import log, pipelinerunner
 
 
-def test_pre_commit():
+def test_hooks_pre_commit():
+    '''Test pre-commit hooks.'''
     log.logger.set_root_logger(
         log_level=25,
         log_path=None

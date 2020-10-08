@@ -44,17 +44,13 @@ TOKENS: "Acked-by"
       | "Signed-off-by"
       | "Tested-by"
 name: DESCRIPTION
-email: "<" EMAIL ">"
 EMAIL: CNAME "@" CNAME "." CNAME
 
 // body
 DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
 
 %import common.CNAME
-%import common.ESCAPED_STRING -> STRING
 %import common.INT
 %import common.NEWLINE -> _NL
 %import common.NUMBER
-%import common.WS
 %import common.WS_INLINE
-// %ignore WS
