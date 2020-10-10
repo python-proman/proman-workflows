@@ -13,7 +13,7 @@ title: type scope? break? ": " description
 
 ?body: (_NL | DESCRIPTION)+
 
-?footer: (_NL [breaking_change | trailer | issue])+
+?footer: (_NL [trailer | issue | breaking_change])+
 
 // title
 type: TYPES
@@ -36,21 +36,32 @@ breaking_change: "BREAKING CHANGE: " DESCRIPTION
 issue: ISSUES " #" [CNAME "-"] INT
 ISSUES: "Refs"
       | "Fix"
-trailer: TOKENS ": " DESCRIPTION ["<" EMAIL ">"]
+trailer: TOKENS ": " NAME ["<" EMAIL ">"]
 TOKENS: "Acked-by"
       | "Cc"
       | "Reviewed-by"
       | "Reported-by"
       | "Signed-off-by"
       | "Tested-by"
-name: DESCRIPTION
-EMAIL: CNAME "@" CNAME "." CNAME
+NAME: LETTER [DOMAIN_CHAR | " "]+ "."? [DOMAIN_CHAR | " "]+ LETTER "."?
+
+// email
+EMAIL: LOCAL_PART "@" DOMAIN
+LOCAL_PART: (LOCAL_CHAR+ "." LOCAL_CHAR+)+
+LOCAL_CHAR: CNAME | "-" | INT
+DOMAIN: (LETTER DOMAIN_CHAR+ LETTER ".")+ TLD
+DOMAIN_CHAR: LETTER | "-" | INT
+TLD: LETTER ~ 3
 
 // body
 DESCRIPTION: (CNAME | WS_INLINE | NUMBER)+
 
 %import common.CNAME
 %import common.INT
+%import common.LETTER
 %import common.NEWLINE -> _NL
 %import common.NUMBER
+%import common.WORD
+%import common.WS
 %import common.WS_INLINE
+%ignore WS

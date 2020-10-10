@@ -5,7 +5,7 @@ from textwrap import dedent
 
 message = '''fix(example): test a message
 
-Reviewed-by: Jesse P Johnson <jpj6652@gmail.com>
+Reviewed-by: Jim H. Henson Jr. <jim.henson1@email.com>
 Refs #123
 Fix #124
 BREAKING CHANGE: This could change things
@@ -17,8 +17,8 @@ def test_footer_trailer():
     parser = MessageParser()
     parser.parse(message)
     assert parser.footer['trailer']['token'] == 'Reviewed-by'
-    assert parser.footer['trailer']['name'] == 'Jesse P Johnson '
-    assert parser.footer['trailer']['email'] == 'jpj6652@gmail.com'
+    assert parser.footer['trailer']['name'] == 'Jim H. Henson Jr.'
+    assert parser.footer['trailer']['email'] == 'jim.henson1@email.com'
 
 
 def test_footer_issues():
