@@ -51,7 +51,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.4.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
@@ -85,6 +85,17 @@ name = "bump2version"
 optional = false
 python-versions = ">=3.5"
 version = "1.0.0"
+
+[[package]]
+category = "main"
+description = "Lightweight, extensible schema and data validation tool for Python dictionaries."
+name = "cerberus"
+optional = false
+python-versions = ">=2.7"
+version = "1.3.2"
+
+[package.dependencies]
+setuptools = "*"
 
 [[package]]
 category = "dev"
@@ -125,17 +136,15 @@ description = "Simple layered configuraion tool"
 name = "compendium"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.1.1.dev63"
+version = "0.1.1.dev66"
 
 [package.dependencies]
 anymod = ">=0.1.1-alpha.4,<0.2.0"
+cerberus = ">=1.3.2,<2.0.0"
 dpath = ">=2.0.1,<3.0.0"
-jsonschema = ">=3.2.0,<4.0.0"
 "ruamel.yaml" = ">=0.16.10,<0.17.0"
 tomlkit = ">=0.6.0,<0.7.0"
-xmlschema = ">=1.2.3,<2.0.0"
 xmltodict = ">=0.12.0,<0.13.0"
-yamale = ">=3.0.2,<4.0.0"
 
 [[package]]
 category = "dev"
@@ -199,14 +208,6 @@ pipenv = ["pipenv"]
 category = "main"
 description = "Filesystem-like pathing and searching for dictionaries"
 name = "dpath"
-optional = false
-python-versions = "*"
-version = "2.0.1"
-
-[[package]]
-category = "main"
-description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml"
-name = "elementpath"
 optional = false
 python-versions = "*"
 version = "2.0.1"
@@ -312,7 +313,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.10"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Read metadata from Python packages"
 marker = "python_version < \"3.8\""
 name = "importlib-metadata"
@@ -371,28 +372,6 @@ name = "joblib"
 optional = false
 python-versions = ">=3.6"
 version = "0.16.0"
-
-[[package]]
-category = "main"
-description = "An implementation of JSON Schema validation for Python"
-name = "jsonschema"
-optional = false
-python-versions = "*"
-version = "3.2.0"
-
-[package.dependencies]
-attrs = ">=17.4.0"
-pyrsistent = ">=0.14.0"
-setuptools = "*"
-six = ">=1.11.0"
-
-[package.dependencies.importlib-metadata]
-python = "<3.8"
-version = "*"
-
-[package.extras]
-format = ["idna", "jsonpointer (>1.13)", "rfc3987", "strict-rfc3339", "webcolors"]
-format_nongpl = ["idna", "jsonpointer (>1.13)", "webcolors", "rfc3986-validator (>0.1.0)", "rfc3339-validator"]
 
 [[package]]
 category = "main"
@@ -677,17 +656,6 @@ dev = ["check-manifest", "flake8"]
 test = ["pytest", "tox"]
 
 [[package]]
-category = "main"
-description = "Persistent/Functional/Immutable data structures"
-name = "pyrsistent"
-optional = false
-python-versions = "*"
-version = "0.16.0"
-
-[package.dependencies]
-six = "*"
-
-[[package]]
 category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
@@ -748,7 +716,7 @@ python-versions = "*"
 version = "0.1.21"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
@@ -921,17 +889,6 @@ version = "0.2.5"
 
 [[package]]
 category = "main"
-description = "An XML Schema validator and decoder"
-name = "xmlschema"
-optional = false
-python-versions = "*"
-version = "1.2.3"
-
-[package.dependencies]
-elementpath = ">=2.0.0,<2.1.0"
-
-[[package]]
-category = "main"
 description = "Makes working with XML feel like you are working with JSON"
 name = "xmltodict"
 optional = false
@@ -939,18 +896,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.12.0"
 
 [[package]]
-category = "main"
-description = "A schema and validator for YAML."
-name = "yamale"
-optional = false
-python-versions = ">=3.6"
-version = "3.0.3"
-
-[package.dependencies]
-pyyaml = "*"
-
-[[package]]
-category = "main"
+category = "dev"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 marker = "python_version < \"3.8\""
 name = "zipp"
@@ -963,7 +909,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "44e70f6173931eef3223df0b3286bee4651b2730b399be910bf55d421f9fecbd"
+content-hash = "37665d92c6f8a2c0f4ff615fe435fe37830e5cde6572d5b3ba8e3145d9ce74f2"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -1000,6 +946,9 @@ bump2version = [
     {file = "bump2version-1.0.0-py2.py3-none-any.whl", hash = "sha256:477f0e18a0d58e50bb3dbc9af7fcda464fd0ebfc7a6151d8888602d7153171a0"},
     {file = "bump2version-1.0.0.tar.gz", hash = "sha256:cd4f3a231305e405ed8944d8ff35bd742d9bc740ad62f483bd0ca21ce7131984"},
 ]
+cerberus = [
+    {file = "Cerberus-1.3.2.tar.gz", hash = "sha256:302e6694f206dd85cb63f13fd5025b31ab6d38c99c50c6d769f8fa0b0f299589"},
+]
 certifi = [
     {file = "certifi-2020.6.20-py2.py3-none-any.whl", hash = "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"},
     {file = "certifi-2020.6.20.tar.gz", hash = "sha256:5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3"},
@@ -1017,8 +966,8 @@ colorama = [
     {file = "colorama-0.4.3.tar.gz", hash = "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"},
 ]
 compendium = [
-    {file = "compendium-0.1.1.dev63-py3-none-any.whl", hash = "sha256:bf322952e97cf19e1fed6eb9920adfbc4930f164c9275b328b2947277373ced5"},
-    {file = "compendium-0.1.1.dev63.tar.gz", hash = "sha256:fd3bb8bb75fd02ee0f17ffba5ed50a605a7c8ede116798abe3edd334139f9cfa"},
+    {file = "compendium-0.1.1.dev66-py3-none-any.whl", hash = "sha256:e3b30641e1cf6b95989a42f6ee5d11d602e37c54b4cefdb23c2d0d9bc2b6c1f0"},
+    {file = "compendium-0.1.1.dev66.tar.gz", hash = "sha256:201207021b8d87b848ad758f639016407a31e87d02c255de3378589df0016677"},
 ]
 coverage = [
     {file = "coverage-5.2.1-cp27-cp27m-macosx_10_13_intel.whl", hash = "sha256:40f70f81be4d34f8d491e55936904db5c527b0711b2a46513641a5729783c2e4"},
@@ -1074,10 +1023,6 @@ dparse = [
 dpath = [
     {file = "dpath-2.0.1.tar.gz", hash = "sha256:bea06b5f4ff620a28dfc9848cf4d6b2bfeed34238edeb8ebe815c433b54eb1fa"},
 ]
-elementpath = [
-    {file = "elementpath-2.0.1-py3-none-any.whl", hash = "sha256:2c8207772c4beb859cfbf9a6ac866349ce5d2ea49d94d4f6132f66fecbea7fd4"},
-    {file = "elementpath-2.0.1.tar.gz", hash = "sha256:be296a00a8ebbb858864c577b4c8cc8e2a72d8e6a94c58d725a2b64a1c6aa72f"},
-]
 flake8 = [
     {file = "flake8-3.8.3-py2.py3-none-any.whl", hash = "sha256:15e351d19611c887e482fb960eae4d44845013cc142d42896e9862f775d8cf5c"},
     {file = "flake8-3.8.3.tar.gz", hash = "sha256:f04b9fcbac03b0a3e58c0ab3a0ecc462e023a9faf046d57794184028123aa208"},
@@ -1129,10 +1074,6 @@ jinja2 = [
 joblib = [
     {file = "joblib-0.16.0-py3-none-any.whl", hash = "sha256:d348c5d4ae31496b2aa060d6d9b787864dd204f9480baaa52d18850cb43e9f49"},
     {file = "joblib-0.16.0.tar.gz", hash = "sha256:8f52bf24c64b608bf0b2563e0e47d6fcf516abc8cfafe10cfd98ad66d94f92d6"},
-]
-jsonschema = [
-    {file = "jsonschema-3.2.0-py2.py3-none-any.whl", hash = "sha256:4e5b3cf8216f577bee9ce139cbe72eca3ea4f292ec60928ff24758ce626cd163"},
-    {file = "jsonschema-3.2.0.tar.gz", hash = "sha256:c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"},
 ]
 lark-parser = [
     {file = "lark_parser-0.10.0-py2.py3-none-any.whl", hash = "sha256:f7044d3a4ad42c07e853da590727d5f1e5f9c36e5795bdeb05227fe0bace2344"},
@@ -1253,9 +1194,6 @@ pyparsing = [
 pypyr = [
     {file = "pypyr-4.0.0-py3-none-any.whl", hash = "sha256:a40c551f961f67be6138e198f81d1bf3249d108e316b8e6ea424a29b12131487"},
     {file = "pypyr-4.0.0.tar.gz", hash = "sha256:a286e8c05265d5aabf1009b50a3a335139f3cf6723daf88261146af5b291f51f"},
-]
-pyrsistent = [
-    {file = "pyrsistent-0.16.0.tar.gz", hash = "sha256:28669905fe725965daa16184933676547c5bb40a5153055a8dee2a4bd7933ad3"},
 ]
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
@@ -1389,16 +1327,9 @@ wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
 ]
-xmlschema = [
-    {file = "xmlschema-1.2.3-py3-none-any.whl", hash = "sha256:aace96e9c0fda70a0156491f9fadc51b7b8fe80d6a532078c661f84910800b94"},
-    {file = "xmlschema-1.2.3.tar.gz", hash = "sha256:c981db622f9f00bffcb61648ab9a6f21d6655cfb66ad994918b079705b9b9a34"},
-]
 xmltodict = [
     {file = "xmltodict-0.12.0-py2.py3-none-any.whl", hash = "sha256:8bbcb45cc982f48b2ca8fe7e7827c5d792f217ecf1792626f808bf41c3b86051"},
     {file = "xmltodict-0.12.0.tar.gz", hash = "sha256:50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21"},
-]
-yamale = [
-    {file = "yamale-3.0.3.tar.gz", hash = "sha256:3019fb0cf9ffd9984b7440efcb7b9df2be41b3c1e733e6d457a61ed94953c9ad"},
 ]
 zipp = [
     {file = "zipp-3.1.0-py3-none-any.whl", hash = "sha256:aa36550ff0c0b7ef7fa639055d797116ee891440eac1a56f378e2d3179e0320b"},

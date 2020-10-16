@@ -6,13 +6,18 @@
 import logging
 import os
 
+from git import Repo
 from lark import Lark, logger, Transformer
 
-grammar = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
+from .config import Config
+
+repo = Repo('.')
+_grammar = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
 
 
 class MessageParser:
-    def __init__(self, grammar=grammar, start='message', **options):
+    def __init__(self, grammar=_grammar, start='message', **options):
+        cfg = Config()
         self.__parser = Lark.open(grammar, start=start, **options)
 
     def parse(self, text, start=None, on_error=None):
@@ -59,3 +64,6 @@ class MessageParser:
                     'Unknown'
                 )
         return footer
+
+def add(path='git_tools/templates/gitmessage.j2'):
+    repo.config_writer().set_value("commit", "template", path).release()
