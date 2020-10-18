@@ -4,7 +4,7 @@
 '''Provide CLI for git-tools.'''
 
 # from . import submodule
-from . import hooks, submodule, message
+from . import hooks, setup, submodule, message
 from argufy import Parser
 
 
@@ -12,6 +12,7 @@ def main():
     '''Do main function for CLI.'''
     parser = Parser()
     parser.add_subcommands(hooks)
+    parser.add_subcommands(setup)
     parser.add_subcommands(submodule)
     parser.add_subcommands(message)
     hooks.test = 'test'

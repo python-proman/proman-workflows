@@ -1,7 +1,6 @@
 '''Test git hooks pipeline.'''
 
 from git_tools.message import MessageParser
-from textwrap import dedent
 
 message = '''fix(example): test a message
 
