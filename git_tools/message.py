@@ -4,17 +4,17 @@
 '''Control Git messages.'''
 
 # import logging
-import os
 
 from git import Repo
 from lark import Lark
 
+from .config import grammar
+
 repo = Repo('.')
-_grammar = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
 
 
 class MessageParser:
-    def __init__(self, grammar=_grammar, start='message', **options):
+    def __init__(self, grammar=grammar, start='message', **options):
         # cfg = Config()
         self.__parser = Lark.open(grammar, start=start, **options)
 
@@ -62,9 +62,3 @@ class MessageParser:
                     'Unknown'
                 )
         return footer
-
-
-def validate():
-    commit = repo.head.commit
-    message_parser = MessageParser()
-    message_parser.parse(commit.message)

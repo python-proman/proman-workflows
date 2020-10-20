@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
-'''Control Git submodules.'''
+'''Control Git hooks.'''
 
 import os
 import sys
-from . import config
+
 from jinja2 import Template
+
+from .. import config
 
 __HOOKS__ = (
     'applypatch-msg',
@@ -45,8 +47,11 @@ __HOOKS_TEMPLATE__ = """\
 # license: Apache 2.0, see LICENSE for more details.
 '''Test git hooks pipeline.'''
 
-import os
+from git import Repo
 from pypyr import log, pipelinerunner
+
+git_repo = Repo('.git', search_parent_directories=True)
+git_root_path = git_repo.git.rev_parse('--show-toplevel')
 
 log.logger.set_root_logger(
     log_level={{ log_level }},
@@ -56,7 +61,7 @@ log.logger.set_root_logger(
 pipelinerunner.main(
     pipeline_name='.git-hooks',
     pipeline_context_input='{{ pipeline_context_input }}',
-    working_dir='{{ working_dir }}',
+    working_dir=git_root_path,
     groups=[{% for group in groups %}'{{ group }}'{% if not loop.last %},{% endif %}{% endfor %}],
     success_group='{{ success_group }}',
     failure_group='{{ failure_group }}',

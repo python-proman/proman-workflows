@@ -11,13 +11,15 @@ from git.config import GitConfigParser
 git_repo = git.Repo('.git', search_parent_directories=True)
 git_root_path = git_repo.git.rev_parse('--show-toplevel')
 git_manage_path = os.path.join(git_root_path, '.git')
+git_hooks_path = os.path.join(git_manage_path, 'hooks')
+git_tools_path = os.path.join(git_root_path, '.git-tools')
 
 git_cfg_sys_path = os.path.join(os.sep, 'etc', 'gitconfig')
 git_cfg_home_path = os.path.join(os.path.expanduser('~'), '.gitconfig')
 git_cfg_repo_path = os.path.join(git_manage_path, 'config')
 
-git_hooks_path = os.path.join(git_manage_path, 'hooks')
-git_tools_path = os.path.join(git_root_path, '.git-tools')
+
+grammar = os.path.join('git_tools', 'grammars', 'conventional_commits.lark')
 
 
 class Config:

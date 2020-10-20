@@ -35,7 +35,7 @@ description = "Inspection based parser based on argparse."
 name = "argufy"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.1.1.dev11"
+version = "0.1.1.dev14"
 
 [package.dependencies]
 argparse_color_formatter = ">=1.2.2,<2.0.0"
@@ -909,7 +909,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "37665d92c6f8a2c0f4ff615fe435fe37830e5cde6572d5b3ba8e3145d9ce74f2"
+content-hash = "6e936c5ac5e6c0c02f661cca4fb846b9c55d6377dfff101301fe810b1b782daf"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -927,8 +927,8 @@ argparse-color-formatter = [
     {file = "argparse_color_formatter-1.2.2.post2-py3-none-any.whl", hash = "sha256:9861f2aac9ee8c6154d8486c3d6e9c500ebaea6dd89fdca0dbb2612a6ba184b3"},
 ]
 argufy = [
-    {file = "argufy-0.1.1.dev11-py3-none-any.whl", hash = "sha256:56a641fe7cda5a3ed8205fef7d0d53f8e25d7269225252d22c1cf282f78c5ad1"},
-    {file = "argufy-0.1.1.dev11.tar.gz", hash = "sha256:b1dfc538a797bc794c5039231c9240a81db716d73b3608e6354a3e02958b15de"},
+    {file = "argufy-0.1.1.dev14-py3-none-any.whl", hash = "sha256:50a43c1aa56d5c8c6af90312e4ba624df0bf8e4b1ed34a7ff3f37561a87d2c22"},
+    {file = "argufy-0.1.1.dev14.tar.gz", hash = "sha256:e75557e16d38fd1871644ee0e570df67a107ae291220cb1f8aca6385e2328376"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},

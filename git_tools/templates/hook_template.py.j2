@@ -1,6 +1,11 @@
 #!/usr/sbin/python
 '''Test git hooks pipeline.'''
+
+from git import Repo
 from pypyr import log, pipelinerunner
+
+git_repo = Repo('.git', search_parent_directories=True)
+git_root_path = git_repo.git.rev_parse('--show-toplevel')
 
 
 log.logger.set_root_logger(
@@ -12,7 +17,7 @@ log.logger.set_root_logger(
 pipelinerunner.main(
     pipeline_name='.git-hooks.yaml',
     pipeline_context_input='{{ hooks_pipeline_context_input }}',
-    working_dir='{{ hooks_working_dir }}',
+    working_dir=git_root_path,
     groups=[{% for group in hooks_groups %}'{{ group }}'{% if not loop.last %},{% endif %}{% endfor %}],
     success_group='{{ hooks_success_group }}',
     failure_group='{{ hooks_failure_group }}'

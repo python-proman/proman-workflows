@@ -2,7 +2,9 @@
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
 '''Control Git submodules.'''
+
 import os
+
 from git import Repo
 
 # from git.objects.submodule.base import Submodule
@@ -14,7 +16,6 @@ from git import Repo
 #     find_submodule_git_dir,
 #     touch
 # )
-
 
 base_dir = 'modules'
 repo = Repo('.')
@@ -61,7 +62,12 @@ def update(name=None):
         repo.submodule_update(recursive=False)
 
 
-def remove(name=None, module=True, force=True, configuration=True):
+def remove(
+    name: str = None,
+    module: bool = True,
+    force: bool = True,
+    configuration: bool = True
+):
     '''Remove submodule from repository.
 
     Parameters
