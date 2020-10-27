@@ -10,4 +10,4 @@ Convenience tools to manage Git capabilities with Python.
 
 ## Install
 
-`pip install git-tools`
+`pip install proman-workflows`
