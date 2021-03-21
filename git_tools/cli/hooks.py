@@ -10,7 +10,7 @@ from jinja2 import Template
 
 from .. import config
 
-__HOOKS__ = (
+__hooks__ = {
     'applypatch-msg',
     'pre-applypatch',
     'post-applypatch',
@@ -38,9 +38,9 @@ __HOOKS__ = (
     'p4-post-changelist',
     'p4-pre-submit',
     'post-index-change'
-)
+}
 
-__HOOKS_TEMPLATE__ = """\
+__hooks_template__ = """\
 #!{{ python_executable }}
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
@@ -62,10 +62,26 @@ pipelinerunner.main(
     pipeline_name='.git-hooks',
     pipeline_context_input='{{ pipeline_context_input }}',
     working_dir=git_root_path,
-    groups=[{% for group in groups %}'{{ group }}'{% if not loop.last %},{% endif %}{% endfor %}],
+    groups=[
+        {%- for group in groups -%}
+            '{{ group }}'{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+    ],
     success_group='{{ success_group }}',
     failure_group='{{ failure_group }}',
 )
+"""
+
+__template__ = """\
+from invoke import Collection, Program
+from git import Repo
+from git_tools import hooks
+
+repo = Repo('.git', search_parent_directories=True)
+path = repo.git.rev_parse('--show-toplevel')
+
+hook = Program(namespace=Collection.from_module(hooks), version='0.1.0')
+hook.run
 """
 
 
@@ -73,7 +89,7 @@ def setup(name: str = 'pre-commit', update: bool = False):
     '''Do setup for post checkout hooks.'''
     path = os.path.join(config.git_hooks_path, name)
     if not os.path.exists(path) or update:
-        template = Template(__HOOKS_TEMPLATE__)
+        template = Template(__hooks_template__)
         content = template.render(
             python_executable=sys.executable,
             pipeline_context_input='arb context input',

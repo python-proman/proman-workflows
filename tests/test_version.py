@@ -1,5 +1,5 @@
 '''Add version tests.'''
-from git_tools.__version__ import __version__
+from git_tools import __version__
 
 
 def test_version():
