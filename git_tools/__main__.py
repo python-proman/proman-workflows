@@ -9,16 +9,15 @@ from .cli import hooks, setup, submodule, message
 
 
 def main():
-    '''Do main function for CLI.'''
-    parser = Parser()
-    parser.add_subcommands(hooks)
-    parser.add_subcommands(setup)
-    parser.add_subcommands(submodule)
-    parser.add_subcommands(message)
+    ''' CLI.'''
+    parser = Parser(command_type='subcommand')
+    parser.add_commands(hooks)
+    parser.add_commands(setup)
+    parser.add_commands(submodule)
+    parser.add_commands(message)
     hooks.test = 'test'
     parser.dispatch()
 
 
 if __name__ == '__main__':
-    '''Execute main.'''
     main()

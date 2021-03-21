@@ -95,8 +95,8 @@ def setup(name: str = 'pre-commit', update: bool = False):
             pipeline_context_input='arb context input',
             working_dir=config.git_root_path,
             groups=[name],
-            success_group=name + '-success-group',
-            failure_group=name + '-failure-group',
+            success_group=f"{name}-success-group",
+            failure_group=f"{name}-failure-group",
             log_level=25,
             log_path=None
         )
