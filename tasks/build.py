@@ -5,7 +5,7 @@
 
 from invoke import task  # type: ignore
 
-from git_tools import __version__
+from proman_workflows import __version__
 
 if 'dev' in __version__ or 'rc' in __version__:
     part = 'build'

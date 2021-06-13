@@ -4,7 +4,7 @@
 '''Test configuration file.'''
 
 import os
-from git_tools.config import Config
+from proman_workflows.config import GitConfig
 
 
 # def test_create_config():

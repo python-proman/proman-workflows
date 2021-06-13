@@ -1,5 +1,5 @@
 '''Add version tests.'''
-from git_tools import __version__
+from proman_workflows import __version__
 
 
 def test_version():

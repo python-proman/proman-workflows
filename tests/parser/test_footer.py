@@ -1,6 +1,6 @@
 '''Test git hooks pipeline.'''
 
-from git_tools.message import MessageParser
+from proman_workflows.parser import CommitMessageParser
 
 message = '''fix(example): test a message
 
@@ -13,7 +13,7 @@ BREAKING CHANGE: This could change things
 
 def test_footer_trailer():
     '''Test footer trailer.'''
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse(message)
     assert parser.footer['trailer']['token'] == 'Reviewed-by'
     assert parser.footer['trailer']['name'] == 'Jim H. Henson Jr.'
@@ -22,7 +22,7 @@ def test_footer_trailer():
 
 def test_footer_issues():
     '''Test footer issues.'''
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse(message)
     assert parser.footer['issues'][0]['Refs'] == '123'
     assert parser.footer['issues'][1]['Fix'] == '124'
@@ -30,6 +30,6 @@ def test_footer_issues():
 
 def test_footer_breaking_change():
     '''test footer breaking change.'''
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse(message)
     assert parser.footer['breaking_change'] == 'This could change things'

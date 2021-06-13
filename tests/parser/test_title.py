@@ -1,17 +1,17 @@
 '''Test git hooks pipeline.'''
 
-from git_tools.message import MessageParser
+from proman_workflows.parser import CommitMessageParser
 
 
 def test_title():
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse('fix: test')
     assert parser.title['type'] == 'fix'
     assert parser.title['description'] == 'test'
 
 
 def test_title_scope():
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse('feat(ui): test')
     assert parser.title['type'] == 'feat'
     assert parser.title['scope'] == 'ui'
@@ -19,7 +19,7 @@ def test_title_scope():
 
 
 def test_title_breaking_change():
-    parser = MessageParser()
+    parser = CommitMessageParser()
     parser.parse('refactor!: test')
     assert parser.title['type'] == 'refactor'
     assert parser.title['break'] is True

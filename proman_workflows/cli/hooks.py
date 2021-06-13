@@ -8,37 +8,7 @@ import sys
 
 from jinja2 import Template
 
-from .. import config
-
-__hooks__ = {
-    'applypatch-msg',
-    'pre-applypatch',
-    'post-applypatch',
-    'pre-commit',
-    'pre-merge-commit',
-    'prepare-commit-msg',
-    'post-commit',
-    'pre-rebase',
-    'post-checkout',
-    'post-merge',
-    'pre-push',
-    'pre-recieve',
-    'update',
-    'post-recieve',
-    'post-update',
-    'reference-transaction',
-    'push-to-checkout',
-    'pre-auto-gc',
-    'post-rewrite',
-    'rebase',
-    'sendemail-validate',
-    'fsmonitor-watchman',
-    'p4-changelist',
-    'p4-prepare-changelist',
-    'p4-post-changelist',
-    'p4-pre-submit',
-    'post-index-change'
-}
+from proman_workflows import config
 
 __hooks_template__ = """\
 #!{{ python_executable }}

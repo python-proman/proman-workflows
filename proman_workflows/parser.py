@@ -13,10 +13,10 @@ from .config import grammar
 repo = Repo('.')
 
 
-class MessageParser:
-    def __init__(self, grammar=grammar, start='message', **options):
+class CommitMessageParser:
+    def __init__(self, grammar=grammar, start='message', **kwargs):
         # cfg = Config()
-        self.__parser = Lark.open(grammar, start=start, **options)
+        self.__parser = Lark.open(grammar, start=start, **kwargs)
 
     def parse(self, text, start=None, on_error=None):
         self.__tree = self.__parser.parse(text, start, on_error)

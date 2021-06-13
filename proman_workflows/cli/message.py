@@ -4,22 +4,24 @@
 '''Control Git messages.'''
 
 import re
+from typing import Optional
+
 from git import Repo
 
-from ..message import MessageParser
+from proman_workflows.parser import CommitMessageParser
 
 repo = Repo('.')
 
 
-def search(sha: str = None):
+def search(digest: str):
     pass
 
 
-def validate(sha: str = None):
+def validate(digest: Optional[str] = None):
     if hash:
         rex = re.compile('^[a-fA-F0-9]{40}$')
-        branch = rex.match(str(sha))
+        branch = rex.match(str(digest))
         print(repo.tree(branch.group()))
     commit = repo.head.commit
-    message_parser = MessageParser()
+    message_parser = CommitMessageParser()
     message_parser.parse(commit.message)
