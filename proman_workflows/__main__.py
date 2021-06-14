@@ -5,7 +5,7 @@
 
 from argufy import Parser
 
-from .cli import hooks, setup, submodule, message
+from proman_workflows.cli import hooks, setup, submodule, message
 
 
 def main():

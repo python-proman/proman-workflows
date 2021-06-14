@@ -22,7 +22,7 @@ def test_hooks_pre_commit():
     )
 
     pipelinerunner.main(
-        pipeline_name='.git-hooks',
+        pipeline_name='.workflows',
         pipeline_context_input='arb context input',
         working_dir='tests/hooks',
         groups=['pre-commit'],

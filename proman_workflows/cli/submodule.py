@@ -5,8 +5,6 @@
 
 import os
 
-from git import Repo
-
 # from git.objects.submodule.base import Submodule
 # from git.objects.submodule.root import (
 #     RootModule,
@@ -17,8 +15,9 @@ from git import Repo
 #     touch
 # )
 
+from proman_workflows import repo
+
 base_dir = 'modules'
-repo = Repo('.')
 
 post_commit = '''#!/bin/bash
 exec git submodule update

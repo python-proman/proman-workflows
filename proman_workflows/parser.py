@@ -1,64 +1,89 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
-'''Control Git messages.'''
+'''Parse Git commit messages.'''
 
 # import logging
+from typing import Any, Callable, Dict, List, Optional
 
-from git import Repo
 from lark import Lark
 
-from .config import grammar
-
-repo = Repo('.')
+from proman_workflows import config
 
 
 class CommitMessageParser:
-    def __init__(self, grammar=grammar, start='message', **kwargs):
-        # cfg = Config()
+    '''Parse commit messages.'''
+
+    def __init__(
+        self,
+        grammar: str = config.grammar,
+        start: str = 'message',
+        **kwargs: Any
+    ) -> None:
+        '''Initialize commit message parser.'''
+        # TODO: need to limit messages to 100 characters
         self.__parser = Lark.open(grammar, start=start, **kwargs)
 
-    def parse(self, text, start=None, on_error=None):
-        self.__tree = self.__parser.parse(text, start, on_error)
+    def parse(
+        self,
+        text: str,
+        start: Optional[str] = None,
+        on_error: Optional[Callable] = None
+    ) -> None:
+        '''Parse commit message.'''
+        self.__tree = self.__parser.parse(  # type: ignore
+            text, start=start, on_error=on_error
+        )
 
-    def _get_section(self, name):
+    def _get_section(self, name: str) -> Optional[Any]:
+        '''Get commit message section.'''
         for arg in self.__tree.children:
-            if arg.data == name:
+            if arg.data == name:  # type: ignore
                 return arg
         return None
 
     @property
-    def title(self):
+    def title(self) -> Dict[str, Any]:
+        '''Get title section of commit message.'''
         title = {}
-        for arg in self._get_section('title').children:
-            title[arg.data] = next((x.value for x in arg.children), True)
+        section = self._get_section('title')
+        if section:
+            for arg in section.children:
+                title[arg.data] = next((x.value for x in arg.children), True)
         return title
 
     @property
-    def body(self):
+    def body(self) -> List[str]:
+        '''Get body section of commit message.'''
         section = self._get_section('body')
-        return [arg.value for arg in section.children]
+        if section:
+            return [arg.value for arg in section.children]
+        else:
+            return []
 
     @property
-    def footer(self):
-        footer = {'issues': []}
-        for arg in self._get_section('footer').children:
-            if arg.data == 'trailer':
-                footer['trailer'] = {}
-                for x, y in enumerate(arg.children):
-                    if x == 0:
-                        footer['trailer']['token'] = y.value
-                    if x == 1:
-                        footer['trailer']['name'] = y.value
-                    if x == 2:
-                        footer['trailer']['email'] = y.value
-            if arg.data == 'issue':
-                footer['issues'].append(
-                    {arg.children[0].value: arg.children[1].value}
-                )
-            if arg.data == 'breaking_change':
-                footer['breaking_change'] = next(
-                    (x.value for x in arg.children),
-                    'Unknown'
-                )
+    def footer(self) -> Dict[str, Any]:
+        '''Get footer section of commit message.'''
+        footer: Dict[str, Any] = {'issues': []}
+        section = self._get_section('footer')
+        if section:
+            for arg in section.children:
+                if arg.data == 'trailer':
+                    footer['trailer'] = {}
+                    for x, y in enumerate(arg.children):
+                        if x == 0:
+                            footer['trailer']['token'] = y.value
+                        if x == 1:
+                            footer['trailer']['name'] = y.value
+                        if x == 2:
+                            footer['trailer']['email'] = y.value
+                if arg.data == 'issue':
+                    footer['issues'].append(
+                        {arg.children[0].value: arg.children[1].value}
+                    )
+                if arg.data == 'breaking_change':
+                    footer['breaking_change'] = next(
+                        (x.value for x in arg.children),
+                        'Unknown'
+                    )
         return footer

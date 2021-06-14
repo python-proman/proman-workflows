@@ -8,10 +8,11 @@ authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 python = "^3.6"
 jinja2 = "^2.11.2"
 lark-parser = "^0.10.0"
-compendium = "^0.1.1-alpha.66"
 argufy = "^0.1.1-alpha.12"
 transitions = "^0.8.4"
 GitPython = "^3.1.17"
+bump2version = "^1.0.1"
+compendium = "^0.1.1-alpha.82"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -26,7 +27,8 @@ mkdocs = "^1.1.2"
 bump2version = "^1.0.0"
 invoke = "^1.4.1"
 mkdocs-material = "^5.4.0"
-flit = "^2.3.0"
+flit = "^3.2.0"
+mypy = "^0.902"
 
 [tool.flit.metadata]
 module = "proman_workflows"
