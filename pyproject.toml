@@ -11,8 +11,8 @@ lark-parser = "^0.10.0"
 argufy = "^0.1.1-alpha.12"
 transitions = "^0.8.4"
 GitPython = "^3.1.17"
-bump2version = "^1.0.1"
 compendium = "^0.1.1-alpha.82"
+packaging = "^20.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -34,9 +34,8 @@ mypy = "^0.902"
 module = "proman_workflows"
 author = "Jesse P. Johnson"
 author-email = "jpj6652@gmail.com"
-home-page = "https://github.com/kuwv/python-source"
+home-page = "https://github.com/proman/proman-workflows"
 requires = ["argufy", "jinja2", "GitPython", "lark-parser", "transitions"]
-
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 
 [tool.flit.scripts]

@@ -102,7 +102,7 @@ stevedore = ">=1.20.0"
 name = "bump2version"
 version = "1.0.1"
 description = "Version-bump your software with a single command!"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.5"
 
@@ -499,7 +499,7 @@ python-versions = "*"
 name = "packaging"
 version = "20.9"
 description = "Core utilities for Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -586,7 +586,7 @@ Markdown = ">=3.2"
 name = "pyparsing"
 version = "2.4.7"
 description = "Python parsing module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -844,7 +844,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "e18d8fd1a3a36e54536d7f4d024aa6323c5db5f947c3113d346a7e3fff66e2b8"
+content-hash = "0408e53d859168bbf5da99d3905cf79863846aac8f66614885d383be162bb8ff"
 
 [metadata.files]
 ansicolors = [

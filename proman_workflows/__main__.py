@@ -5,17 +5,17 @@
 
 from argufy import Parser
 
-from proman_workflows.cli import hooks, setup, submodule, message
+from proman_workflows.cli import hooks, setup, submodule, release
 
 
-def main():
+def main() -> None:
     ''' CLI.'''
     parser = Parser(command_type='subcommand')
     parser.add_commands(hooks)
     parser.add_commands(setup)
     parser.add_commands(submodule)
-    parser.add_commands(message)
-    hooks.test = 'test'
+    parser.add_commands(release)
+    hooks.test = 'test'  # type: ignore
     parser.dispatch()
 
 

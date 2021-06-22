@@ -3,7 +3,16 @@
 authors = ["Jesse P. Johnson"]
 description = "A mock project for development."
 name = "mock-project"
-version = "0.1.0"
+version = "2.2.0"
+
+[tool.proman.release]
+[[tool.proman.release.files]]
+filepath = "example/__init__.py"
+pattern = "__version__ = '${version}'"
+
+[[tool.proman.release.files]]
+filepath = "pyproject.toml"
+pattern = "version = \"${version}\""
 
 [tool.proman.dependencies]
 idna = "3.1"

@@ -21,8 +21,8 @@ __version__ = '0.1.0'
 __license__ = 'Apache-2.0'
 __copyright__ = 'Copyright 2020 Jesse Johnson.'
 
-repo = Repo('.')
-source_config = Config(filepath=os.path.join(os.getcwd(), 'pyproject.toml'))
+repo = Repo('.git', search_parent_directories=True)
+source_tree = Config(filepath=os.path.join(os.getcwd(), 'pyproject.toml'))
 parser = CommitMessageParser()
 
 __all__ = ['repo', 'source_config', 'parser']

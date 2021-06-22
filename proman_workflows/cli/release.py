@@ -9,11 +9,11 @@ from typing import Optional
 
 from proman_workflows import repo, source_config
 from proman_workflows.parser import CommitMessageParser
-from proman_workflows.releases import GitFlow
+from proman_workflows.releases import CommitMessageAction
 
 log = logging.getLogger(__name__)
 
-workflow = GitFlow(
+workflow = CommitMessageAction(
     name='test',
     config=source_config,
 )
@@ -22,12 +22,24 @@ workflow = GitFlow(
 #     pass
 
 
-def version() -> None:
-    ref = repo.refs['origin/master']
-    print(ref)
-    workflow.parse(ref)
+def version(name: str = 'master') -> None:
+    ref = repo.refs[name].commit
+    workflow.parse(ref.message)
+    title = workflow.title
+    if title['type'] == 'feat':
+        print('this is a minor bump')
+    if title['type'] == 'fix':
+        print('this is a patch')
+    # 'build'
+    # 'chore'  # deprecated (see: build and ci)
+    # 'ci'
+    # 'docs'
+    # 'style'
+    # 'refactor'
+    # 'perf'
+    # 'test'
     print(workflow.current_version)
-    workflow.version()
+    # workflow.version()
 
 
 def validate(digest: Optional[str] = None) -> None:
@@ -36,6 +48,6 @@ def validate(digest: Optional[str] = None) -> None:
         branch = rex.match(str(digest))
         print(repo.tree(branch.group()) if branch else None)
     commit = repo.head.commit
-    commit_message = CommitMessageParser()
-    commit_message.parse(commit.message)
-    print(commit_message.title)
+    parser = CommitMessageParser()
+    parser.parse(commit.message)
+    print(parser.title)

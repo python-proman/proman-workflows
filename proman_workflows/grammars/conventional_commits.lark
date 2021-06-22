@@ -26,9 +26,9 @@ TYPES: "fix"
      | "chore"
      | "ci"
      | "docs"
-     | "style"
-     | "refactor"
      | "perf"
+     | "refactor"
+     | "style"
      | "test"
 
 // footer
