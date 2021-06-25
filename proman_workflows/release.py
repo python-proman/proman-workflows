@@ -10,6 +10,7 @@ from copy import deepcopy
 from string import Template
 from typing import Any, Optional, Tuple
 
+from git import Repo
 from packaging.version import (
     _cmpkey,
     # _parse_local_version,
@@ -18,7 +19,7 @@ from packaging.version import (
 )
 from transitions import Machine
 
-from proman_workflows import repo, source_tree
+from proman_workflows import repo, source_tree, exception
 from proman_workflows.config import Config
 from proman_workflows.parser import CommitMessageParser
 
@@ -180,16 +181,31 @@ class PythonVersion(Version):
     #     return self
 
 
-class GitFlow:
+class VCSStrategy:
+    ...
+
+
+class GitFlow(VCSStrategy):
     '''Provide branching state engine.'''
 
-    main_branches = ['master', 'develop']
-    support_branches = ['feature', 'release', 'hotfix']
-    states = ['development', 'release', 'maintenance', 'final']
+    main_branches = ['develop', 'master']
+    support_branches = ['feature', 'hotfix', 'release']
+    states = support_branches + main_branches
+    pattern = r"""
+        ^(?P<kind>feat|fix|rc)
+        (?:
+            [/_-]?
+            (?P<name>[A-Za-z]\w+)
+        )
+        (?:
+            [_-]?
+            (?P<id>\d+)
+        )?$
+    """
 
     def __init__(
         self,
-        name: str = repo.active_branch,
+        repo: Repo = repo,
         *args: Any,
         **kwargs: Any
     ) -> None:
@@ -197,63 +213,126 @@ class GitFlow:
 
         Reconcile current version with commit message type.
         '''
-        self.name = name
+        self.repo = repo
+        self.name = kwargs.get('branch', str(repo.active_branch))
 
         transitions = [
             {
-                'trigger': 'create_feature',
-                'source': 'final',
-                'dest': 'development'
+                'trigger': 'setup_develop',
+                'source': 'master',
+                'dest': 'develop',
+                'before': 'check_branch',
+                'after': 'update_branch',
             }, {
-                'trigger': 'add_feature',
-                'source': 'development',
-                'dest': 'release'
+                'trigger': 'feature_start',
+                'source': 'develop',
+                'dest': 'feature',
             }, {
-                'trigger': 'create_hotfix',
-                'source': ['final', 'release'],
-                'dest': 'maintenance',
+                'trigger': 'feature_finish',
+                'source': 'feature',
+                'dest': 'develop',
+                'before': 'refresh_main',
+                'after': 'finalize_feature',
             }, {
-                'trigger': 'add_hotfix',
-                'source': 'maintenance',
-                'dest': ['development', 'release', 'final'],
+                'trigger': 'hotfix_start',
+                'source': 'master',
+                'dest': 'hotfix',
             }, {
-                'trigger': 'create_release',
-                'source': 'development',
-                'dest': 'release'
+                'trigger': 'hotfix_finish',
+                'source': 'hotfix',
+                'dest': 'master',
+                'before': 'refresh_main',
+                'after': 'finalize_hotfix'
             }, {
-                'trigger': 'finish_release',
+                'trigger': 'release_start',
+                'source': 'develop',
+                'dest': 'release',
+            }, {
+                'trigger': 'release_finish',
                 'source': 'release',
-                'dest': 'final'
+                'dest': 'master',
+                'before': 'refresh_main',
+                'after': 'finalize_release',
             }
         ]
         self.machine = Machine(
             self,
             states=GitFlow.states,
             transitions=transitions,
-            initial='development'
+            initial=self.working_branch()
         )
 
-    def current_branch(self) -> str:
+    def refresh_main(self) -> None:
+        print('pulling sources')
+
+    def finalize_feature(self) -> None:
+        print('merge feature into develop')
+
+    def finalize_hotfix(self) -> None:
+        print('merge hotfix to develop/master')
+
+    def finalize_release(self) -> None:
+        print('pushing release to develop/master')
+
+    def working_branch(self) -> str:
+        if self.name == 'develop' or self.name == 'master':
+            return self.name
+        else:
+            pattern = re.compile(GitFlow.pattern, re.VERBOSE | re.IGNORECASE)
+            if pattern:
+                result = re.search(pattern, self.name)
+                if result:
+                    if result['kind'] == 'feat':
+                        return 'feature'
+                    elif result['kind'] == 'fix':
+                        return 'hotfix'
+                    elif result['kind'] == 'rc':
+                        return 'release'
         return 'master'
+
+    def commit(
+        self,
+        basedir: str = os.getcwd(),
+        filepaths: Tuple[Any, ...] = (),
+        message: str = 'initial commit',
+    ) -> None:
+        '''Commit changes in a Git repository.'''
+        if filepaths == ():
+            filepaths = (os.path.join(basedir, '*'),)
+        for filepath in filepaths:
+            self.repo.index.add(os.path.join(basedir, filepath))
+        self.repo.index.commit(message)
+
+    def tag(
+        self,
+        path: str,
+        ref: str = 'HEAD',
+        message: Optional[str] = None,
+        force: bool = False,
+        **kwargs: Any
+    ) -> None:
+        '''Tag commit message.'''
+        self.repo.create_tag(
+            path=path, ref=ref, message=message, force=force, **kwargs
+        )
 
 
 # TODO determine relation with state and git hooks
-
-
 class CommitMessageAction(CommitMessageParser):
     def __init__(
         self,
         config: Config = source_tree,
-        branch: str = str(repo.active_branch),
+        repo: Repo = repo,
         *args: Any,
         **kwargs: Any
     ) -> None:
         '''Initialize commit message action object.'''
         self.config = config
         self.version = PythonVersion(config.retrieve('/tool/proman/version'))
+        self.repo = repo
 
         super().__init__(*args, **kwargs)
-        ref = repo.refs[branch].commit
+        ref = self.repo.refs[str(self.repo.active_branch)].commit
         self.parse(ref.message)
 
     def __update_config(
@@ -267,8 +346,8 @@ class CommitMessageAction(CommitMessageParser):
         with open(filepath, 'r+') as f:
             file_contents = f.read()
             pattern = re.compile(re.escape(version), flags=0)
-            # TODO: if pattern not found
             file_contents = pattern.sub(new_version, file_contents)
+            # TODO: error if pattern not found in contents
             f.seek(0)
             f.truncate()
             f.write(file_contents)
@@ -288,49 +367,87 @@ class CommitMessageAction(CommitMessageParser):
                     .substitute(version=new_version)
                 )
             )
+        self.commit(
+            filepaths=tuple(f['filepath'] for f in filepaths),
+            message=f"ci(version): apply {new_version} modifications"
+        )
+
+    def commit(
+        self,
+        basedir: str = os.getcwd(),
+        filepaths: Tuple[Any, ...] = (),
+        message: str = 'initial commit',
+    ) -> None:
+        '''Commit changes in a Git repository.'''
+        if filepaths == ():
+            filepaths = (os.path.join(basedir, '*'),)
+        for filepath in filepaths:
+            self.repo.index.add(os.path.join(basedir, filepath))
+        self.repo.index.commit(message)
+
+    def tag(
+        self,
+        path: str,
+        ref: str = 'HEAD',
+        message: Optional[str] = None,
+        force: bool = False,
+        **kwargs: Any
+    ) -> None:
+        '''Tag commit message.'''
+        self.repo.create_tag(
+            path=path, ref=ref, message=message, force=force, **kwargs
+        )
 
     def bump_version(self) -> str:
         '''Update the version of the application.'''
         # states = ['dev', 'alpha', 'beta', 'rc', 'final', 'post']
         version = deepcopy(self.version)
-        if (
-            ('break' in self.title and self.title['break'])
-            or (
-                'breaking_change' in self.footer
-                and self.footer['breaking_change']
-            )
-        ):
+        new_version = None
+
+        if self.title['break'] or self.footer['breaking_change']:
             new_version = self.version.bump_major()
-        elif self.title['type'] == 'feat':
-            new_version = self.version.bump_minor()
-        elif self.title['type'] == 'fix':
-            new_version = self.version.bump_micro()
-        # update release instance
-        elif self.title['type'] == 'build':
-            # build number
-            ...
-        elif self.title['type'] == 'ci':
-            # build number
-            ...
-        elif self.title['type'] == 'chore':
-            # build number
-            ...
-        elif self.title['type'] == 'docs':
-            # build number
-            ...
-        elif self.title['type'] == 'perf':
-            # build number
-            # potential for breaking change
-            ...
-        elif self.title['type'] == 'refactor':
-            # build number
-            # potential for breaking change
-            ...
-        elif self.title['type'] == 'style':
-            # build number
-            ...
-        elif self.title['type'] == 'test':
-            # build number
-            ...
-        self.update_configs(version=version, new_version=new_version)
+        elif 'type' in self.title:
+            if self.title['type'] == 'feat':
+                new_version = self.version.bump_minor()
+            elif self.title['type'] == 'fix':
+                new_version = self.version.bump_micro()
+            # update release instance
+            elif self.title['type'] == 'build':
+                # build number
+                ...
+            elif self.title['type'] == 'ci':
+                # build number
+                ...
+            elif self.title['type'] == 'chore':
+                # build number
+                ...
+            elif self.title['type'] == 'docs':
+                # build number
+                ...
+            elif self.title['type'] == 'perf':
+                # build number
+                # potential for breaking change
+                ...
+            elif self.title['type'] == 'refactor':
+                # build number
+                # potential for breaking change
+                ...
+            elif self.title['type'] == 'style':
+                # build number
+                ...
+            elif self.title['type'] == 'test':
+                # build number
+                ...
+
+        if not self.repo.is_dirty():
+            if new_version:
+                self.update_configs(version=version, new_version=new_version)
+            else:
+                raise exception.PromanWorkflowException(
+                    'no new version available'
+                )
+        else:
+            raise exception.PromanWorkflowException(
+                'git repository is not clean'
+            )
         return str(version)

@@ -4,6 +4,7 @@
 '''Parse Git commit messages.'''
 
 # import logging
+from collections import defaultdict
 from typing import Any, Callable, Dict, List, Optional
 
 from lark import Lark
@@ -45,7 +46,7 @@ class CommitMessageParser:
     @property
     def title(self) -> Dict[str, Any]:
         '''Get title section of commit message.'''
-        title = {}
+        title: Dict[str, Any] = defaultdict(lambda: None)
         section = self._get_section('title')
         if section:
             for arg in section.children:
@@ -64,7 +65,9 @@ class CommitMessageParser:
     @property
     def footer(self) -> Dict[str, Any]:
         '''Get footer section of commit message.'''
-        footer: Dict[str, Any] = {'issues': []}
+        footer: Dict[str, Any] = defaultdict(lambda: None)
+        footer['issues'] = []
+
         section = self._get_section('footer')
         if section:
             for arg in section.children:

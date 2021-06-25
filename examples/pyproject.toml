@@ -3,7 +3,7 @@
 authors = ["Jesse P. Johnson"]
 description = "A mock project for development."
 name = "mock-project"
-version = "2.2.0"
+version = "2.6.0"
 
 [tool.proman.release]
 [[tool.proman.release.files]]
