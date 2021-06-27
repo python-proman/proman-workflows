@@ -11,7 +11,7 @@ lark-parser = "^0.10.0"
 argufy = "^0.1.1-alpha.12"
 transitions = "^0.8.4"
 GitPython = "^3.1.17"
-compendium = "^0.1.1-alpha.82"
+compendium = "^0.1.1-dev.82"
 packaging = "^20.9"
 invoke = "^1.5.0"
 
@@ -39,7 +39,7 @@ requires = ["argufy", "jinja2", "GitPython", "lark-parser", "transitions"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 
 [tool.flit.entrypoints."proman.namespaces"]
-proman_workflows = "proman_workflows:PromanWorkflows"
+conventional_commits = "proman_workflows:conventional_commits"
 
 [tool.flit.scripts]
 workflow = "proman_workflows.__main__:main"
