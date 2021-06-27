@@ -19,8 +19,9 @@ PATHS = [VENV_PATH] if VENV_PATH else []
 
 # TODO check VCS for paths
 base_dir = os.getcwd()
-pyproject_path = os.path.join(base_dir, 'pyproject.toml')
-lock_path = os.path.join(base_dir, 'proman-lock.json')
+filenames = ['pyproject.toml', 'setup.cfg']
+# pyproject_path = os.path.join(base_dir, 'pyproject.toml')
+# lock_path = os.path.join(base_dir, 'proman-lock.json')
 pypackages_dir = os.path.join(base_dir, '__pypackages__')
 
 GIT_HOOKS = {

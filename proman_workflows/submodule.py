@@ -4,6 +4,7 @@
 '''Control Git submodules.'''
 
 import os
+from typing import Optional
 
 # from git.objects.submodule.base import Submodule
 # from git.objects.submodule.root import (
@@ -24,20 +25,20 @@ exec git submodule update
 '''
 
 
-def setup():
+def setup() -> None:
     '''Do setup for post checkout hooks.'''
     path = os.path.join(os.getcwd(), '.git', 'hooks', 'post-checkout')
     with open(path, 'w') as f:
         f.write(post_commit)
 
 
-def index():
+def index() -> None:
     '''List submodules with project.'''
     for sm in repo.submodules:
         print(sm)
 
 
-def view(name=None):
+def view(name: Optional[str] = None) -> None:
     '''View project info.'''
     if name:
         sm = repo.submodule(name)
@@ -46,13 +47,18 @@ def view(name=None):
         print('No module name provided')
 
 
-def add(module=None, url=None, branch='master', path=None):
+def add(
+    module: Optional[str] = None,
+    url: Optional[str] = None,
+    branch: str = 'master',
+    path: Optional[str] = None
+) -> None:
     '''Add submodule to project.'''
     repo.create_submodule(module, path, url=url, branch=branch)
     repo.index.commit(f'Added {module} submodule')
 
 
-def update(name=None):
+def update(name: Optional[str] = None) -> None:
     '''Update submodule within project.'''
     if name:
         sm = repo.submodule(name)
@@ -62,11 +68,11 @@ def update(name=None):
 
 
 def remove(
-    name: str = None,
+    name: Optional[str] = None,
     module: bool = True,
     force: bool = True,
     configuration: bool = True
-):
+) -> None:
     '''Remove submodule from repository.
 
     Parameters

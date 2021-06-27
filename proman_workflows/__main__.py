@@ -5,7 +5,7 @@
 
 from argufy import Parser
 
-from proman_workflows.cli import hooks, setup, submodule, release
+from proman_workflows.cli import hooks, setup, release
 
 
 def main() -> None:
@@ -13,7 +13,6 @@ def main() -> None:
     parser = Parser(command_type='subcommand')
     parser.add_commands(hooks)
     parser.add_commands(setup)
-    parser.add_commands(submodule)
     parser.add_commands(release)
     hooks.test = 'test'  # type: ignore
     parser.dispatch()

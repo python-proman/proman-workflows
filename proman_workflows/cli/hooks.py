@@ -6,9 +6,9 @@
 import os
 import sys
 
-from jinja2 import Template
+from jinja2 import Template  # type: ignore
 
-from proman_workflows import config
+from proman_workflows import config, repo
 
 __hooks_template__ = """\
 #!{{ python_executable }}
@@ -54,16 +54,18 @@ hook = Program(namespace=Collection.from_module(hooks), version='0.1.0')
 hook.run
 """
 
+dirs = config.GitDirs(repo)
 
-def setup(name: str = 'pre-commit', update: bool = False):
+
+def setup(name: str = 'pre-commit', update: bool = False) -> None:
     '''Do setup for post checkout hooks.'''
-    path = os.path.join(config.git_hooks_path, name)
+    path = os.path.join(dirs.hooks_dir, name)
     if not os.path.exists(path) or update:
         template = Template(__hooks_template__)
         content = template.render(
             python_executable=sys.executable,
             pipeline_context_input='arb context input',
-            working_dir=config.git_root_path,
+            working_dir=dirs.repo_dir,
             groups=[name],
             success_group=f"{name}-success-group",
             failure_group=f"{name}-failure-group",
@@ -76,7 +78,7 @@ def setup(name: str = 'pre-commit', update: bool = False):
         os.chmod(path, 0o775)
 
 
-def remove(name: str = 'pre-commit'):
+def remove(name: str = 'pre-commit') -> None:
     '''Remove submodule from repository.
 
     Parameters
@@ -85,6 +87,6 @@ def remove(name: str = 'pre-commit'):
         Name of submodule to be removed
 
     '''
-    path = os.path.join(config.git_hooks_path, name)
+    path = os.path.join(dirs.hooks_dir, name)
     if os.path.exists(path):
         os.remove(path)

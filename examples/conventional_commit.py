@@ -1,7 +1,8 @@
-from proman_workflows.release import CommitMessageAction
+# from proman_workflows.release import ReleaseController
+from proman_workflows import get_release_controller
 
-
-commit = CommitMessageAction()
-print(commit.config.retrieve('/tool/proman/release/files'))
-print(commit.version)
-print(commit.bump_version())
+controller = get_release_controller()
+print(controller.config.retrieve('/tool/proman/release/files'))
+print('old', controller.version)
+controller.bump_version()
+print('new', controller.version)

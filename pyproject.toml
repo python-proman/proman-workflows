@@ -13,6 +13,7 @@ transitions = "^0.8.4"
 GitPython = "^3.1.17"
 compendium = "^0.1.1-alpha.82"
 packaging = "^20.9"
+invoke = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -24,11 +25,10 @@ isort = "^4.3.21"
 bandit = "^1.6.2"
 safety = "^1.9.0"
 mkdocs = "^1.1.2"
-bump2version = "^1.0.0"
-invoke = "^1.4.1"
 mkdocs-material = "^5.4.0"
 flit = "^3.2.0"
 mypy = "^0.902"
+mccabe = "^0.6.1"
 
 [tool.flit.metadata]
 module = "proman_workflows"
@@ -37,6 +37,9 @@ author-email = "jpj6652@gmail.com"
 home-page = "https://github.com/proman/proman-workflows"
 requires = ["argufy", "jinja2", "GitPython", "lark-parser", "transitions"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
+
+[tool.flit.entrypoints."proman.namespaces"]
+proman_workflows = "proman_workflows:PromanWorkflows"
 
 [tool.flit.scripts]
 workflow = "proman_workflows.__main__:main"
