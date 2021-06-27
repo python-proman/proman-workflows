@@ -8,7 +8,7 @@ import os
 from typing import Any, List
 
 from git import Repo
-from invoke import Collection
+from invoke import Collection, Program
 
 from proman_workflows import config, exception
 from proman_workflows.config import Config
@@ -66,5 +66,13 @@ namespace = Collection()
 namespace.add_collection(conventional_commits, name='commit_hook')
 # namespace.configure({'package': 'override-package'})
 # print(namespace.task_names)
+
+program = Program(
+    version=__version__,
+    namespace=namespace,
+    name=__title__,
+    binary='conventional-commit',
+    binary_names=['conventional-commit'],
+)
 
 __all__ = ['repo', 'source_config', 'parser']

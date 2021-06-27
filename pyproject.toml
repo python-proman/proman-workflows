@@ -43,6 +43,8 @@ conventional_commits = "proman_workflows:conventional_commits"
 
 [tool.flit.scripts]
 workflow = "proman_workflows.__main__:main"
+conventional-commit = "proman_workflows:program.run"
+
 
 [tool.black]
 include = '\.pyi?$'
