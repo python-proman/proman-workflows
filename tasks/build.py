@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
+# type: ignore
 '''Test Task-Runner.'''
 
-from invoke import task  # type: ignore
+from invoke import task
 
 from proman_workflows import __version__
 
@@ -14,7 +15,7 @@ else:
 
 
 @task
-def build(ctx, format=None):  # type: ignore
+def build(ctx, format=None):
     '''Build wheel package.'''
     if format:
         ctx.run("flit build --format={}".format(format))
@@ -23,7 +24,7 @@ def build(ctx, format=None):  # type: ignore
 
 
 @task
-def install(ctx, symlink=True, dev=False):  # type: ignore
+def install(ctx, symlink=True, dev=False):
     '''Install within environment.'''
     args = []
     if symlink:
@@ -33,8 +34,7 @@ def install(ctx, symlink=True, dev=False):  # type: ignore
     ctx.run("flit install {}".format(' '.join(args)))
 
 
-@task
-def version(  # type: ignore
+def version(
     ctx, part=part, tag=False, commit=False, message=None
 ):
     '''Update project version and apply tags.'''
@@ -54,13 +54,13 @@ def version(  # type: ignore
 
 
 @task
-def publish(ctx):  # type: ignore
+def publish(ctx):
     '''Publish project distribution.'''
     ctx.run('flit publish')
 
 
 @task
-def clean(ctx):  # type: ignore
+def clean(ctx):
     '''Clean project dependencies and build.'''
     paths = ['dist', 'logs', 'site']
     paths.append('**/__pycache__')

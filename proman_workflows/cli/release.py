@@ -13,7 +13,8 @@ log = logging.getLogger(__name__)
 
 workflow = get_release_controller()
 
-# def search(digest: str):
+
+# def search(digest: str) -> None:
 #     pass
 
 

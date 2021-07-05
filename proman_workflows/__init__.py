@@ -10,15 +10,14 @@ from typing import Any, List
 from git import Repo
 from invoke import Collection, Program
 
-from proman_workflows import config, exception
+from proman_workflows import config, conventional_commits, exception
 from proman_workflows.config import Config
+from proman_workflows.controller import IntegrationController
 from proman_workflows.parser import CommitMessageParser
-from proman_workflows.release import ReleaseController
-from proman_workflows.vcs import GitFlow
-from proman_workflows import conventional_commits
+from proman_workflows.vcs import GitRepo
+# from proman_workflows.version import PythonVersion
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
-
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
@@ -46,20 +45,33 @@ def get_source_tree(
     raise exception.PromanWorkflowException('no configuration found')
 
 
-def get_release_controller(*args: Any, **kwargs: Any) -> ReleaseController:
+# def get_python_version(cfg: Config) -> PythonVersion:
+#     if cfg.retrieve('/tool/proman'):
+#         if 'version' in cfg['tool']['proman']['release']:
+#             version = cfg.retrieve('/tool/proman/release/version')
+#         else:
+#             version = cfg.retrieve('/tool/proman/version')
+#     elif cfg.retrieve('/tool/poetry'):
+#         version = cfg.retrieve('/tool/poetry/version')
+#     elif cfg.retrieve('/metadata'):
+#         version = cfg.retrieve('/metadata/version')
+#     return PythonVersion(version)
+
+
+def get_release_controller(*args: Any, **kwargs: Any) -> IntegrationController:
     '''Create and return a release controller.'''
     basepath = kwargs.get('basepath', os.getcwd())
     filenames = kwargs.get('filenames', config.filenames)
-    return ReleaseController(
+    return IntegrationController(
         config=get_source_tree(basepath=basepath, filenames=filenames),
-        workflow=GitFlow(get_repo(basepath))
+        repo=GitRepo(get_repo(basepath)),
+        **kwargs,
     )
 
 
 repo = get_repo()
 source_tree = get_source_tree()
 parser = CommitMessageParser()
-
 
 # Assemble namespace for tasks
 namespace = Collection()
@@ -71,8 +83,15 @@ program = Program(
     version=__version__,
     namespace=namespace,
     name=__title__,
-    binary='conventional-commit',
-    binary_names=['conventional-commit'],
+    binary='commit-workflow',
+    binary_names=['commit-workflow'],
 )
 
-__all__ = ['repo', 'source_config', 'parser']
+__all__ = [
+    'get_repo',
+    'get_source_tree',
+    'get_release_controller',
+    'parser',
+    'repo',
+    'source_tree',
+]

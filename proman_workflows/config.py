@@ -10,7 +10,7 @@ from typing import Optional
 from urllib.parse import urljoin, urlparse
 
 from compendium.loader import ConfigFile
-from git import Repo
+# from git import Repo
 from git.config import GitConfigParser
 
 INDEX_URL = urlparse('https://pypi.org')
@@ -66,8 +66,7 @@ grammar: str = os.path.join(
 class GitDirs:
     '''Provide settings for git repositories.'''
 
-    repo: Repo
-    repo_dir: str = field(init=False)
+    repo_dir: str
 
     git_dir: str = field(init=False)
     hooks_dir: str = field(init=False)
@@ -79,7 +78,7 @@ class GitDirs:
 
     def __post_init__(self) -> None:
         '''Initialize git-tools configuration.'''
-        self.repo_dir = self.repo.git.rev_parse('--show-toplevel')
+        # self.repo_dir = self.repo.git.rev_parse('--show-toplevel')
         self.git_dir = os.path.join(self.repo_dir, '.git')
         self.hooks_dir = os.path.join(self.git_dir, 'hooks')
         self.config = os.path.join(self.git_dir, 'config')

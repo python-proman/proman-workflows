@@ -29,6 +29,7 @@ mkdocs-material = "^5.4.0"
 flit = "^3.2.0"
 mypy = "^0.902"
 mccabe = "^0.6.1"
+pyfakefs = "^4.5.0"
 
 [tool.flit.metadata]
 module = "proman_workflows"
@@ -43,8 +44,7 @@ conventional_commits = "proman_workflows:conventional_commits"
 
 [tool.flit.scripts]
 workflow = "proman_workflows.__main__:main"
-conventional-commit = "proman_workflows:program.run"
-
+commit-workflow = "proman_workflows:program.run"
 
 [tool.black]
 include = '\.pyi?$'

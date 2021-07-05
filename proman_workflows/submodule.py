@@ -3,7 +3,6 @@
 # license: Apache 2.0, see LICENSE for more details.
 '''Control Git submodules.'''
 
-import os
 from typing import Optional
 
 # from git.objects.submodule.base import Submodule
@@ -16,6 +15,8 @@ from typing import Optional
 #     touch
 # )
 
+from invoke import task
+
 from proman_workflows import repo
 
 base_dir = 'modules'
@@ -25,19 +26,21 @@ exec git submodule update
 '''
 
 
-def setup() -> None:
-    '''Do setup for post checkout hooks.'''
-    path = os.path.join(os.getcwd(), '.git', 'hooks', 'post-checkout')
-    with open(path, 'w') as f:
-        f.write(post_commit)
+# def setup() -> None:
+#     '''Do setup for post checkout hooks.'''
+#     path = os.path.join(os.getcwd(), '.git', 'hooks', 'post-checkout')
+#     with open(path, 'w') as f:
+#         f.write(post_commit)
 
 
+@task
 def index() -> None:
     '''List submodules with project.'''
     for sm in repo.submodules:
         print(sm)
 
 
+@task
 def view(name: Optional[str] = None) -> None:
     '''View project info.'''
     if name:
@@ -47,6 +50,7 @@ def view(name: Optional[str] = None) -> None:
         print('No module name provided')
 
 
+@task
 def add(
     module: Optional[str] = None,
     url: Optional[str] = None,
@@ -58,6 +62,7 @@ def add(
     repo.index.commit(f'Added {module} submodule')
 
 
+@task
 def update(name: Optional[str] = None) -> None:
     '''Update submodule within project.'''
     if name:
@@ -67,6 +72,7 @@ def update(name: Optional[str] = None) -> None:
         repo.submodule_update(recursive=False)
 
 
+@task
 def remove(
     name: Optional[str] = None,
     module: bool = True,

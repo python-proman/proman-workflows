@@ -1,11 +1,14 @@
-[tool]
 [tool.proman]
 authors = ["Jesse P. Johnson"]
 description = "A mock project for development."
 name = "mock-project"
-version = "2.6.3"
+version = "2.6.5"
 
 [tool.proman.release]
+enable_devreleases = true
+enable_prereleases = true
+enable_postreleases = true
+
 [[tool.proman.release.files]]
 filepath = "example/__init__.py"
 pattern = "__version__ = '${version}'"

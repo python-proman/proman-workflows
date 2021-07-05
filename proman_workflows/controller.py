@@ -13,7 +13,7 @@ from typing import Any
 from packaging.version import Version
 # from transitions import Machine
 
-from proman_workflows import exception
+# from proman_workflows import exception
 from proman_workflows.config import Config
 from proman_workflows.parser import CommitMessageParser
 from proman_workflows.vcs import GitRepo
@@ -26,33 +26,45 @@ from proman_workflows.version import PythonVersion
 
 
 # TODO determine relation with state and git hooks
-class ReleaseController(CommitMessageParser):
+class IntegrationController(CommitMessageParser):
+
+    # kinds = ['rolling', 'sustainment']
+    # Trunk Based Development (TBD)
+    # Stage Based Development (SBD)
+    # Release Branching Strategy (RBS)
+    # Feature Branching Strategy (FBS)
+
     def __init__(
         self,
         config: Config,
-        workflow: GitRepo,
+        repo: GitRepo,
         *args: Any,
         **kwargs: Any
     ) -> None:
         '''Initialize commit message action object.'''
         self.config = config
-        if self.config.retrieve('/tool/proman'):
-            if 'version' in self.config['tool']['proman']['release']:
-                version = config.retrieve('/tool/proman/release/version')
-            else:
-                version = config.retrieve('/tool/proman/version')
-        elif self.config.retrieve('/tool/poetry'):
-            version = config.retrieve('/tool/poetry/version')
-        elif self.config.retrieve('/metadata'):
-            version = config.retrieve('/metadata/version')
-        self.version = PythonVersion(version)
-        self.workflow = workflow
 
+        if 'version' in kwargs:
+            version = kwargs.pop('version')
+        elif self.config.retrieve('/tool/proman'):
+            if 'version' in self.config['tool']['proman']['release']:
+                version = self.config.retrieve('/tool/proman/release/version')
+            else:
+                version = self.config.retrieve('/tool/proman/version')
+        elif self.config.retrieve('/tool/poetry'):
+            version = self.config.retrieve('/tool/poetry/version')
+        elif self.config.retrieve('/metadata'):
+            version = self.config.retrieve('/metadata/version')
+        self.version = PythonVersion(version)
+
+        parse_current_repo = kwargs.pop('parse_current_repo', True)
         super().__init__(*args, **kwargs)
-        ref = self.workflow.repo.refs[
-            str(self.workflow.repo.active_branch)
-        ].commit
-        self.parse(ref.message)
+
+        self.repo = repo
+        if parse_current_repo:
+            branch = str(self.repo.repo.active_branch)
+            ref = self.repo.repo.refs[branch].commit
+            self.parse(ref.message)
 
     def __update_config(
         self,
@@ -86,7 +98,7 @@ class ReleaseController(CommitMessageParser):
                     .substitute(version=new_version)
                 )
             )
-        self.workflow.commit(
+        self.repo.commit(
             filepaths=tuple(f['filepath'] for f in filepaths),
             message=f"ci(version): apply {new_version} modifications"
         )
@@ -97,6 +109,7 @@ class ReleaseController(CommitMessageParser):
         version = deepcopy(self.version)
         new_version = None
 
+        # local number depends on metadata / fork / conflict existing vers
         if self.title['break'] or self.footer['breaking_change']:
             new_version = self.version.bump_major()
         elif 'type' in self.title:
@@ -106,41 +119,32 @@ class ReleaseController(CommitMessageParser):
                 new_version = self.version.bump_micro()
             # update release instance
             elif self.title['type'] == 'build':
-                # build number
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'ci':
-                # build number
-                ...
-            elif self.title['type'] == 'chore':
-                # build number
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'docs':
-                # build number
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'perf':
-                # build number
-                # potential for breaking change
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'refactor':
-                # build number
-                # potential for breaking change
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'style':
-                # build number
-                ...
+                new_version = self.version.bump_release()
             elif self.title['type'] == 'test':
-                # build number
-                ...
+                new_version = self.version.bump_release()
+            elif self.title['type'] == 'chore':
+                new_version = self.version.bump_release()
 
-        if not self.workflow.repo.is_dirty():
-            if new_version:
-                self.update_configs(version=version, new_version=new_version)
-            else:
-                raise exception.PromanWorkflowException(
-                    'no new version available'
-                )
-        else:
-            raise exception.PromanWorkflowException(
-                'git repository is not clean'
-            )
-        return str(version)
+        # if not self.repo.repo.is_dirty():
+        #     if new_version:
+        #         self.update_configs(version=version, new_version=new_version)
+        #     else:
+        #         raise exception.PromanWorkflowException(
+        #             'no new version available'
+        #         )
+        # else:
+        #     raise exception.PromanWorkflowException(
+        #         'git repository is not clean'
+        #     )
+        # return str(version)
+        return str(version) + ' ' + str(new_version)
