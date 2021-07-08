@@ -13,9 +13,9 @@ from invoke import Collection, Program
 from proman_workflows import config, conventional_commits, exception
 from proman_workflows.config import Config
 from proman_workflows.controller import IntegrationController
-from proman_workflows.parser import CommitMessageParser
-from proman_workflows.vcs import GitRepo
-# from proman_workflows.version import PythonVersion
+from proman_workflows.grammars.conventional_commits import CommitMessageParser
+from proman_workflows.vcs import Git
+from proman_workflows.version import PythonVersion
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -30,7 +30,7 @@ __copyright__ = 'Copyright 2021 Jesse Johnson.'
 
 def get_repo(path: str = os.getcwd()) -> Repo:
     '''Load the repository object.'''
-    return Repo(os.path.join(path, '.git'), search_parent_directories=True)
+    return Git(os.path.join(path))
 
 
 def get_source_tree(
@@ -45,26 +45,31 @@ def get_source_tree(
     raise exception.PromanWorkflowException('no configuration found')
 
 
-# def get_python_version(cfg: Config) -> PythonVersion:
-#     if cfg.retrieve('/tool/proman'):
-#         if 'version' in cfg['tool']['proman']['release']:
-#             version = cfg.retrieve('/tool/proman/release/version')
-#         else:
-#             version = cfg.retrieve('/tool/proman/version')
-#     elif cfg.retrieve('/tool/poetry'):
-#         version = cfg.retrieve('/tool/poetry/version')
-#     elif cfg.retrieve('/metadata'):
-#         version = cfg.retrieve('/metadata/version')
-#     return PythonVersion(version)
+def get_python_version(cfg: Config) -> PythonVersion:
+    if cfg.retrieve('/tool/proman'):
+        if 'version' in cfg['tool']['proman']['release']:
+            version = cfg.retrieve('/tool/proman/release/version')
+        else:
+            version = cfg.retrieve('/tool/proman/version')
+    elif cfg.retrieve('/tool/poetry'):
+        version = cfg.retrieve('/tool/poetry/version')
+    elif cfg.retrieve('/metadata'):
+        version = cfg.retrieve('/metadata/version')
+    else:
+        raise exception.PromanWorkflowException('no version found')
+    return PythonVersion(version)
 
 
 def get_release_controller(*args: Any, **kwargs: Any) -> IntegrationController:
     '''Create and return a release controller.'''
     basepath = kwargs.get('basepath', os.getcwd())
     filenames = kwargs.get('filenames', config.filenames)
+    cfg = get_source_tree(basepath=basepath, filenames=filenames)
+    version = get_python_version(cfg)
     return IntegrationController(
-        config=get_source_tree(basepath=basepath, filenames=filenames),
-        repo=GitRepo(get_repo(basepath)),
+        version=version,
+        config=cfg,
+        repo=get_repo(basepath),
         **kwargs,
     )
 

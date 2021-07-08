@@ -2,77 +2,124 @@
 from proman_workflows.version import PythonVersion
 
 
-def test_releaese():
-    v1 = PythonVersion('1.0.0')
-    assert v1.get_state() == 'final'
-    assert v1.major == 1
-    assert v1.minor == 0
-    assert v1.micro == 0
-    v1.bump_major()
-    assert str(v1) == '2.0.0'
-    v1.bump_minor()
-    assert str(v1) == '2.1.0'
-    v1.bump_micro()
-    assert str(v1) == '2.1.1'
+def test_versioning():
+    v = PythonVersion('1.0.0')
+    assert v.get_state() == 'final'
+    assert v.major == 1
+    assert v.minor == 0
+    assert v.micro == 0
+    v.bump_major()
+    assert str(v) == '2.0.0'
+    v.bump_minor()
+    assert str(v) == '2.1.0'
+    v.bump_micro()
+    assert str(v) == '2.1.1'
+
+
+def test_devrelease():
+    v = PythonVersion('1.0.0', enable_devreleases=True)
+    v.start_devrelease()
+    assert str(v) == '1.1.0.dev0'
+    v.finish_release()
+    assert str(v) == '1.1.0'
+
+
+def test_devrelease_state():
+    v = PythonVersion('1.0.0', enable_devreleases=True)
+    assert v.get_state() == 'final'
+    v.start_devrelease()
+    assert v.get_state() == 'development'
+    v.finish_release()
+    assert v.get_state() == 'final'
 
 
 def test_prerelease():
-    v2 = PythonVersion('2.0.0', enable_prereleases=True)
-    assert v2.get_state() == 'final'
-    v2.start_prerelease()
-    assert str(v2) == '3.0.0a0'
-    assert v2.pre == ('a', 0)
-    v2.bump_prerelease()
-    assert str(v2) == '3.0.0a1'
-    v2.new_prerelease()
-    assert str(v2) == '3.0.0b0'
-    v2.bump_prerelease()
-    assert str(v2) == '3.0.0b1'
-    v2.new_prerelease()
-    assert str(v2) == '3.0.0rc0'
-    v2.bump_prerelease()
-    assert str(v2) == '3.0.0rc1'
+    v = PythonVersion('2.0.0', enable_prereleases=True)
+    assert v.get_state() == 'final'
+    v.start_prerelease()
+    assert str(v) == '3.0.0a0'
+    assert v.pre == ('a', 0)
+    v.bump_prerelease()
+    assert str(v) == '3.0.0a1'
+    v.start_prerelease()
+    assert str(v) == '3.0.0b0'
+    v.bump_prerelease()
+    assert str(v) == '3.0.0b1'
+    v.start_prerelease()
+    assert str(v) == '3.0.0rc0'
+    v.bump_prerelease()
+    assert str(v) == '3.0.0rc1'
+
+
+def test_prerelease_states():
+    v = PythonVersion('1.0.0', enable_prereleases=True)
+    assert v.get_state() == 'final'
+    v.start_prerelease()
+    assert v.get_state() == 'prerelease'
+    v.start_prerelease()
+    assert v.get_state() == 'prerelease'
+    v.start_prerelease()
+    assert v.get_state() == 'prerelease'
+    v.finish_release()
+    assert v.get_state() == 'final'
 
 
 def test_post():
-    v3 = PythonVersion('2.0.0-post1', enable_postreleases=True)
-    assert v3.get_state() == 'post'
-    assert v3.release == (2, 0, 0)
-    assert v3.base_version == '2.0.0'
-    assert v3.major == 2
-    assert v3.minor == 0
-    assert v3.micro == 0
-    v3.bump_major()
-    assert str(v3) == '3.0.0'
-    assert v3.major == 3
-    v3.bump_minor()
-    assert str(v3) == '3.1.0'
-    assert v3.minor == 1
-    v3.bump_micro()
-    assert str(v3) == '3.1.1'
-    assert v3.micro == 1
+    v = PythonVersion('2.0.0', enable_postreleases=True)
+    assert v.get_state() == 'final'
+    v.start_postrelease()
+    assert v.release == (2, 0, 0)
+    assert v.base_version == '2.0.0'
+    assert v.major == 2
+    assert v.minor == 0
+    assert v.micro == 0
+    assert v.get_state() == 'post'
+    v.bump_postrelease()
+    assert v.get_state() == 'post'
+    v.bump_major()
+    assert v.get_state() == 'final'
+
+
+def test_post_state():
+    v = PythonVersion('2.0.0', enable_postreleases=True)
+    assert v.get_state() == 'final'
+
+    v.start_postrelease()
+    assert v.get_state() == 'post'
 
 
 def test_local():
-    v4 = PythonVersion('3.0.0+dev4.post3')
-    v4.get_state() == 'final'
-    assert v4.release == (3, 0, 0)
-    assert v4.pre is None
-    assert v4.post is None
-    assert v4.local == 'dev4.post3'
-    v4.bump_major()
-    assert str(v4) == '4.0.0'
+    v = PythonVersion('3.0.0+dev4.post3')
+    assert v.release == (3, 0, 0)
+    assert v.pre is None
+    assert v.post is None
+    assert v.local == 'dev4.post3'
+    v.bump_major()
+    assert str(v) == '4.0.0'
+
+
+def test_local_state():
+    v = PythonVersion('1.0.0')
+    assert v.get_state() == 'final'
+
+    v.start_local()
+    assert v.local == 'build.0'
+    v.get_state() == 'final'
+
+    v.bump_local()
+    assert v.local == 'build.1'
 
 
 def test_mixed():
-    v5 = PythonVersion('5.0.0-rc5+build254')
-    print('v5', v5.get_state())
-    print('v5', v5.local)
+    # TODO: getting warning due to both
+    v = PythonVersion('5.0.0-rc5+build254')
+    assert v.get_state() == 'prerelease'
+    assert v.local == 'build254'
 
 
 def test_epoch():
-    v6 = PythonVersion('1!6.0.0')
-    assert v6.get_state() == 'final'
-    assert v6.epoch == 1
-    v6.bump_epoch()
-    assert str(v6) == '2!6.0.0'
+    v = PythonVersion('1!6.0.0')
+    assert v.get_state() == 'final'
+    assert v.epoch == 1
+    v.bump_epoch()
+    assert str(v) == '2!6.0.0'

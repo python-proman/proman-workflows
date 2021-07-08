@@ -3,14 +3,13 @@
 # license: Apache 2.0, see LICENSE for more details.
 '''Provide CLI for git-tools.'''
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import os
 # from pprint import pprint
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
 from compendium.loader import ConfigFile
-# from git import Repo
 from git.config import GitConfigParser
 
 INDEX_URL = urlparse('https://pypi.org')
@@ -63,32 +62,11 @@ grammar: str = os.path.join(
 
 
 @dataclass
-class GitDirs:
-    '''Provide settings for git repositories.'''
-
-    repo_dir: str
-
-    git_dir: str = field(init=False)
-    hooks_dir: str = field(init=False)
-    tools_dir: str = field(init=False)
+class GitConfig:
+    '''Manage git config.'''
 
     system_config: str = os.path.join(os.sep, 'etc', 'gitconfig')
     global_config: str = os.path.join(os.path.expanduser('~'), '.gitconfig')
-    config: str = field(init=False)
-
-    def __post_init__(self) -> None:
-        '''Initialize git-tools configuration.'''
-        # self.repo_dir = self.repo.git.rev_parse('--show-toplevel')
-        self.git_dir = os.path.join(self.repo_dir, '.git')
-        self.hooks_dir = os.path.join(self.git_dir, 'hooks')
-        self.config = os.path.join(self.git_dir, 'config')
-
-# workflows_dir = os.path.join(repo_dir, '.workflows')
-
-
-@dataclass
-class GitConfig(GitDirs):
-    '''Manage git config.'''
 
     def __post_init__(self) -> None:
         self.load()

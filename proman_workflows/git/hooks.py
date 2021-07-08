@@ -1,18 +1,20 @@
 '''Provide templating for git hooks.'''
 
-import config
 import os
 import sys
 from typing import Any
 
-from jinja2 import Environment, FileSystemLoader  # type: ignore
+from jinja2 import Environment, FileSystemLoader
+
+from proman_workflows import config, repo
 
 
-class GitHooks:
+class Hooks:
     def __init__(self, hooks_dir: str, template: str = 'invoke_hooks') -> None:
         '''Initialize git hooks object.'''
         self.hooks_dir = hooks_dir
-        self.template = os.path.join(config.hooks_dir, template)
+        self.template = f"{template}.j2"
+        print(self.template)
 
     def setup(
         self,
@@ -29,6 +31,7 @@ class GitHooks:
 
             content = template.render(
                 python_executable=sys.executable,
+                # other variables
             )
 
             with open(path, 'w+') as f:

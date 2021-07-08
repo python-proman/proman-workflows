@@ -10,14 +10,14 @@ from typing import Any
 from git import Repo
 from transitions import Machine
 
-from proman_workflows.vcs import GitRepo
+from proman_workflows.vcs import Git
 
 
 class VCSWorkflow:
     ...
 
 
-class GitFlow(GitRepo, VCSWorkflow):
+class GitFlow(Git, VCSWorkflow):
     '''Provide branching state engine.'''
 
     main_branches = ['develop', 'master']

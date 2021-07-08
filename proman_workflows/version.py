@@ -34,82 +34,60 @@ class PythonVersion(Version):
             initial=self.get_state()
         )
 
-        # determine release sources
-        release_sources = ['final']
-        if self.enable_devreleases:
-            release_sources += ['development']
-        if self.enable_prereleases:
-            release_sources += ['release']
-        if self.enable_postreleases:
-            release_sources += ['post']
-
         self.machine.add_transition(
             trigger='start_local',
-            source=release_sources,
+            source=['final', 'release', 'development', 'post'],
             dest='local',
             before='new_local'
         )
 
-        # handle dev-releases
-        if self.enable_devreleases:
-            self.machine.add_transition(
-                trigger='start_devrelease',
-                source=[x for x in release_sources if x != 'development'],
-                dest='development',
-                before='new_devrelease',
-            )
-
-        # handle pre-releases
-        if self.enable_prereleases:
-            # determine prerelease sources
-            __prerelease_sources = ['final']
-            if self.enable_devreleases:
-                __prerelease_sources += ['development']
-            if self.enable_postreleases:
-                __prerelease_sources += ['post']
-
-            self.machine.add_transition(
-                trigger='start_prerelease',
-                source=__prerelease_sources,
-                dest='alpha',
-                before='new_prerelease'
-            )
-            self.machine.add_transition(
-                trigger='start_prerelease',
-                source='alpha',
-                dest='beta',
-                before='new_prerelease'
-            )
-            self.machine.add_transition(
-                trigger='start_prerelease',
-                source='beta',
-                dest='release',
-                before='new_prerelease'
-            )
-
-        # determine release branch source
-        final_source = ['local']
-        if self.enable_devreleases:
-            final_source += ['development']
-        if self.enable_prereleases:
-            final_source += ['release']
-
-        # handle final release
+        # dev-releases
         self.machine.add_transition(
-            trigger='finalize_release',
-            source=final_source,
-            dest='final',
-            before='finish_release'
+            trigger='start_devrelease',
+            source=['final', 'release', 'post'],
+            dest='development',
+            before='new_devrelease',
+            conditions=['devreleases_enabled']
         )
 
-        # handle post-releases
-        if self.enable_postreleases:
-            self.machine.add_transition(
-                trigger='start_postrelease',
-                source='final',
-                dest='post',
-                before='bump_postrelease',
-            )
+        self.machine.add_transition(
+            trigger='start_prerelease',
+            source=['final', 'development', 'post'],
+            dest='alpha',
+            before='new_prerelease',
+            conditions=['prereleases_enabled']
+        )
+        self.machine.add_transition(
+            trigger='start_prerelease',
+            source='alpha',
+            dest='beta',
+            before='new_prerelease',
+            conditions=['prereleases_enabled']
+        )
+        self.machine.add_transition(
+            trigger='start_prerelease',
+            source='beta',
+            dest='release',
+            before='new_prerelease',
+            conditions=['prereleases_enabled']
+        )
+
+        # final release
+        self.machine.add_transition(
+            trigger='finish_release',
+            source=['local', 'development', 'release'],
+            dest='final',
+            before='finalize_release'
+        )
+
+        # post-releases
+        self.machine.add_transition(
+            trigger='start_postrelease',
+            source='final',
+            dest='post',
+            before='new_postrelease',
+            conditions=['postreleases_enabled']
+        )
 
     @property
     def states(self) -> List[str]:
@@ -122,6 +100,18 @@ class PythonVersion(Version):
         if self.enable_postreleases:
             states += ['post']
         return states
+
+    @property
+    def devreleases_enabled(self) -> bool:
+        return self.enable_devreleases
+
+    @property
+    def prereleases_enabled(self) -> bool:
+        return self.enable_prereleases
+
+    @property
+    def postreleases_enabled(self) -> bool:
+        return self.enable_postreleases
 
     def get_prerelease(self) -> Optional[str]:
         '''Get current prerelease state.'''
@@ -207,14 +197,13 @@ class PythonVersion(Version):
 
     def new_devrelease(self, kind: str = 'minor') -> None:
         '''Update to the next development release version number.'''
-        if self.enable_devreleases and not self.dev:
+        if not self.dev:
             self.__bump_version(kind)
-            dev = ('dev', 0)
-            self.__update_version(dev=dev)
+            self.__update_version(dev=('dev', 0))
 
     def bump_devrelease(self) -> None:
         '''Update to the next development release version number.'''
-        if self.enable_devreleases and self.dev:
+        if self.dev:
             dev = (self.dev[0], self.dev[1] + 1)
             self.__update_version(dev=dev)
 
@@ -224,11 +213,15 @@ class PythonVersion(Version):
 
     def bump_local(self) -> None:
         '''Update local version instance number.'''
-        print('bump local', self.local)
+        if self.local:
+            local = self.local.split('.')
+            if local[-1].isdigit():
+                local[-1] = str(int(local[-1]) + 1)
+            self.__update_version(local='.'.join(local))
 
     def new_prerelease(self, kind: str = 'major') -> None:
         '''Update to next prerelease version type.'''
-        if self.is_prerelease and self.pre:
+        if self.pre:
             if self.pre[0] == 'a':
                 pre = ('b', 0)
             elif self.pre[0] == 'b':
@@ -240,17 +233,22 @@ class PythonVersion(Version):
 
     def bump_prerelease(self) -> None:
         '''Update the prerelease version number.'''
-        if self.enable_prereleases and self.pre:
+        if self.pre:
             pre = (self.pre[0], self.pre[1] + 1)
             self.__update_version(pre=pre)
 
-    def finish_release(self) -> None:
+    def new_postrelease(self, kind: str = 'major') -> None:
         '''Update to next prerelease version type.'''
-        if self.is_devrelease or self.is_prerelease:
-            self.__update_version(release=(self.major, self.minor, self.micro))
+        if self.get_state() == 'final':
+            self.__update_version(post=('post', 0))
 
     def bump_postrelease(self) -> None:
         '''Update the post release version number.'''
-        if self.enable_postreleases and self.post:
+        if self.post:
             post = (self.post[0], self.post[1] + 1)
             self.__update_version(post=post)
+
+    def finalize_release(self) -> None:
+        '''Update to next prerelease version type.'''
+        if self.is_devrelease or self.is_prerelease:
+            self.__update_version(release=(self.major, self.minor, self.micro))

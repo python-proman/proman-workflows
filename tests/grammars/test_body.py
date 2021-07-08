@@ -1,7 +1,7 @@
+# type: ignore
 '''Test git hooks pipeline.'''
 
-from proman_workflows.parser import CommitMessageParser
-from textwrap import dedent
+from proman_workflows.grammars.conventional_commits import CommitMessageParser
 
 message = '''fix: test a message
 

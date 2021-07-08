@@ -24,3 +24,7 @@ print(refactor.bump_version())
 controller = get_release_controller(version='1.2.0')
 assert str(controller.version) == '1.2.0'
 print(controller.bump_version())
+
+docs = get_release_controller(version='1.0.0')
+docs.parse('docs: test')
+print(docs.bump_version())

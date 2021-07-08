@@ -18,15 +18,12 @@ workflow = get_release_controller()
 #     pass
 
 
-def version(name: str = 'master') -> None:
-    ref = repo.refs[name].commit
-    workflow.parse(ref.message)
-    title = workflow.title
-    if title['type'] == 'feat':
-        print('this is a minor bump')
-    if title['type'] == 'fix':
-        print('this is a patch')
-    # print(workflow.current_version)
+def version(
+    bump: bool = False,
+    # branch: str = 'master'
+) -> None:
+    if bump:
+        workflow.bump_version()
     print(workflow.version)
 
 

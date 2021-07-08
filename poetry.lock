@@ -791,6 +791,25 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "types-jinja2"
+version = "2.11.2"
+description = "Typing stubs for Jinja2"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+types-MarkupSafe = "*"
+
+[[package]]
+name = "types-markupsafe"
+version = "1.1.4"
+description = "Typing stubs for MarkupSafe"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "3.10.0.0"
 description = "Backported and Experimental Type Hints for Python 3.5+"
@@ -845,7 +864,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "dc82a8ab5919f627232f07b1290ff4f81480603aa9340784453ff4fe1dcd72ad"
+content-hash = "c7a24448760e1cdbd9c5111c9e62b7ce15ba6350bcd5704125f240c107bed08e"
 
 [metadata.files]
 ansicolors = [
@@ -1297,6 +1316,14 @@ typed-ast = [
     {file = "typed_ast-1.4.3-cp39-cp39-win32.whl", hash = "sha256:209596a4ec71d990d71d5e0d312ac935d86930e6eecff6ccc7007fe54d703808"},
     {file = "typed_ast-1.4.3-cp39-cp39-win_amd64.whl", hash = "sha256:9c6d1a54552b5330bc657b7ef0eae25d00ba7ffe85d9ea8ae6540d2197a3788c"},
     {file = "typed_ast-1.4.3.tar.gz", hash = "sha256:fb1bbeac803adea29cedd70781399c99138358c26d05fcbd23c13016b7f5ec65"},
+]
+types-jinja2 = [
+    {file = "types-Jinja2-2.11.2.tar.gz", hash = "sha256:5b53d2b8bc6dd6dfbc0ae3e33e346fbe343cbeba1ed528858749e2a2ffe0e143"},
+    {file = "types_Jinja2-2.11.2-py2.py3-none-any.whl", hash = "sha256:d27e112a8add449407de235f4533239149056327c8bddc6b0d6bf80cd7280c16"},
+]
+types-markupsafe = [
+    {file = "types-MarkupSafe-1.1.4.tar.gz", hash = "sha256:4fd2cc858fb4aea38555850f4ac2ecafae3543c88abb056669a3346c5c1b202c"},
+    {file = "types_MarkupSafe-1.1.4-py3-none-any.whl", hash = "sha256:2539a9e9b1b5a1bf1c10fdf2cb1dcb89e6f360759196883f4d5d103c53624375"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},

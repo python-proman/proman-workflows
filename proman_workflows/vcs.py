@@ -5,65 +5,70 @@
 
 # import logging
 import os
-from typing import Any, Optional, Tuple
+from typing import Any, List, Optional
 
 from git import Repo
+from git.types import PathLike
 # from transitions import Machine
 
-# TODO: version comparison against previous version
-# has API spec been modified?
-# has Python version changed?
-# has requirements versions changed?
+from proman_workflows import exception
 
 
-class VCSWorkflow:
-    ...
+class Git(Repo):
+    '''Provide settings for git repositories.'''
 
+    system_config: str = os.path.join(os.sep, 'etc', 'gitconfig')
+    global_config: str = os.path.join(os.path.expanduser('~'), '.gitconfig')
 
-class GitRepo:
-    def __init__(self, repo: Repo) -> None:
+    def __init__(self, path: PathLike = os.getcwd()) -> None:
         '''Initialize git object.'''
-        self.repo = repo
+        self.repo_dir = path
         self.branch = 'master'
+        super().__init__(path=path)
+        self.git_dir = os.path.join(self.repo_dir, '.git')
+        self.hooks_dir = os.path.join(self.git_dir, 'hooks')
+        self.config = os.path.join(self.git_dir, 'config')
 
     def init(self, path: str) -> None:
         '''Initialize a Git repository.'''
         if not os.path.exists(os.path.join(path, '.git')):
             Repo.init(path)
         else:
-            print('Repository already initialized.')
+            print('repository already initialized')
 
     def clone(
         self,
-        repo: Repo,
+        url: str,
         path: str = '.',
         branch: str = 'master',
     ) -> None:
         '''Clone Git repository.'''
         if not os.path.exists(path):
-            Repo.clone_from(repo, path, branch=branch)
-        # else:
-        #     raise exceptions.VCSException('clone already exists')
+            Repo.clone_from(url, path, branch=branch)
+        else:
+            raise exception.PromanWorkflowException(
+                'cloned repository alreaady exists'
+            )
 
     def add_remote(
         self,
-        remote: Repo,
-        name: str = 'origin',
+        url: str,
+        remote: str = 'origin',
         branch: str = 'master',
     ) -> None:
         '''Add Git remote repository URL.'''
         if next(iter(self.repo.remotes), None) is None:
-            self.repo.create_remote(name, url=remote)
+            self.repo.create_remote(remote, url=url)
         else:
-            for remote in self.repo.remotes:
-                if name == remote.name:
-                    remote.set_url(self.repo)
+            for r in self.repo.remotes:
+                if remote == r.name:
+                    r.set_url(self.repo)
                 else:
-                    self.repo.create_remote(name, url=remote)
+                    self.repo.create_remote(remote, url=url)
 
-    def checkout(self, name: str) -> None:
+    def checkout(self, branch: str) -> None:
         '''Checkout Git branch.'''
-        new_branch = self.repo.create_head(name)
+        new_branch = self.repo.create_head(branch)
         self.repo.head.reference = new_branch
 
     def push(
@@ -85,27 +90,15 @@ class GitRepo:
     def commit(
         self,
         basedir: str = os.getcwd(),
-        filepaths: Tuple[Any, ...] = (),
+        filepaths: List[str] = [],
         message: str = 'initial commit',
     ) -> None:
         '''Commit changes in a Git repository.'''
-        if filepaths == ():
-            filepaths = (os.path.join(basedir, '*'),)
+        if filepaths == []:
+            filepaths = [os.path.join(basedir, '*')]
         for filepath in filepaths:
             self.repo.index.add(os.path.join(basedir, filepath))
         self.repo.index.commit(message)
-
-    # def commit(
-    #     self,
-    #     items=[],
-    #     path=config.working_dir,
-    #     message='initial commit'
-    # ):
-    #     '''Commit changes in a Git repository.'''
-    #     if items == []:
-    #         items = os.path.join(path, '*')
-    #     self.repo.index.add(items)
-    #     self.repo.index.commit(message)
 
     def tag(
         self,
