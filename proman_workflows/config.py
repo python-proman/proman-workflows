@@ -3,10 +3,10 @@
 # license: Apache 2.0, see LICENSE for more details.
 '''Provide CLI for git-tools.'''
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import os
 # from pprint import pprint
-from typing import Optional
+from typing import Optional, Tuple
 from urllib.parse import urljoin, urlparse
 
 from compendium.loader import ConfigFile
@@ -17,48 +17,69 @@ VENV_PATH = os.getenv('VIRTUAL_ENV', None)
 PATHS = [VENV_PATH] if VENV_PATH else []
 
 # TODO check VCS for paths
-base_dir = os.getcwd()
+basedir = os.getcwd()
 filenames = ['pyproject.toml', 'setup.cfg']
-# pyproject_path = os.path.join(base_dir, 'pyproject.toml')
-# lock_path = os.path.join(base_dir, 'proman-lock.json')
-pypackages_dir = os.path.join(base_dir, '__pypackages__')
-
-GIT_HOOKS = {
-    'applypatch-msg',
-    'pre-applypatch',
-    'post-applypatch',
-    'pre-commit',
-    'pre-merge-commit',
-    'prepare-commit-msg',
-    'post-commit',
-    'pre-rebase',
-    'post-checkout',
-    'post-merge',
-    'pre-push',
-    'pre-recieve',
-    'update',
-    'post-recieve',
-    'post-update',
-    'reference-transaction',
-    'push-to-checkout',
-    'pre-auto-gc',
-    'post-rewrite',
-    'rebase',
-    'sendemail-validate',
-    'fsmonitor-watchman',
-    'p4-changelist',
-    'p4-prepare-changelist',
-    'p4-post-changelist',
-    'p4-pre-submit',
-    'post-index-change'
-}
-
-task_engine: str = 'invoke'
-templates_dir: str = os.path.join(os.path.dirname(__file__), 'templates')
+# pyproject_path = os.path.join(basedir, 'pyproject.toml')
+# lock_path = os.path.join(basedir, 'proman-lock.json')
+pypackages_dir = os.path.join(basedir, '__pypackages__')
 
 grammar: str = os.path.join(
     os.path.dirname(__file__), 'grammars', 'conventional_commits.lark'
 )
+# 'proman_workflows/templates/gitmessage.j2'
+
+
+@dataclass
+class TaskRunner:
+    '''Manager task runner setup.'''
+
+    name: str = 'invoke'
+    template: str = field(init=False)
+    templates_dir: str = os.path.join(os.path.dirname(__file__), 'templates')
+
+    def __post_init__(self) -> None:
+        '''Run post initialization.'''
+        self.template = f"{self.name}_hooks.j2"
+
+
+@dataclass
+class HooksConfig(TaskRunner):
+    '''Manage hooks config.'''
+
+    hooks_dir: str = os.path.join(basedir, '.git', 'hooks')
+
+    @property
+    def hooks(self) -> Tuple[str, ...]:
+        '''Provide valid hooks.'''
+        return (
+            'applypatch-msg',
+            'pre-applypatch',
+            'post-applypatch',
+            'pre-commit',
+            'pre-merge-commit',
+            'prepare-commit-msg',
+            'post-commit',
+            'pre-rebase',
+            'post-checkout',
+            'post-merge',
+            'pre-push',
+            'pre-recieve',
+            'update',
+            'post-recieve',
+            'post-update',
+            'reference-transaction',
+            'push-to-checkout',
+            'pre-auto-gc',
+            'post-rewrite',
+            'rebase',
+            'sendemail-validate',
+            'fsmonitor-watchman',
+            'p4-changelist',
+            'p4-prepare-changelist',
+            'p4-post-changelist',
+            'p4-pre-submit',
+            'post-index-change',
+        )
 
 
 @dataclass
@@ -69,6 +90,7 @@ class GitConfig:
     global_config: str = os.path.join(os.path.expanduser('~'), '.gitconfig')
 
     def __post_init__(self) -> None:
+        '''Run post initiation.'''
         self.load()
 
     def load(self) -> None:

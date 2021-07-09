@@ -40,12 +40,12 @@ home-page = "https://github.com/proman/proman-workflows"
 requires = ["argufy", "jinja2", "GitPython", "lark-parser", "transitions"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 
-[tool.flit.entrypoints."proman.namespaces"]
-conventional_commits = "proman_workflows:conventional_commits"
+[tool.flit.entrypoints."proman.precommit.validate"]
+conventional_commits = "proman_workflows:precommit"
 
 [tool.flit.scripts]
-workflow = "proman_workflows.__main__:main"
-versions = "proman_workflows:program.run"
+versions = "proman_workflows.__main__:main"
+workflow = "proman_workflows:program.run"
 
 [tool.black]
 include = '\.pyi?$'

@@ -2,44 +2,49 @@
 
 import os
 import sys
-from typing import Any
+from dataclasses import asdict
 
+from invoke import Collection, Context, task
 from jinja2 import Environment, FileSystemLoader
 
-from proman_workflows import config, repo
+from proman_workflows.config import HooksConfig
 
 
-class Hooks:
-    def __init__(self, hooks_dir: str, template: str = 'invoke_hooks') -> None:
-        '''Initialize git hooks object.'''
-        self.hooks_dir = hooks_dir
-        self.template = f"{template}.j2"
-        print(self.template)
+@task
+def setup(ctx, name='pre-commit', update=False):
+    # type: (Context, str, bool) -> None
+    '''Create git hook.'''
+    path = os.path.join(ctx.hooks_dir, name)
+    if not os.path.exists(path) or update:
+        file_system_loader = FileSystemLoader(ctx.templates_dir)
+        env = Environment(loader=file_system_loader)
+        template = env.get_template(ctx.template)
 
-    def setup(
-        self,
-        name: str = 'pre-commit',
-        update: bool = False,
-        **kwargs: Any,
-    ) -> None:
-        '''Do setup for post checkout hooks.'''
-        path = os.path.join(self.hooks_dir, name)
-        if not os.path.exists(path) or update:
-            file_system_loader = FileSystemLoader(config.templates_dir)
-            env = Environment(loader=file_system_loader)
-            template = env.get_template(self.template)
+        content = template.render(
+            python_executable=sys.executable,
+            proman_namespace='proman.precommit',
+            proman_command='conventional_commits.update',
+        )
 
-            content = template.render(
-                python_executable=sys.executable,
-                # other variables
-            )
+        with open(path, 'w+') as f:
+            f.write(content)
+        os.chmod(path, 0o775)
 
-            with open(path, 'w+') as f:
-                f.write(content)
-            os.chmod(path, 0o775)
 
-    def remove(self, name: str = 'pre-commit') -> None:
-        '''Remove git hook.'''
-        path = os.path.join(self.hooks_dir, name)
-        if os.path.exists(path):
-            os.remove(path)
+@task
+def index(ctx):  # type: (Context) -> None
+    '''List git setup git hooks.'''
+    print('list contents')
+
+
+@task
+def remove(ctx, name='pre-commit'):  # type: (Context, str) -> None
+    '''Remove git hook.'''
+    path = os.path.join(ctx.hooks_dir, name)
+    if os.path.exists(path):
+        os.remove(path)
+
+
+hooks_config = HooksConfig()
+hooks_tasks = Collection(setup, index, remove)
+hooks_tasks.configure(asdict(hooks_config))

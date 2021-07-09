@@ -82,9 +82,11 @@ class Git(Repo):
         origin.push(branch or self.branch)
 
     def pull(self) -> None:
+        '''Pull updates to git branch.'''
         ...
 
     def merge(self) -> None:
+        '''Merge branch to git branch.'''
         ...
 
     def commit(

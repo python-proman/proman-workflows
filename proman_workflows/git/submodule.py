@@ -15,7 +15,7 @@ from typing import Optional
 #     touch
 # )
 
-from invoke import task
+from invoke import Collection, Context, task
 
 from proman_workflows import repo
 
@@ -34,14 +34,14 @@ exec git submodule update
 
 
 @task
-def index() -> None:
+def index(ctx):  # type: (Context) -> None
     '''List submodules with project.'''
     for sm in repo.submodules:
         print(sm)
 
 
 @task
-def view(name: Optional[str] = None) -> None:
+def view(ctx, name=None):  # type: (Context, Optional[str]) -> None
     '''View project info.'''
     if name:
         sm = repo.submodule(name)
@@ -51,19 +51,15 @@ def view(name: Optional[str] = None) -> None:
 
 
 @task
-def add(
-    module: Optional[str] = None,
-    url: Optional[str] = None,
-    branch: str = 'master',
-    path: Optional[str] = None
-) -> None:
+def add(ctx, module=None, url=None, branch='master', path=None):
+    # type: (Context, Optional[str], Optional[str], str, Optional[str]) -> None
     '''Add submodule to project.'''
     repo.create_submodule(module, path, url=url, branch=branch)
     repo.index.commit(f'Added {module} submodule')
 
 
 @task
-def update(name: Optional[str] = None) -> None:
+def update(ctx, name=None):  # type: (Context, Optional[str]) -> None
     '''Update submodule within project.'''
     if name:
         sm = repo.submodule(name)
@@ -74,15 +70,19 @@ def update(name: Optional[str] = None) -> None:
 
 @task
 def remove(
-    name: Optional[str] = None,
-    module: bool = True,
-    force: bool = True,
-    configuration: bool = True
-) -> None:
+    ctx,
+    name=None,
+    module=True,
+    force=True,
+    configuration=True
+):
+    # type: (Context, Optional[str], bool, bool, bool) -> None
     '''Remove submodule from repository.
 
     Parameters
     ----------
+    ctx:
+        Invoke context
     name:
         Name of submodule to be removed
     module:
@@ -95,3 +95,6 @@ def remove(
     '''
     sm = repo.submodule(name)
     sm.remove(module=module, force=force, configuration=configuration)
+
+
+submodule_tasks = Collection(add, index, view, remove, update)

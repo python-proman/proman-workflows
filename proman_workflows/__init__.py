@@ -5,17 +5,19 @@
 
 import logging
 import os
-from typing import Any, List
+from typing import Any, List, Union
 
 from git import Repo
 from invoke import Collection, Program
 
-from proman_workflows import config, conventional_commits, exception
+from proman_workflows import config, setup, exception
 from proman_workflows.config import Config
 from proman_workflows.controller import IntegrationController
 from proman_workflows.grammars.conventional_commits import CommitMessageParser
 from proman_workflows.vcs import Git
 from proman_workflows.version import PythonVersion
+
+from proman_workflows.git.hooks import hooks_tasks
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -45,18 +47,21 @@ def get_source_tree(
     raise exception.PromanWorkflowException('no configuration found')
 
 
-def get_python_version(cfg: Config) -> PythonVersion:
-    if cfg.retrieve('/tool/proman'):
-        if 'version' in cfg['tool']['proman']['release']:
-            version = cfg.retrieve('/tool/proman/release/version')
+def get_python_version(cfg: Union[Config, str]) -> PythonVersion:
+    if isinstance(cfg, Config):
+        if cfg.retrieve('/tool/proman'):
+            if 'version' in cfg['tool']['proman']['release']:
+                version = cfg.retrieve('/tool/proman/release/version')
+            else:
+                version = cfg.retrieve('/tool/proman/version')
+        elif cfg.retrieve('/tool/poetry'):
+            version = cfg.retrieve('/tool/poetry/version')
+        elif cfg.retrieve('/metadata'):
+            version = cfg.retrieve('/metadata/version')
         else:
-            version = cfg.retrieve('/tool/proman/version')
-    elif cfg.retrieve('/tool/poetry'):
-        version = cfg.retrieve('/tool/poetry/version')
-    elif cfg.retrieve('/metadata'):
-        version = cfg.retrieve('/metadata/version')
+            raise exception.PromanWorkflowException('no version found')
     else:
-        raise exception.PromanWorkflowException('no version found')
+        version = cfg
     return PythonVersion(version)
 
 
@@ -65,7 +70,7 @@ def get_release_controller(*args: Any, **kwargs: Any) -> IntegrationController:
     basepath = kwargs.get('basepath', os.getcwd())
     filenames = kwargs.get('filenames', config.filenames)
     cfg = get_source_tree(basepath=basepath, filenames=filenames)
-    version = get_python_version(cfg)
+    version = get_python_version(kwargs.pop('version', cfg))
     return IntegrationController(
         version=version,
         config=cfg,
@@ -80,7 +85,8 @@ parser = CommitMessageParser()
 
 # Assemble namespace for tasks
 namespace = Collection()
-namespace.add_collection(conventional_commits, name='commit_hook')
+namespace.add_collection(setup, name='setup')
+namespace.add_collection(hooks_tasks, name='hooks')
 # namespace.configure({'package': 'override-package'})
 # print(namespace.task_names)
 
