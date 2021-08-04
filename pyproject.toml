@@ -5,10 +5,9 @@ description = "Convential commits parser in Python."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 jinja2 = "^2.11.2"
 lark-parser = "^0.10.0"
-argufy = "^0.1.1-alpha.12"
 transitions = "^0.8.4"
 GitPython = "^3.1.17"
 compendium = "^0.1.1-dev.82"
@@ -21,16 +20,18 @@ flake8 = "^3.8.3"
 pydocstyle = "^5.0.2"
 docstr-coverage = "^1.2.0"
 pytest-cov = "^2.10.0"
-isort = "^4.3.21"
+isort = "^5.9.2"
 bandit = "^1.6.2"
 safety = "^1.9.0"
-mkdocs = "^1.1.2"
-mkdocs-material = "^5.4.0"
+mkdocs = "^1.2.2"
+mkdocs-material = "^7.2.0"
+mkdocstrings = "^0.15.2"
 flit = "^3.2.0"
-mypy = "^0.902"
-mccabe = "^0.6.1"
+mypy = "^0.910"
 pyfakefs = "^4.5.0"
 types-Jinja2 = "^2.11.2"
+tox = "^3.24.0"
+black = "^21.7b0"
 
 [tool.flit.metadata]
 module = "proman_workflows"
@@ -44,10 +45,14 @@ classifiers = ["License :: OSI Approved :: Apache Software License"]
 conventional_commits = "proman_workflows:precommit"
 
 [tool.flit.scripts]
-versions = "proman_workflows.__main__:main"
 workflow = "proman_workflows:program.run"
 
+[tool.isort]
+profile = "black"
+line_length = 79
+
 [tool.black]
+ling-length = 79
 include = '\.pyi?$'
 exclude = '''
 
@@ -62,3 +67,15 @@ exclude = '''
   )
 )
 '''
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:invoke.*:",
+    "ignore::DeprecationWarning:_yaml.*:",
+]
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+ignore_missing_imports = true

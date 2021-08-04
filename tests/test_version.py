@@ -1,3 +1,4 @@
+# type: ignore
 '''Add version tests.'''
 from proman_workflows import __version__
 

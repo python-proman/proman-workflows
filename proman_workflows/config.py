@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
-# license: Apache 2.0, see LICENSE for more details.
+# license: MPL-2.0, see LICENSE for more details.
 '''Provide CLI for git-tools.'''
 
-from dataclasses import dataclass, field
 import os
+import platform
+from dataclasses import dataclass, field
 # from pprint import pprint
 from typing import Optional, Tuple
 from urllib.parse import urljoin, urlparse
@@ -126,3 +127,30 @@ class Config(ConfigFile):
         super().__init__(self.filepath)
         if os.path.isfile(self.filepath):
             self.load()
+
+
+# System setup
+if platform.system() == 'Windows':
+    __bin_subpath = os.path.join('bin')
+
+if platform.system() == 'Darwin':
+    __bin_subpath = os.path.join('Library', 'bin')
+
+if platform.system() == 'Linux':
+    __bin_subpath = os.path.join('.local', 'bin')
+
+system_type = platform.system().lower()
+
+# Versions
+mkcert_version = os.getenv('MKCERT_VERSION', 'v1.4.2')
+
+# Paths
+project_path = os.getenv('PROJECT_PATH', '.')
+bin_path = os.path.join(os.path.expanduser('~'), __bin_subpath)
+static_dir = 'static'
+webui_dir = os.path.join(static_dir, 'webui')
+docs_dir = static_dir
+webapp_dir = '.'
+
+# Settings
+environment = os.getenv('FLASK_ENV', 'development')
