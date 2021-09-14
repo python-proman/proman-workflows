@@ -70,13 +70,8 @@ def update(ctx, name=None):  # type: (Context, Optional[str]) -> None
 
 @task
 def remove(
-    ctx,
-    name=None,
-    module=True,
-    force=True,
-    configuration=True
-):
-    # type: (Context, Optional[str], bool, bool, bool) -> None
+    ctx, name=None, module=True, force=True, configuration=True
+):  # type: (Context, Optional[str], bool, bool, bool) -> None
     '''Remove submodule from repository.
 
     Parameters

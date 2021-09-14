@@ -34,9 +34,7 @@ def install(ctx, symlink=True, dev=False):
     ctx.run("flit install {}".format(' '.join(args)))
 
 
-def version(
-    ctx, part=part, tag=False, commit=False, message=None
-):
+def version(ctx, part=part, tag=False, commit=False, message=None):
     '''Update project version and apply tags.'''
     args = [part]
     if tag:

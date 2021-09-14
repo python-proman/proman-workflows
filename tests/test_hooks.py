@@ -11,15 +11,11 @@ except ImportError:
 
 
 @pytest.mark.skipif(
-    'pipelinerunner' not in sys.modules,
-    reason="requires the PyPyr library"
+    'pipelinerunner' not in sys.modules, reason="requires the PyPyr library"
 )
 def test_hooks_pre_commit():
     '''Test pre-commit hooks using PyPyr.'''
-    log.logger.set_root_logger(
-        log_level=25,
-        log_path=None
-    )
+    log.logger.set_root_logger(log_level=25, log_path=None)
 
     pipelinerunner.main(
         pipeline_name='.workflows',
@@ -27,5 +23,5 @@ def test_hooks_pre_commit():
         working_dir='tests/hooks',
         groups=['pre-commit'],
         success_group='pre-commit-success',
-        failure_group='pre-commit-failure'
+        failure_group='pre-commit-failure',
     )

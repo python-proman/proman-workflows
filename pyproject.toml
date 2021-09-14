@@ -1,18 +1,20 @@
 [tool.poetry]
 name = "proman_workflows"
 version = "0.1.0"
-description = "Convential commits parser in Python."
+description = "Convenience tools to manage projects with Python."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
+readme = "README.md"
+classifiers = ["License :: OSI Approved :: Apache Software License"]
+include = ["proman_workflows/templates"]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
 jinja2 = "^2.11.2"
-lark-parser = "^0.10.0"
-transitions = "^0.8.4"
-GitPython = "^3.1.17"
-compendium = "^0.1.1-dev.82"
-packaging = "^20.9"
 invoke = "^1.5.0"
+compendium = "^0.1.1-alpha.0"
+python-gnupg = "^0.4.7"
+proman-common = "^0.1.1-alpha.1"
+editables = "^0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -33,19 +35,32 @@ types-Jinja2 = "^2.11.2"
 tox = "^3.24.0"
 black = "^21.7b0"
 
+# [tool.poetry.extras]
+# gnome = ["secretstorage"]
+# kde = ["dbus-python"]
+
+[tool.poetry.plugins."proman.precommit.validate"]
+conventional_commits = "proman_workflows:precommit"
+
+[tool.poetry.scripts]
+pki = "proman_workflows:pki.run"
+workflow = "proman_workflows:workflow.run"
+
+# TODO: deprecate flit
 [tool.flit.metadata]
 module = "proman_workflows"
 author = "Jesse P. Johnson"
 author-email = "jpj6652@gmail.com"
 home-page = "https://github.com/proman/proman-workflows"
-requires = ["argufy", "jinja2", "GitPython", "lark-parser", "transitions"]
+requires = ["compendium", "invoke", "jinja2"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 
 [tool.flit.entrypoints."proman.precommit.validate"]
 conventional_commits = "proman_workflows:precommit"
 
 [tool.flit.scripts]
-workflow = "proman_workflows:program.run"
+pki = "proman_workflows:pki.run"
+workflow = "proman_workflows:workflow.run"
 
 [tool.isort]
 profile = "black"
@@ -70,8 +85,8 @@ exclude = '''
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    "ignore::DeprecationWarning:invoke.*:",
-    "ignore::DeprecationWarning:_yaml.*:",
+  "ignore::DeprecationWarning:invoke.*:",
+  "ignore::DeprecationWarning:_yaml.*:",
 ]
 
 [tool.mypy]
@@ -79,3 +94,11 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_untyped_defs = true
 ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+# requires = ["flit_core>=2,<4"]
+# build-backend = "flit_core.buildapi"
+# requires = ['setuptools>=40.8.0', 'wheel']
+# build-backend = 'setuptools.build_meta'
