@@ -6,113 +6,12 @@
 # import importlib
 from typing import TYPE_CHECKING, Optional
 
-from invoke import Collection, task
+from invoke import task
 
-from . import poetry, twine
+from ..collection import Collection
 
 if TYPE_CHECKING:
     from invoke import Context
-
-
-@task(iterable=['path'])
-def clean(
-    ctx,  # type: Context
-    path=None,  # type: Optional[str]
-    mindepth=None,  # type: Optional[int]
-    maxdepth=None,  # type: Optional[int]
-):  # type: (...) -> None
-    """Clean project dependencies and build."""
-    args = []
-    if not path:
-        paths = [
-            '__pycache__',
-            '.mypy_cache',
-            'dist',
-            '*.pyc',
-        ]
-    if mindepth:
-        args.append(f"-mindepth {mindepth}")
-    if maxdepth:
-        args.append(f"-maxdepth {maxdepth}")
-    for path in paths:
-        ctx.run(
-            "find . %s -exec rm -rf {} +" % (
-                ' '.join([f"-name {path}"] + args)
-            )
-        )
-
-
-@task
-def build(
-    ctx,
-    kind='wheel',
-    outdir=None,
-    skip_dependency_check=False,
-    no_isolation=False,
-):  # type: (Context, str, Optional[str], bool, bool) -> None
-    """Build package."""
-    args = []
-    if kind == 'wheel':
-        args.append('--wheel')
-    elif kind == 'sdist':
-        args.append('--sdist')
-    else:
-        raise Exception('cannot build unknown package format')
-    if outdir:
-        args.append(f"--outdir={outdir}")
-    if skip_dependency_check:
-        args.append('--skip-dependency-check')
-    if no_isolation:
-        args.append('--no-isolation')
-    ctx.run(f"{ctx.python_path} -m build {' '.join(args)}")
-
-
-@task
-def install(
-    ctx,  # type: Context
-    dev=True,  # type: bool
-    editable=True,  # type: bool
-    remove_untracked=None,  # type: Optional[str]
-    extras=None,  # type: Optional[str]
-):  # type: (...) -> None
-    """Install package locally."""
-    poetry.install(
-        ctx,
-        dev=dev,
-        editable=editable,
-        remove_untracked=remove_untracked,
-        extras=extras,
-    )
-
-
-@task
-def publish(
-    ctx,  # type: Context
-    repository=None,  # type: Optional[str]
-    repository_url=None,  # type: Optional[str]
-    sign=False,  # type: bool
-    sign_with=None,  # type: Optional[str]
-    identity=None,  # type: Optional[str]
-    username=None,  # type: Optional[str]
-    password=None,  # type: Optional[str]
-    comment=None,  # type: Optional[str]
-    cert_path=None,  # type: Optional[str]
-    client_cert_path=None,  # type: Optional[str]
-):  # type: (...) -> None
-    """Publich package to repository."""
-    twine.publish(
-        ctx,
-        repository=repository,
-        repository_url=repository_url,
-        sign=sign,
-        sign_with=sign_with,
-        identity=identity,
-        username=username,
-        password=password,
-        comment=comment,
-        cert_path=cert_path,
-        client_cert_path=client_cert_path,
-    )
 
 
 @task
@@ -150,7 +49,20 @@ def version(
     ctx.run(f"bumpversion {' '.join(args)}")
 
 
-build_tasks = Collection(twine, clean, build, version)
-# build_tasks.add_collection(flit, name='flit')
-# build_tasks.add_collection(poetry, name='poetry')
-# build_tasks.add_collection(twine, name='twine')
+namespace = Collection()
+namespace.configure(
+    {
+        '_collections': [
+             {
+                'name': 'package',
+                'driver_name': 'poetry',
+                'driver_namespace': 'proman.workflow.package'
+             }
+        ]
+    }
+)
+namespace.load_collections()
+namespace.add_task(version)
+# namespace.add_collection(flit, name='flit')
+# namespace.add_collection(poetry, name='poetry')
+# namespace.add_collection(twine, name='twine')

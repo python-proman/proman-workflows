@@ -3,11 +3,14 @@
 # license: Apache 2.0, see LICENSE for more details.
 """Provide documentation task-runner."""
 
-import textwrap
+from typing import TYPE_CHECKING
 
-from invoke import Context, task
+from invoke import task
 
-from . import config
+from ..collection import Collection
+
+if TYPE_CHECKING:
+    from invoke import Context
 
 
 @task
@@ -22,37 +25,18 @@ def coverage(ctx):  # type: (Context) -> None
     ctx.run('docstr-coverage **/*.py')
 
 
-@task(pre=[lint], post=[coverage])
-def test(ctx):  # type: (Context) -> None
-    """Test documentation build."""
-    with ctx.cd(config.docs_dir):
-        ctx.run('mkdocs build')
-
-
-@task
-def build(ctx):  # type: (Context) -> None
-    """Build documentation site."""
-    with ctx.cd(config.docs_dir):
-        ctx.run('mkdocs build')
-
-
-@task
-def start(ctx, hostname='localhost', port=8001):  # type: (Context, str, int) -> None
-    """Start docsite."""
-    with ctx.cd(config.docs_dir):
-        ctx.run(
-            textwrap.dedent(
-                f"""\
-                mkdocs serve \
-                --dev-addr={hostname}:{port} \
-                --livereload
-            """
-            ),
-            disown=True,
-        )
-
-
-@task
-def stop(ctx):  # type: (Context) -> None
-    """Stop docsite."""
-    ctx.run('pkill mkdocs')
+namespace = Collection()
+namespace.configure(
+    {
+        '_collections': [
+             {
+                'name': 'site',
+                'driver_name': 'mkdocs',
+                'driver_namespace': 'proman.workflow.docs'
+             }
+        ]
+    }
+)
+namespace.load_collections()
+namespace.add_task(lint)
+namespace.add_task(coverage)

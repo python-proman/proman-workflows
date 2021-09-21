@@ -45,6 +45,6 @@ def remove(ctx, name='pre-commit'):  # type: (Context, str) -> None
         os.remove(path)
 
 
-hooks_config = HooksConfig()
-hooks_tasks = Collection(setup, index, remove)
-hooks_tasks.configure(asdict(hooks_config))
+config = HooksConfig()
+namespace = Collection(setup, index, remove)
+namespace.configure(asdict(config))

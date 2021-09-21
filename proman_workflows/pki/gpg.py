@@ -4,7 +4,7 @@ import os
 from typing import TYPE_CHECKING, Optional
 
 from gnupg import GPG
-from invoke import task
+from invoke import Collection, task
 
 if TYPE_CHECKING:
     from gnupg import GenKey, ListKeys
@@ -72,3 +72,6 @@ def export_key(
     ascii_armored_keys = gpg.export_keys(key, secret)
     with open(f"{key}.asc", 'w') as f:
         f.write(ascii_armored_keys)
+
+
+namespace = Collection(list_keys, get_key, export_key, generate_key)

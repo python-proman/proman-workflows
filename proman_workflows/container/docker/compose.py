@@ -6,7 +6,7 @@
 from typing import Any, Dict, List, Optional
 from invoke import Context, task
 
-from .. import config
+from ... import config
 
 
 @task(iterable=['files'])

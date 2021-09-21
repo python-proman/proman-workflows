@@ -5,12 +5,68 @@
 
 from typing import TYPE_CHECKING, Optional
 
-from invoke import task
+from invoke import Collection, task
 
 from .. import config
 
 if TYPE_CHECKING:
     from invoke import Context
+
+
+@task(name='license')
+def licensing(
+    ctx,  # type: Context
+    key=None,  # type: Optional[str]
+    db=None,  # type: Optional[str]
+    json=None,  # type: Optional[bool]
+    bare=None,  # type: Optional[bool]
+    cache=None,  # type: Optional[bool]
+    file=None,  # type: Optional[str]
+    proxy_host=None,  # type: Optional[str]
+    proxy_port=None,  # type: Optional[int]
+    proxy_protocol=None,  # type: Optional[str]
+):  # type: (...) -> None
+    """Configure license for safety."""
+    args = []
+    if key:
+        args.append(f"--key={key}")
+    if db:
+        args.append(f"--db={db}")
+    if json is not None:
+        args.append('--json' if json else '--no-json')
+    if bare is not None:
+        args.append('--bare' if bare else '--not-bare')
+    if cache is not None:
+        args.append('--cache' if cache else '--no-cache')
+    if file:
+        args.append(f"--file={file}")
+    if proxy_host:
+        args.append(f"--proxy-host={proxy_host}")
+    if proxy_port:
+        args.append(f"--proxy-port={proxy_port}")
+    if proxy_protocol:
+        args.append(f"--proxy-protocol={proxy_protocol}")
+    with ctx.cd(config.working_dir):
+        ctx.run(f"safety license {' '.join(args)}")
+
+
+@task
+def review(
+    ctx,  # type: Context
+    full_report=None,  # type: Optional[bool]
+    bare=None,  # type: Optional[bool]
+    file=None,  # type: Optional[str]
+):  # type: (...) -> None
+    """Perform safety reiew of reports."""
+    args = []
+    if full_report is not None:
+        args.append('--full-report' if full_report else '--short-report')
+    if bare is not None:
+        args.append('--bare' if bare else '--not-bare')
+    if file:
+        args.append(f"--file={file}")
+    with ctx.cd(config.working_dir):
+        ctx.run(f"safety review {' '.join(args)}")
 
 
 @task
@@ -30,7 +86,7 @@ def check(
     proxy_port=None,  # type: Optional[int]
     proxy_protocol=None,  # type: Optional[str]
 ):  # type: (...) -> None
-    """Perform static code analysis on imports."""
+    """Perform safety check of project dependencies."""
     args = []
     if key:
         args.append(f"--key={key}")
@@ -58,61 +114,8 @@ def check(
         args.append(f"--proxy-port={proxy_port}")
     if proxy_protocol:
         args.append(f"--proxy-protocol={proxy_protocol}")
-    with ctx.cd(config.webapp_dir):
+    with ctx.cd(config.working_dir):
         ctx.run(f"safety check {' '.join(args)}")
 
 
-@task
-def license(
-    ctx,  # type: Context
-    key=None,  # type: Optional[str]
-    db=None,  # type: Optional[str]
-    json=None,  # type: Optional[bool]
-    bare=None,  # type: Optional[bool]
-    cache=None,  # type: Optional[bool]
-    file=None,  # type: Optional[str]
-    proxy_host=None,  # type: Optional[str]
-    proxy_port=None,  # type: Optional[int]
-    proxy_protocol=None,  # type: Optional[str]
-):  # type: (...) -> None
-    """Perform static code analysis on imports."""
-    args = []
-    if key:
-        args.append(f"--key={key}")
-    if db:
-        args.append(f"--db={db}")
-    if json is not None:
-        args.append('--json' if json else '--no-json')
-    if bare is not None:
-        args.append('--bare' if bare else '--not-bare')
-    if cache is not None:
-        args.append('--cache' if cache else '--no-cache')
-    if file:
-        args.append(f"--file={file}")
-    if proxy_host:
-        args.append(f"--proxy-host={proxy_host}")
-    if proxy_port:
-        args.append(f"--proxy-port={proxy_port}")
-    if proxy_protocol:
-        args.append(f"--proxy-protocol={proxy_protocol}")
-    with ctx.cd(config.webapp_dir):
-        ctx.run(f"safety license {' '.join(args)}")
-
-
-@task
-def review(
-    ctx,  # type: Context
-    full_report=None,  # type: Optional[bool]
-    bare=None,  # type: Optional[bool]
-    file=None,  # type: Optional[str]
-):  # type: (...) -> None
-    """Perform static code analysis on imports."""
-    args = []
-    if full_report is not None:
-        args.append('--full-report' if full_report else '--short-report')
-    if bare is not None:
-        args.append('--bare' if bare else '--not-bare')
-    if file:
-        args.append(f"--file={file}")
-    with ctx.cd(config.webapp_dir):
-        ctx.run(f"safety review {' '.join(args)}")
+namespace = Collection(check, licensing, review)

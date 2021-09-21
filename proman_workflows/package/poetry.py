@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Publish packages using Twine."""
+"""Publish packages using Poetry."""
 
 from typing import TYPE_CHECKING, Optional
 from invoke import Collection, task
 
 if TYPE_CHECKING:
     from invoke import Context
+
+
+@task
+def build(ctx, kind=None):  # type: (Context, Optional[bool]) -> None
+    """Build wheel package."""
+    args = ['--no-interaction']
+    if kind:
+        args.append(f"--format={kind}")
+    ctx.run(f"poetry build {' '.join(args)}")
 
 
 @task
@@ -16,7 +25,7 @@ def install(
     remove_untracked=None,  # type: Optional[str]
     extras=None,  # type: Optional[str]
 ):  # type: (...) -> None
-    """Upload package to a PyPI repository."""
+    """Install project into local environment."""
     args = ['--no-interaction']
     if not dev:
         args.append('--no-dev')
@@ -30,15 +39,6 @@ def install(
 
 
 @task
-def build(ctx, kind=None):  # type: (Context, Optional[bool]) -> None
-    """Build wheel package."""
-    args = ['--no-interaction']
-    if kind:
-        args.append(f"--format={kind}")
-    ctx.run(f"poetry build {' '.join(args)}")
-
-
-@task
 def publish(
     ctx,  # type: Context
     repository_url=None,  # type: Optional[str]
@@ -47,7 +47,7 @@ def publish(
     cert_path=None,  # type: Optional[str]
     client_cert_path=None,  # type: Optional[str]
 ):  # type: (...) -> None
-    """Upload package to a PyPI repository."""
+    """Publish package to a PyPI repository."""
     args = ['--no-interaction']
     if repository_url:
         args.append(f"--repository={repository_url}")
@@ -64,4 +64,4 @@ def publish(
     ctx.run(f"poetry publish {' '.join(args)}")
 
 
-poetry_tasks: Collection = Collection(build, install, publish)
+namespace: Collection = Collection(build, install, publish)

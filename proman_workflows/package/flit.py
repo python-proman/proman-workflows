@@ -6,8 +6,6 @@
 from typing import TYPE_CHECKING, Optional
 from invoke import Collection, task
 
-# from . import config
-
 if TYPE_CHECKING:
     from invoke import Context
 
@@ -69,4 +67,4 @@ def publish(
     ctx.run(f"flit publish {' '.join(args)}")
 
 
-flit_tasks = Collection(build, install, publish)
+tasks = Collection(build, install, publish)

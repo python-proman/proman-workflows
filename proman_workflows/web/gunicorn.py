@@ -5,22 +5,14 @@
 
 import os
 import textwrap
+from typing import TYPE_CHECKING
 
-from invoke import Context, task
+from invoke import task
 
 from .. import config
 
-
-def build(ctx, path='.'):  # type: (Context, str) -> None
-    """Build docker image."""
-    ctx.run(
-        f"""\
-        pipenv lock \
-        --requirements > {config.webapp_dir}/requirements.txt
-    """
-    )
-    with ctx.cd(config.webapp_dir):
-        ctx.run(f"docker build {path}")
+if TYPE_CHECKING:
+    from invoke import Context
 
 
 @task

@@ -3,65 +3,43 @@
 # license: Apache 2.0, see LICENSE for more details.
 """Quality Assurance Task-Runner."""
 
-from typing import Optional
+import logging
 
-from invoke import Context, task
+from proman_workflows.collection import Collection
 
-from .. import config
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
+# Assemble collections for namespace
+namespace = Collection()
+namespace.configure(
+    {
+        '_collections': [
+            {
+                'name': 'sort-headers',
+                'driver_name': 'isort',
+                'driver_namespace': 'proman.workflow.formatter',
+            }, {
+                'name': 'format',
+                'driver_name': 'black',
+                'driver_namespace': 'proman.workflow.formatter',
+            }, {
+                'name': 'typing',
+                'driver_name': 'mypy',
+                'driver_namespace': 'proman.workflow.typing',
+             }, {
+                 'name': 'lint',
+                 'driver_name': 'flake8',
+                 'driver_namespace': 'proman.workflow.lint',
+             }, {
+                 'name': 'unit-tests',
+                 'driver_name': 'pytest',
+                 'driver_namespace': 'proman.workflow.unit_tests',
+             }
+        ]
+    }
+)
+namespace.load_collections()
 
-@task
-def style(ctx):  # type: (Context) -> None
-    """Format project source code to PEP-8 standard."""
-    # args = ['--skip-string-normalization']
-    with ctx.cd(config.webapp_dir):
-        ctx.run('isort --atomic **/*.py')
-        ctx.run('autopep8 --in-place --recursive .')
-
-
-@task
-def lint(ctx):  # type: (Context) -> None
-    """Check project source code for linting errors."""
-    with ctx.cd(config.webapp_dir):
-        ctx.run('flake8')
-
-
-@task
-def type_check(ctx, path='.'):  # type: (Context, str) -> None
-    """Check project source types."""
-    with ctx.cd(config.webapp_dir):
-        ctx.run("mypy {}".format(path))
-
-
-@task
-def unit_test(ctx, capture=None):  # type: (Context, Optional[str]) -> None
-    """Perform unit tests."""
-    args = []
-    if capture:
-        args.append('--capture=' + capture)
-    with ctx.cd(config.webapp_dir):
-        ctx.run("pytest {}".format(' '.join(args)))
-
-
-@task
-def static_analysis(ctx):  # type: (Context) -> None
-    """Perform static code analysis on imports."""
-    with ctx.cd(config.webapp_dir):
-        ctx.run('safety check')
-        ctx.run('bandit -r spades')
-
-
-@task
-def coverage(ctx, report=None):  # type: (Context, Optional[str]) -> None
-    """Perform coverage checks for tests."""
-    args = ['--cov=spades']
-    if report:
-        args.append('--cov-report={}'.format(report))
-    with ctx.cd(config.webapp_dir):
-        ctx.run("pytest {} ./tests/".format(' '.join(args)))
-
-
-@task(pre=[style, lint, unit_test, static_analysis, coverage])
-def test(ctx):  # type: (Context) -> None
-    """Run all tests."""
-    pass
+__all__ = [
+    'namespace',
+]

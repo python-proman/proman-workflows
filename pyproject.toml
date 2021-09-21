@@ -15,6 +15,7 @@ compendium = "^0.1.1-alpha.0"
 python-gnupg = "^0.4.7"
 proman-common = "^0.1.1-alpha.1"
 editables = "^0.2"
+stevedore = "^3.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -42,8 +43,47 @@ black = "^21.7b0"
 [tool.poetry.plugins."proman.precommit.validate"]
 conventional_commits = "proman_workflows:precommit"
 
+[tool.poetry.plugins."proman.workflow.pki"]
+gpg = "proman_workflows.pki.gpg:namespace"
+tls = "proman_workflows.pki.tls:namespace"
+
+[tool.poetry.plugins."proman.workflow.scm"]
+git_hooks = "proman_workflows.git.hooks:namespace"
+
+[tool.poetry.plugins."proman.workflow.package"]
+flit = "proman_workflows.package.flit:namespace"
+poetry = "proman_workflows.package.poetry:namespace"
+setuptools = "proman_workflows.package.setuptools:namespace"
+twine = "proman_workflows.package.twine:namespace"
+
+[tool.poetry.plugins."proman.workflow.lint"]
+flake8 = "proman_workflows.qa.flake8:namespace"
+
+[tool.poetry.plugins."proman.workflow.formatter"]
+autopep8 = "proman_workflows.qa.autopep8:namespace"
+black = "proman_workflows.qa.black:namespace"
+isort = "proman_workflows.qa.isort:namespace"
+
+[tool.poetry.plugins."proman.workflow.unit_tests"]
+pytest = "proman_workflows.qa.pytest:namespace"
+
+# [tool.poetry.plugins."proman.workflow.coverage"]
+# pytest = "proman_workflows.qa.pytest:namespace"
+
+[tool.poetry.plugins."proman.workflow.typing"]
+mypy = "proman_workflows.qa.mypy:namespace"
+
+[tool.poetry.plugins."proman.workflow.sca"]
+bandit = "proman_workflows.qa.bandit:namespace"
+safety = "proman_workflows.qa.safety:namespace"
+
+[tool.poetry.plugins."proman.workflow.docs"]
+mkdocs = "proman_workflows.docs.mkdocs:namespace"
+
+[tool.poetry.plugins."proman.workflow.integration"]
+
 [tool.poetry.scripts]
-pki = "proman_workflows:pki.run"
+project = "proman_workflows:project.run"
 workflow = "proman_workflows:workflow.run"
 
 # TODO: deprecate flit
@@ -52,14 +92,14 @@ module = "proman_workflows"
 author = "Jesse P. Johnson"
 author-email = "jpj6652@gmail.com"
 home-page = "https://github.com/proman/proman-workflows"
-requires = ["compendium", "invoke", "jinja2"]
+requires = ["compendium", "invoke", "jinja2", "proman-common", "stevedore"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 
 [tool.flit.entrypoints."proman.precommit.validate"]
 conventional_commits = "proman_workflows:precommit"
 
 [tool.flit.scripts]
-pki = "proman_workflows:pki.run"
+project = "proman_workflows:project.run"
 workflow = "proman_workflows:workflow.run"
 
 [tool.isort]

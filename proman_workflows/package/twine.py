@@ -2,9 +2,7 @@
 """Publish packages using Twine."""
 
 from typing import TYPE_CHECKING, Optional
-from invoke import task
-
-# from . import config
+from invoke import Collection, task
 
 if TYPE_CHECKING:
     from invoke import Context
@@ -121,3 +119,6 @@ def publish(
     if disable_progress_bar:
         args.append('--disable-progress-bar')
     ctx.run(f"twine upload {' '.join(args)}")
+
+
+namespace = Collection(check, register, publish)

@@ -150,7 +150,8 @@ bin_path = os.path.join(os.path.expanduser('~'), __bin_subpath)
 static_dir = 'static'
 webui_dir = os.path.join(static_dir, 'webui')
 docs_dir = static_dir
-webapp_dir = '.'
+working_dir = os.getcwd()
+webapp_dir = os.getcwd()
 
 # Settings
 environment = os.getenv('FLASK_ENV', 'development')

@@ -5,15 +5,13 @@
 
 from typing import TYPE_CHECKING, Optional
 
-from invoke import task
-
-from .. import config
+from invoke import Collection, task
 
 if TYPE_CHECKING:
     from invoke import Context
 
 
-@task(iterator=['kind'])
+@task(iterable=['kind'])
 def check(
     ctx,  # type: Context
     recursive=None,  # type: Optional[str]
@@ -79,5 +77,8 @@ def check(
         args.append(f"--ini {ini_path}")
     if exit_zero:
         args.append('--exit-zero')
-    with ctx.cd(config.webapp_dir):
+    with ctx.cd(ctx.working_dir):
         ctx.run(f"safety check {' '.join(args)}")
+
+
+namespace = Collection(check)

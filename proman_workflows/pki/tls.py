@@ -4,13 +4,16 @@
 """Validation Task-Runner."""
 
 # import platform
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
-from invoke import Context, task
+from invoke import Collection, task
 
 from .. import config, filesystem
 
 # from .package_manager import github
+
+if TYPE_CHECKING:
+    from invoke import Context
 
 mkcert = f"mkcert-{config.mkcert_version}-{config.system_type}-amd64"
 
@@ -71,3 +74,6 @@ def cleanup(ctx, path=None):  # type: (Context, Optional[str]) -> None
     if path:
         filesystem.rmdir(ctx, path)
     ctx.run('mkcert -uninstall')
+
+
+namespace = Collection(cleanup, generate, setup)
