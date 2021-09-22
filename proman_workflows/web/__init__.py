@@ -5,9 +5,9 @@
 
 from invoke import Collection
 
-from . import service, webui, webapp, validate
 from ..container import compose
 from ..pki import tls
+from . import service, validate, webapp, webui
 
 ns = Collection().from_module(service)
 ns.add_collection(Collection.from_module(compose))

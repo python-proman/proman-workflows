@@ -11,9 +11,16 @@ from invoke import Program
 from proman_common.config import Config
 
 from proman_workflows import (
-    config, docs, exception, package, qa, security, utils
+    config,
+    docs,
+    exception,
+    package,
+    qa,
+    security,
+    utils,
 )
 from proman_workflows.collection import Collection
+
 # from proman_workflows.vcs import Git
 
 __author__ = 'Jesse P. Johnson'
@@ -48,32 +55,6 @@ workflow_namespace.configure(
         'working_dir': config.working_dir,
     }
 )
-#         '_collections': [
-#              {
-#                 'name': 'package',
-#                 'driver_name': 'poetry',
-#                 'driver_namespace': 'proman.workflow.package'
-#              }, {
-#                 'name': 'typing',
-#                 'driver_name': 'mypy',
-#                 'driver_namespace': 'proman.workflow.typing'
-#              }, {
-#                 'name': 'sast',
-#                 'driver_name': 'bandit',
-#                 'driver_namespace': 'proman.workflow.sca',
-#              }, {
-#                  'name': 'dependency-scan',
-#                  'driver_name': 'safety',
-#                  'driver_namespace': 'proman.workflow.sca'
-#              }, {
-#                  'name': 'unit-tests',
-#                  'driver_name': 'pytest',
-#                  'driver_namespace': 'proman.workflow.unit_tests'
-#              }
-#         ]
-#     }
-# )
-# workflow_namespace.load_collections()
 workflow_namespace.add_collection(docs.namespace, name='docs')
 workflow_namespace.add_collection(package.namespace, name='dist')
 workflow_namespace.add_collection(qa.namespace, name='qa')

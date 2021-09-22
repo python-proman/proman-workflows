@@ -5,6 +5,5 @@
 
 from proman_workflows import workflow
 
-
 if __name__ == '__main__':
     workflow.run()

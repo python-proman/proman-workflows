@@ -63,6 +63,3 @@ namespace.configure(
 )
 namespace.load_collections()
 namespace.add_task(version)
-# namespace.add_collection(flit, name='flit')
-# namespace.add_collection(poetry, name='poetry')
-# namespace.add_collection(twine, name='twine')

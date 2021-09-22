@@ -3,12 +3,10 @@
 # license: Apache 2.0, see LICENSE for more details.
 """Build Task-Runner."""
 
-from passlib.pwd import genword
 from invoke import Context, task
+from passlib.pwd import genword
 
-from . import compose
-from . import filesystem
-from . import certs
+from . import certs, compose, filesystem
 
 
 @task

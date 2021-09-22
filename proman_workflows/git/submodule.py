@@ -5,6 +5,10 @@
 
 from typing import Optional
 
+from invoke import Collection, Context, task
+
+from proman_workflows import repo
+
 # from git.objects.submodule.base import Submodule
 # from git.objects.submodule.root import (
 #     RootModule,
@@ -15,9 +19,7 @@ from typing import Optional
 #     touch
 # )
 
-from invoke import Collection, Context, task
 
-from proman_workflows import repo
 
 base_dir = 'modules'
 

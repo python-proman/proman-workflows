@@ -13,6 +13,7 @@ from typing import Optional, Tuple
 from urllib.parse import urljoin, urlparse
 
 from compendium.loader import ConfigFile
+
 # from git.config import GitConfigParser
 
 INDEX_URL = urlparse('https://pypi.org')

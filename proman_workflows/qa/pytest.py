@@ -37,9 +37,13 @@ def run(
 
 
 @task
-def coverage(ctx, report=None):  # type: (Context, Optional[str]) -> None
+def coverage(
+    ctx,
+    project_dir,
+    report=None
+):  # type: (Context, str, Optional[str]) -> None
     """Perform coverage checks for tests."""
-    args = ['--cov=spades']
+    args = [f"--cov={project_dir}"]
     if report:
         args.append(f"--cov-report={report}")
     with ctx.cd(ctx.working_dir):

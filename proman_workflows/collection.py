@@ -7,6 +7,7 @@ import logging
 from typing import Any, Optional
 
 from invoke import Collection as InvokeCollection
+
 # from stevedore.extension import ExtensionManager
 from stevedore.driver import DriverManager
 

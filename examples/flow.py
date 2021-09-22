@@ -1,5 +1,4 @@
 import pytest
-
 from transitions.core import MachineError
 
 from proman_workflows import repo
