@@ -3,7 +3,6 @@
 # license: Apache 2.0, see LICENSE for more details.
 """Provide documentation task-runner."""
 
-import textwrap
 from typing import TYPE_CHECKING, Optional
 
 from invoke import Collection, task
@@ -40,7 +39,8 @@ def build(
     if use_directory_urls is not None:
         args.append(
             '--use-directory-urls'
-            if use_directory_urls else '--no-directory-urls'
+            if use_directory_urls
+            else '--no-directory-urls'
         )
         args.append(f"--site-dir {path}")
     if quiet:
@@ -54,22 +54,48 @@ def build(
 
 @task
 def start(
-    ctx,
-    hostname='localhost',
-    port=8001
-):  # type: (Context, str, int) -> None
+    ctx,  # type: Context
+    address='localhost:8001',  # type: str
+    livereload=None,  # type: Optional[bool]
+    dirtyreload=None,  # type: Optional[bool]
+    watch_theme=False,  # type: bool
+    configfile=None,  # type: Optional[str]
+    strict=False,  # type: bool
+    theme='readthedocs',  # type: str
+    use_directory_urls=None,  # type: Optional[bool]
+    quiet=False,  # type: bool
+    verbose=False,  # type: bool
+):  # type: (...) -> None
     """Start docsite."""
-    with ctx.cd(ctx.docs_dir):
-        ctx.run(
-            textwrap.dedent(
-                f"""\
-                mkdocs serve \
-                --dev-addr={hostname}:{port} \
-                --livereload
-                """
-            ),
-            disown=True,
+    args = [f"--dev-addr {address}"]
+    if livereload is not None:
+        args.append('--livereload' if livereload else '--no-livereload')
+    if dirtyreload:
+        args.append('--dirtyreload')
+    if watch_theme:
+        args.append('--watch-theme')
+    if configfile:
+        args.append(f"--config-file {configfile}")
+    if strict:
+        args.append('--strict')
+    if theme:
+        if theme in ['readthedocs', 'mkdocs', 'material']:
+            args.append(f"--theme {theme}")
+        else:
+            raise Exception('unsupported theme')
+    if use_directory_urls is not None:
+        args.append(
+            '--use-directory-urls'
+            if use_directory_urls
+            else '--no-directory-urls'
         )
+    if quiet:
+        args.append('--quiet')
+    elif verbose:
+        args.append('--verbose')
+
+    with ctx.cd(ctx.docs_dir):
+        ctx.run(f"mkdocs serve {' '.join(args)}", disown=True)
 
 
 @task

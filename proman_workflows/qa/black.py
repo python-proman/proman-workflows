@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
-"""Quality Assurance Task-Runner."""
+"""Provide black integration task-runner."""
 
 from typing import TYPE_CHECKING, Optional
 
@@ -29,7 +29,6 @@ def run(
     exclude=None,  # type: Optional[str]
     extend_exclude=None,  # type: Optional[str]
     force_exclude=None,  # type: Optional[str]
-    stdin_filename=None,  # type: Optional[str]
     quiet=None,  # type: Optional[bool]
     verbose=None,  # type: Optional[bool]
     version=None,  # type: Optional[bool]
@@ -69,8 +68,6 @@ def run(
         args.append(f"--extend-exclude {extend_exclude}")
     if force_exclude:
         args.append(f"--force-exclude {force_exclude}")
-    if stdin_filename:
-        args.append(f"--stdin-filename {stdin_filename}")
     if quiet:
         args.append('--quiet')
     if verbose:

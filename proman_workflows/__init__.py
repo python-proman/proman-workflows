@@ -52,6 +52,7 @@ workflow_namespace = Collection()
 workflow_namespace.configure(
     {
         'spec': specfile.data,
+        'docs_dir': config.docs_dir,
         'working_dir': config.working_dir,
     }
 )
