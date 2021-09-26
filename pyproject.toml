@@ -16,6 +16,7 @@ python-gnupg = "^0.4.7"
 proman-common = "^0.1.1-alpha.1"
 editables = "^0.2"
 stevedore = "^3.4.0"
+briefcase = "^0.3.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -56,6 +57,10 @@ poetry = "proman_workflows.package.poetry:namespace"
 setuptools = "proman_workflows.package.setuptools:namespace"
 twine = "proman_workflows.package.twine:namespace"
 
+[tool.poetry.plugins."proman.workflow.executable"]
+briefcase = "proman_workflows.executable.briefcase:namespace"
+# pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
+
 [tool.poetry.plugins."proman.workflow.lint"]
 flake8 = "proman_workflows.qa.flake8:namespace"
 
@@ -74,8 +79,12 @@ pytest = "proman_workflows.qa.pytest:namespace"
 mypy = "proman_workflows.qa.mypy:namespace"
 
 [tool.poetry.plugins."proman.workflow.sca"]
-bandit = "proman_workflows.qa.bandit:namespace"
-safety = "proman_workflows.qa.safety:namespace"
+bandit = "proman_workflows.security.bandit:namespace"
+safety = "proman_workflows.security.safety:namespace"
+
+[tool.poetry.plugins."proman.workflow.container"]
+docker = "proman_workflows.container.docker:namespace"
+podman = "proman_workflows.container.podman:namespace"
 
 [tool.poetry.plugins."proman.workflow.docs"]
 mkdocs = "proman_workflows.docs.mkdocs:namespace"
@@ -84,7 +93,8 @@ mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
 [tool.poetry.scripts]
 project = "proman_workflows:project.run"
-workflow = "proman_workflows:workflow.run"
+# workflow = "proman_workflows:workflow.run"
+workflow = "proman_workflows.__main__:workflow.run"
 
 # TODO: deprecate flit
 [tool.flit.metadata]

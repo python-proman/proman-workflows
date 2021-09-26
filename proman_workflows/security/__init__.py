@@ -14,15 +14,16 @@ namespace = Collection()
 namespace.configure(
     {
         '_collections': [
-             {
+            {
                 'name': 'sast',
                 'driver_name': 'bandit',
                 'driver_namespace': 'proman.workflow.sca',
-             }, {
-                 'name': 'dependency-scan',
-                 'driver_name': 'safety',
-                 'driver_namespace': 'proman.workflow.sca',
-             }
+            },
+            {
+                'name': 'dependency-scan',
+                'driver_name': 'safety',
+                'driver_namespace': 'proman.workflow.sca',
+            },
         ]
     }
 )

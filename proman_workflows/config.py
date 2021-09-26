@@ -5,6 +5,7 @@
 
 import os
 import platform
+import shutil
 import sys
 from dataclasses import dataclass, field
 
@@ -29,6 +30,11 @@ pypackages_dir = os.path.join(basedir, '__pypackages__')
 python_path = sys.executable
 
 # 'proman_workflows/templates/gitmessage.j2'
+
+if shutil.which('podman'):
+    container_runtime = 'podman'
+elif shutil.which('docker'):
+    container_runtime = 'docker'
 
 
 @dataclass
@@ -148,8 +154,8 @@ mkcert_version = os.getenv('MKCERT_VERSION', 'v1.4.2')
 # Paths
 project_path = os.getenv('PROJECT_PATH', '.')
 bin_path = os.path.join(os.path.expanduser('~'), __bin_subpath)
-# static_dir = 'static'
-# webui_dir = os.path.join(static_dir, 'webui')
+static_dir = 'static'
+webui_dir = os.path.join(static_dir, 'webui')
 working_dir = os.getcwd()
 docs_dir = working_dir
 webapp_dir = os.getcwd()

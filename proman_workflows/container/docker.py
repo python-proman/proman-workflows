@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
-'''Build Task-Runner.'''
+"""Build Task-Runner."""
 
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from invoke import Context, task
+from invoke import Collection, task
 
-from ... import config
+if TYPE_CHECKING:
+    from invoke import Context
 
 
 @task(iterable=['files'])
@@ -19,7 +20,7 @@ def start(
     recreate=False,  # type: bool
     dev=False,  # type: bool
 ):  # type: (...) -> None
-    '''Start all compose containers.'''
+    """Start all compose containers."""
     args = []
     if build:
         args.append('--build')
@@ -33,7 +34,7 @@ def start(
     if files != []:
         files = [f"--file={f}" for f in files]
 
-    with ctx.cd(config.project_path):
+    with ctx.cd(ctx.project_path):
         ctx.run(
             "docker-compose {f} up -d {a}".format(
                 f='' if files == [] else ' '.join(files), a=' '.join(args)
@@ -49,7 +50,7 @@ def stop(
     remove_volumes=True,  # type: bool
     remove_orphans=True,  # type: bool
 ):  # type: (...) -> None
-    '''Stop all compose containers.'''
+    """Stop all compose containers."""
     args = []
     if remove_images:
         args.append(f"--rmi={remove_images}")
@@ -57,5 +58,8 @@ def stop(
         args.append('--volumes')
     if remove_orphans:
         args.append('--remove-orphans')
-    with ctx.cd(config.project_path):
+    with ctx.cd(ctx.project_path):
         ctx.run("docker-compose down {a}".format(a=' '.join(args)))
+
+
+namespace = Collection(start, stop)

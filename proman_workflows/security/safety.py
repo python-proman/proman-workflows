@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Optional
 
 from invoke import Collection, task
 
-from .. import config
-
 if TYPE_CHECKING:
     from invoke import Context
 
@@ -46,7 +44,7 @@ def licensing(
         args.append(f"--proxy-port={proxy_port}")
     if proxy_protocol:
         args.append(f"--proxy-protocol={proxy_protocol}")
-    with ctx.cd(config.working_dir):
+    with ctx.cd(ctx.working_dir):
         ctx.run(f"safety license {' '.join(args)}")
 
 
@@ -65,7 +63,7 @@ def review(
         args.append('--bare' if bare else '--not-bare')
     if file:
         args.append(f"--file={file}")
-    with ctx.cd(config.working_dir):
+    with ctx.cd(ctx.working_dir):
         ctx.run(f"safety review {' '.join(args)}")
 
 
@@ -114,7 +112,7 @@ def check(
         args.append(f"--proxy-port={proxy_port}")
     if proxy_protocol:
         args.append(f"--proxy-protocol={proxy_protocol}")
-    with ctx.cd(config.working_dir):
+    with ctx.cd(ctx.working_dir):
         ctx.run(f"safety check {' '.join(args)}")
 
 

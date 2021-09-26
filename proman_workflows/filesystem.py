@@ -53,7 +53,6 @@ def clean(
         args.append(f"-maxdepth {maxdepth}")
     for path in paths:
         ctx.run(
-            "find . %s -exec rm -rf {} +" % (
-                ' '.join([f"-name {path}"] + args)
-            )
+            "find . %s -exec rm -rf {} +"
+            % (' '.join([f"-name {path}"] + args))
         )

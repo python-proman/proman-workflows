@@ -1,1 +1,1 @@
-'''Provide git capabilities.'''
+"""Provide git capabilities."""

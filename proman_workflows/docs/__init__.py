@@ -38,7 +38,7 @@ def style(
     if count:
         args.append('--count')
     if match:
-        args.append(f"--match={match}'")
+        args.append(f"--match={match}")
     if match_dir:
         args.append(f"--match-dir={match_dir}")
     if ignore_decorators:
@@ -102,14 +102,16 @@ namespace = Collection()
 namespace.configure(
     {
         '_collections': [
-             {
+            {
                 'name': 'site',
                 'driver_name': 'mkdocs',
-                'driver_namespace': 'proman.workflow.docs'
-             }
+                'driver_namespace': 'proman.workflow.docs',
+            }
         ]
     }
 )
 namespace.load_collections()
 namespace.add_task(style)
 namespace.add_task(coverage)
+
+__all__ = ['style', 'coverage', 'namespace']

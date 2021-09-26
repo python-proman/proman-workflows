@@ -12,14 +12,10 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 # Assemble namespace for namespace
 namespace = Collection()
 namespace.load_collection(
-    'gpg',
-    driver_name='gpg',
-    driver_namespace='proman.workflow.pki'
+    'gpg', driver_name='gpg', driver_namespace='proman.workflow.pki'
 )
 namespace.load_collection(
-    'tls',
-    driver_name='tls',
-    driver_namespace='proman.workflow.pki'
+    'tls', driver_name='tls', driver_namespace='proman.workflow.pki'
 )
 
 __all__ = ['namespace']

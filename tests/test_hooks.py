@@ -1,4 +1,4 @@
-'''Test git hooks pipeline.'''
+"""Test git hooks pipeline."""
 
 import sys
 
@@ -11,10 +11,10 @@ except ImportError:
 
 
 @pytest.mark.skipif(
-    'pipelinerunner' not in sys.modules, reason="requires the PyPyr library"
+    'pipelinerunner' not in sys.modules, reason='requires the PyPyr library'
 )
-def test_hooks_pre_commit():
-    '''Test pre-commit hooks using PyPyr.'''
+def test_hooks_pre_commit() -> None:
+    """Test pre-commit hooks using PyPyr."""
     log.logger.set_root_logger(log_level=25, log_path=None)
 
     pipelinerunner.main(

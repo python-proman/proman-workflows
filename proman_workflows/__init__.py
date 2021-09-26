@@ -12,6 +12,7 @@ from proman_common.config import Config
 
 from proman_workflows import (
     config,
+    container,
     docs,
     exception,
     package,
@@ -54,8 +55,10 @@ workflow_namespace.configure(
         'spec': specfile.data,
         'docs_dir': config.docs_dir,
         'working_dir': config.working_dir,
+        'container_runtime': config.container_runtime,
     }
 )
+workflow_namespace.add_collection(container.namespace, name='container')
 workflow_namespace.add_collection(docs.namespace, name='docs')
 workflow_namespace.add_collection(package.namespace, name='dist')
 workflow_namespace.add_collection(qa.namespace, name='qa')
@@ -78,24 +81,28 @@ project_namespace.configure(
                 'name': 'hooks',
                 'driver_name': 'git_hooks',
                 'driver_namespace': 'proman.workflow.scm',
-            }, {
+            },
+            {
                 'name': 'sort-headers',
                 'driver_name': 'isort',
-                'driver_namespace': 'proman.workflow.formatter'
-            }, {
+                'driver_namespace': 'proman.workflow.formatter',
+            },
+            {
                 'name': 'format',
                 'driver_name': 'black',
-                'driver_namespace': 'proman.workflow.formatter'
-            }, {
+                'driver_namespace': 'proman.workflow.formatter',
+            },
+            {
                 'name': 'gpg',
                 'driver_name': 'gpg',
                 'driver_namespace': 'proman.workflow.pki',
-            }, {
+            },
+            {
                 'name': 'tls',
                 'driver_name': 'tls',
-                'driver_namespace': 'proman.workflow.pki'
-            }
-        ]
+                'driver_namespace': 'proman.workflow.pki',
+            },
+        ],
     }
 )
 project_namespace.load_collections()

@@ -1,8 +1,8 @@
 # type: ignore
-'''Add version tests.'''
+"""Add version tests."""
 from proman_workflows import __version__
 
 
 def test_version():
-    '''Test version.'''
-    assert __version__ == "0.1.0"
+    """Test version."""
+    assert __version__ == '0.1.0'

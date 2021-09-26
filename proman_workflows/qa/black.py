@@ -14,14 +14,15 @@ if TYPE_CHECKING:
 @task
 def run(
     ctx,  # type: Context
+    path='**/*.py',  # type: str
     code=None,  # type: Optional[str]
     line_length=79,  # type: int
     target_version=None,  # type: Optional[str]
-    pyi=None,  # type: Optional[str]
-    skip_string_normalization=False,  # type: bool
-    skip_magic_trailing_comma=None,  # type: Optional[bool]
-    check=None,  # type: Optional[bool]
-    diff=None,  # type: Optional[bool]
+    pyi=False,  # type: bool
+    skip_string_normalization=True,  # type: bool
+    skip_magic_trailing_comma=False,  # type: bool
+    check=False,  # type: bool
+    diff=False,  # type: bool
     color=None,  # type: Optional[bool]
     execution=None,  # type: Optional[bool]
     required_version=None,  # type: Optional[str]
@@ -41,7 +42,7 @@ def run(
     if line_length:
         args.append(f"--line-length {line_length}")
     if target_version:
-        args.append('--target-version')
+        args.append(f"--target-version {target_version}")
     if pyi:
         args.append('--pyi')
     if skip_string_normalization:
@@ -76,6 +77,7 @@ def run(
         args.append('--version')
     if config:
         args.append(f"--config {config}")
+    args.append(path)
     ctx.run(f"black {' '.join(args)}")
 
 

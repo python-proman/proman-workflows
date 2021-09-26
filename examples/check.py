@@ -7,10 +7,10 @@ def get_values(var: str) -> None:
 
 get_values(
     dedent(
-        '''\
+        """\
         abc
         def
         ghi
-        '''
+        """
     )
 )

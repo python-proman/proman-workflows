@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2021 by Jesse Johnson.
 # license: MPL-2.0, see LICENSE for more details.
-'''Convenience tools to manage drivers.'''
+"""Convenience tools to manage drivers."""
 
 import logging
 from typing import Any, Optional
@@ -19,14 +19,13 @@ class Collection(InvokeCollection):
 
     @staticmethod
     def get_driver(
-        name: Optional[str] = None,
-        **kwargs: Any
+        name: Optional[str] = None, **kwargs: Any
     ) -> 'DriverManager':
         """Get driver for collection."""
         driver_manager = DriverManager(
             namespace=kwargs.pop('driver_namespace'),
             name=kwargs.pop('driver_name', name),
-            **kwargs
+            **kwargs,
         )
         return driver_manager
 

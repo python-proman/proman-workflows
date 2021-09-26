@@ -39,8 +39,7 @@ def build(
     if use_directory_urls is not None:
         args.append(
             '--use-directory-urls'
-            if use_directory_urls
-            else '--no-directory-urls'
+            if use_directory_urls else '--no-directory-urls'
         )
         args.append(f"--site-dir {path}")
     if quiet:
@@ -86,8 +85,7 @@ def start(
     if use_directory_urls is not None:
         args.append(
             '--use-directory-urls'
-            if use_directory_urls
-            else '--no-directory-urls'
+            if use_directory_urls else '--no-directory-urls'
         )
     if quiet:
         args.append('--quiet')

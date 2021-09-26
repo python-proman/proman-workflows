@@ -53,11 +53,11 @@ namespace = Collection()
 namespace.configure(
     {
         '_collections': [
-             {
+            {
                 'name': 'package',
                 'driver_name': 'poetry',
-                'driver_namespace': 'proman.workflow.package'
-             }
+                'driver_namespace': 'proman.workflow.package',
+            }
         ]
     }
 )
