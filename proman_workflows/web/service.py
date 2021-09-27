@@ -6,15 +6,17 @@
 from invoke import Context, task
 from passlib.pwd import genword
 
-from . import certs, compose, filesystem
+from .. import filesystem
+from ..container import docker
+from ..pki import tls
 
 
 @task
 def start(ctx, certs_path='./nginx/certs'):  # type: (Context, str) -> None
     """Start all services."""
-    certs.setup(ctx)
+    tls.setup(ctx)
     filesystem.mkdir(ctx, certs_path)
-    certs.generate(
+    tls.generate(
         ctx,
         name=['spades.local', 'localhost'],
         key=f"{certs_path}/spades.key",
@@ -24,12 +26,12 @@ def start(ctx, certs_path='./nginx/certs'):  # type: (Context, str) -> None
         'POSTGRESQL_PASSWORD': genword(entropy=56, length=128),
         'REDIS_PASSWORD': genword(entropy=56, length=128),
     }
-    compose.start(ctx, files=[], env=env)
+    docker.start(ctx, files=[], env=env)
 
 
 @task
 def stop(ctx, certs_path='./nginx/certs'):  # type: (Context, str) -> None
     """Stop all services."""
-    compose.stop(ctx)
-    certs.cleanup(ctx)
+    docker.stop(ctx)
+    tls.cleanup(ctx)
     filesystem.rmdir(ctx, certs_path)

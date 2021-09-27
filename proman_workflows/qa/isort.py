@@ -21,7 +21,7 @@ def version(ctx):  # type: (Context) -> None
 def run(
     ctx,  # type: Context
     atomic=True,  # type: bool
-    check_only=False,  # type: bool
+    check=False,  # type: bool
     diff=False,  # type: bool
     dedup_heading=False,  # type: bool
     jobs=None,  # type: Optional[int]
@@ -40,7 +40,7 @@ def run(
     args = []
     if jobs:
         args.append(f"--jobs {jobs}")
-    if check_only:
+    if check:
         args.append('--check-only')
     else:
         if atomic:

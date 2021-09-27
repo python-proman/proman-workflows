@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -24,17 +24,20 @@ jobs:
           poetry install
       - name: Lint
         run: |
-          poetry run inv qa.style --check
-          poetry run inv qa.lint
+          poetry run workflow qa.sort-headers.run --check
+          poetry run workflow qa.style.run --check
+          poetry run workflow qa.lint.run
       - name: Perform tests
         run: |
-          poetry run inv qa.unit-test
-          poetry run inv qa.static-analysis
+          poetry run workflow qa.unit-tests.run
+      - name: Perform security checks
+        run: |
+          poetry run workflow sec.sast.run
+          poetry run workflow sec.dependency-scan.run
       - name: Lint documentation
         run: |
-          poetry run inv doc.lint
-          poetry run inv doc.test
-      - name: Perform documentation tests
+          poetry run workflow docs.style
+          poetry run workflow docs.coverage
+      - name: Perform documentation build
         run: |
-          poetry run inv doc.coverage
-          poetry run inv doc.build
+          poetry run workflow docs.site.build

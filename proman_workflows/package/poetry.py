@@ -23,7 +23,7 @@ def install(
     ctx,  # type: Context
     dev=True,  # type: bool
     editable=True,  # type: bool
-    remove_untracked=None,  # type: Optional[str]
+    remove_untracked=False,  # type: bool
     extras=None,  # type: Optional[str]
 ):  # type: (...) -> None
     """Install project into local environment."""

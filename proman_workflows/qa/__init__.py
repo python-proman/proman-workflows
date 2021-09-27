@@ -20,7 +20,7 @@ namespace.configure(
                 'driver_namespace': 'proman.workflow.formatter',
             },
             {
-                'name': 'format',
+                'name': 'style',
                 'driver_name': 'black',
                 'driver_namespace': 'proman.workflow.formatter',
             },

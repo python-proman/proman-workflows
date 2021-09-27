@@ -48,7 +48,7 @@ def start(
 @task
 def stop(
     ctx,  # type: Context
-    remove_images=None,  # type: Optional[bool]
+    remove_images=None,  # type: Optional[str]
     remove_volumes=True,  # type: bool
     remove_orphans=True,  # type: bool
 ):  # type: (...) -> None
@@ -61,7 +61,7 @@ def stop(
     if remove_orphans:
         args.append('--remove-orphans')
     with ctx.cd(ctx.project_path):
-        ctx.run("podman-compose down {a}".format(a=' '.join(args)))
+        ctx.run(f"podman-compose down {' '.join(args)}")
 
 
 namespace = Collection(start, stop)

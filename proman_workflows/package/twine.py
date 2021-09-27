@@ -29,7 +29,7 @@ def register(
     username=None,  # type: Optional[str]
     password=None,  # type: Optional[str]
     comment=None,  # type: Optional[str]
-    skip_existing=None,  # type: Optional[bool]
+    skip_existing=False,  # type: bool
     cert_path=None,  # type: Optional[str]
     client_cert_path=None,  # type: Optional[str]
     verbose=False,  # type: bool
@@ -60,9 +60,9 @@ def register(
     if skip_existing:
         args.append('--skip-existing')
     if cert_path:
-        args.append(f"--cert {cert_path}")
+        args.append(f"--cert={cert_path}")
     if client_cert_path:
-        args.append(f"--client-cert {client_cert_path}")
+        args.append(f"--client-cert={client_cert_path}")
     if verbose:
         args.append('--verbose')
     if disable_progress_bar:
@@ -81,7 +81,7 @@ def publish(
     username=None,  # type: Optional[str]
     password=None,  # type: Optional[str]
     comment=None,  # type: Optional[str]
-    skip_existing=None,  # type: Optional[bool]
+    skip_existing=False,  # type: bool
     cert_path=None,  # type: Optional[str]
     client_cert_path=None,  # type: Optional[str]
     verbose=False,  # type: bool

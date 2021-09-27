@@ -19,7 +19,7 @@ def build(
     """Build executable."""
     args = ['--no-input']
     if update:
-        args.update('--update')
+        args.append('--update')
     if not docker or ctx.container_runtime != 'docker':
         args.append('--no-docker')
     if verbose:
