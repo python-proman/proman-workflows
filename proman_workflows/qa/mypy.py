@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
 
 @task
-def check(ctx, path='.'):  # type: (Context, str) -> None
+def run(ctx, path='.'):  # type: (Context, str) -> None
     """Check project source types."""
     with ctx.cd(ctx.working_dir):
         ctx.run("mypy {}".format(path))
 
 
-namespace = Collection(check)
+namespace = Collection(run)

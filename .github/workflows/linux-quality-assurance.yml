@@ -27,9 +27,9 @@ jobs:
           poetry run workflow qa.sort-headers.run --check
           poetry run workflow qa.style.run --check
           poetry run workflow qa.lint.run
+          poetry run workflow qa.typing.run
       - name: Perform tests
-        run: |
-          poetry run workflow qa.unit-tests.run
+        run: poetry run workflow qa.unit-tests.run
       - name: Perform security checks
         run: |
           poetry run workflow sec.sast.run
@@ -39,5 +39,4 @@ jobs:
           poetry run workflow docs.style
           poetry run workflow docs.coverage
       - name: Perform documentation build
-        run: |
-          poetry run workflow docs.site.build
+        run: poetry run workflow docs.site.build
