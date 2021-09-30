@@ -27,6 +27,7 @@ def setup(ctx, name='pre-commit', update=False):
             data,
             template_name='invoke_hooks',
             dest=path,
+            executable=True,
             update=update,
         )
 

@@ -1,0 +1,6 @@
+{% for section, entry in sections.items() -%}
+[{{ section }}]
+{%- for key, value in entry.items() %}
+	{{ key }} = {{ value }}
+{%- endfor %}
+{% endfor %}
