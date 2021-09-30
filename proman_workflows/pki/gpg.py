@@ -1,7 +1,7 @@
 """Provide signature capability using GnuPG."""
 
 import os
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from gnupg import GPG
 from invoke import Collection, task
@@ -22,18 +22,22 @@ def list_keys(
     return keys
 
 
-@task(iterable=['query'])
-def get_key(ctx, query):  # type: (Context, str) -> GenKey
+@task
+def get_key(
+    ctx,
+    query,
+    secret=False,
+    sigs=False
+):  # type: (Context, str, bool, bool) -> List[GenKey]
     """Get GPG key."""
     keys = []
-    for key in list_keys(ctx):
-        for q in query:
-            if '=' in q:
-                k, v = q.split('=')
-                if key[k] == v:
-                    keys.append(key)
-            elif q in key:
+    for key in list_keys(ctx, secret=secret, sigs=sigs):
+        if '=' in query:
+            k, v = query.split('=')
+            if key[k] == v:
                 keys.append(key)
+        elif query in key.values():
+            keys.append(key)
     return keys
 
 

@@ -10,7 +10,9 @@ from invoke import Collection, Executor
 from stevedore.extension import ExtensionManager
 
 
-def load_collections(extension: ExtensionManager, data: Dict[str, Any]) -> None:
+def load_collections(
+    extension: ExtensionManager, data: Dict[str, Any]
+) -> None:
     """Load invoke collections using stevedore."""
     namespace.add_collection(extension.plugin, name=extension.name)
     namespace.configure(data)
@@ -21,9 +23,9 @@ data = {'package': 'override-package'}
 
 # load tasks collection
 namespace = Collection()
-extension_manager = ExtensionManager(namespace={{ proman_namespace }})
+extension_manager = ExtensionManager(namespace='{{ proman_namespace }}')
 extension_manager.map(load_collections, data)
 
 # execute tasks group
 ns = Executor(collection=namespace)
-ns.execute({{ proman_command }})
+ns.execute('{{ proman_command }}')

@@ -5,12 +5,26 @@
 
 import os
 import shutil
+import stat
 from typing import TYPE_CHECKING, Optional
 
 from invoke import task
 
 if TYPE_CHECKING:
     from invoke import Context
+
+
+@task
+def write(ctx, content, dest, executable=False, update=False):
+    # type: (Context, str, str, bool, bool) -> None
+    """Create git hook."""
+    if update or not os.path.exists(dest):
+        with open(dest, 'w+') as f:
+            f.write(content)
+
+        if executable:
+            st = os.stat(dest)
+            os.chmod(dest, st.st_mode | stat.S_IEXEC)
 
 
 @task

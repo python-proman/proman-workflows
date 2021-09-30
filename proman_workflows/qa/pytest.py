@@ -38,12 +38,37 @@ def run(
 
 @task
 def coverage(
-    ctx, project_dir, report=None
-):  # type: (Context, str, Optional[str]) -> None
+    ctx,  # type: Context
+    project_dir,  # type: str
+    coverage=True,  # type: bool
+    coverage_on_fail=True,  # type: bool
+    minimum=80,  # type: int
+    append=False,  # type: bool
+    branch=None,  # type: Optional[str]
+    context=None,  # type: Optional[str]
+    configpath=None,  # type: Optional[str]
+    report=None,  # type: Optional[str]
+):  # type: (...) -> None
     """Perform coverage checks for tests."""
-    args = [f"--cov={project_dir}"]
-    if report:
-        args.append(f"--cov-report={report}")
+    args = []
+    if coverage:
+        args.append('--no-cov')
+    if not coverage_on_fail:
+        args.append('--no-cov-on-fail')
+    else:
+        args.append(f"--cov={project_dir}")
+        if configpath:
+            args.append(f"--cov-config={configpath}")
+        if minimum:
+            args.append(f"--cov-fail-under={minimum}")
+        if append:
+            args.append('--cov-append')
+        if branch:
+            args.append('--cov-branch')
+        if context:
+            args.append(f"--cov-context={context}")
+        if report:
+            args.append(f"--cov-report={report}")
     with ctx.cd(ctx.working_dir):
         ctx.run(f"pytest {' '.join(args)}")
 

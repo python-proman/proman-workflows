@@ -47,7 +47,7 @@ def build(
     if verbose:
         args.append('--verbose')
 
-    with ctx.cd(ctx.docs_dir):
+    with ctx.cd(ctx.docs.working_dir):
         ctx.run(f"mkdocs build {' '.join(args)}")
 
 

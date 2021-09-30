@@ -8,14 +8,14 @@ from typing import TYPE_CHECKING, Optional
 
 from invoke import Collection, task
 
-from .. import config, filesystem
+from .. import filesystem
 
 # from .package_manager import github
 
 if TYPE_CHECKING:
     from invoke import Context
 
-mkcert = f"mkcert-{config.mkcert_version}-{config.system_type}-amd64"
+# mkcert = f"mkcert-{config.mkcert_version}-{config.system_type}-amd64"
 
 
 @task

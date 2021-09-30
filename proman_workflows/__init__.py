@@ -5,10 +5,12 @@
 
 import logging
 import os
+from dataclasses import asdict
 from typing import List
 
 from invoke import Program
 from proman_common.config import Config
+from proman_common.filepaths import AppDirs
 
 from proman_workflows import (
     config,
@@ -20,7 +22,9 @@ from proman_workflows import (
     security,
     utils,
 )
+from proman_workflows.config import DocsConfig
 from proman_workflows.collection import Collection
+from proman_workflows import git
 
 # from proman_workflows.vcs import Git
 
@@ -36,24 +40,27 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 def get_specfile(
-    basepath: str = os.getcwd(),
-    filenames: List[str] = config.filenames,
+    basepath: str = config.basedir,
+    specfiles: List[str] = config.specfiles,
 ) -> Config:
     """Get source tree from path."""
-    for filename in filenames:
-        filepath = os.path.join(basepath, filename)
+    for specfile in specfiles:
+        filepath = os.path.join(basepath, specfile)
         if os.path.isfile(filepath):
             return Config(filepath=filepath)
     raise exception.PromanWorkflowException('no configuration found')
 
 
+dirs = AppDirs(project_name='proman-workflows')
 specfile = get_specfile()
+docs_config = DocsConfig()
 
 workflow_namespace = Collection()
 workflow_namespace.configure(
     {
+        'dirs': asdict(dirs),
         'spec': specfile.data,
-        'docs_dir': config.docs_dir,
+        'docs': asdict(docs_config),
         'working_dir': config.working_dir,
         'container_runtime': config.container_runtime,
     }
@@ -76,6 +83,10 @@ project_namespace = Collection()
 project_namespace.configure(
     {
         'spec': specfile.data,
+        'python_path': config.python_path,
+        'repo_dir': config.repo_dir,
+        'working_dir': config.working_dir,
+        'templates_dir': config.templates_dir,
         '_collections': [
             {
                 'name': 'hooks',
@@ -106,6 +117,7 @@ project_namespace.configure(
     }
 )
 project_namespace.load_collections()
+project_namespace.add_collection(git.namespace, name='vcs')
 project = Program(
     version=__version__,
     namespace=project_namespace,

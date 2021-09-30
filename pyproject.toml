@@ -17,6 +17,8 @@ proman-common = "^0.1.1-alpha.1"
 editables = "^0.2"
 stevedore = "^3.4.0"
 briefcase = "^0.3.5"
+pygit2 = "^1.6.1"
+PyInputPlus = "^0.2.12"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
