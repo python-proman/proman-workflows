@@ -67,6 +67,8 @@ def setup(
         config = vcs.config.get_system_config()
     elif scope == 'global':
         config = vcs.config.get_global_config()
+    elif scope == 'xdg':
+        config = vcs.config.get_xdg_config()
     else:
         config = Config(os.path.join(ctx.repo_dir, 'config'))
 

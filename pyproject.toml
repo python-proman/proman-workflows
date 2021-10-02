@@ -41,6 +41,7 @@ black = "^21.7b0"
 
 # [tool.poetry.extras]
 # gnome = ["secretstorage"]
+python-gilt = "^1.2.3"
 # kde = ["dbus-python"]
 
 [tool.poetry.plugins."proman.precommit.validate"]
