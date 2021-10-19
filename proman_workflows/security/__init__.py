@@ -11,22 +11,20 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # Assemble collections for namespace
 namespace = Collection()
-namespace.configure(
-    {
-        '_collections': [
-            {
-                'name': 'sast',
-                'driver_name': 'bandit',
-                'driver_namespace': 'proman.workflow.sca',
-            },
-            {
-                'name': 'dependency-scan',
-                'driver_name': 'safety',
-                'driver_namespace': 'proman.workflow.sca',
-            },
-        ]
-    }
+# namespace.configure({})
+namespace.load_collections(
+    collections=[
+        {
+            'name': 'sast',
+            'driver_name': 'bandit',
+            'driver_namespace': 'proman.workflow.sca',
+        },
+        {
+            'name': 'dependency-scan',
+            'driver_name': 'safety',
+            'driver_namespace': 'proman.workflow.sca',
+        },
+    ]
 )
-namespace.load_collections()
 
 __all__ = ['namespace']

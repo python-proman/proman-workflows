@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from invoke import Collection, task
 from pygit2 import Config, Repository
+
 # import pyinputplus as pyip
 
 from .. import filesystem, templates
@@ -14,10 +15,17 @@ if TYPE_CHECKING:
 
 
 @task
+def repo(ctx):  # type: (Context) -> Repository
+    """Set git as SCM."""
+    return Repository(ctx.repo_dir)
+
+
+@task
 def dump_config(
     ctx, data, template_name, dest, executable=False, update=False
 ):  # type: (Context, Dict[str, Any], str, str, bool, bool) -> None
     """Create git hook."""
+    print('dest', dest)
     if update or not os.path.exists(dest):
         content = templates.render(ctx, data, template_name=template_name)
         filesystem.write(
@@ -30,15 +38,9 @@ def dump_config(
 
 
 @task
-def vcs_client(ctx):  # type: (Context) -> Repository
-    """Set git as SCM."""
-    return Repository(ctx.repo_dir)
-
-
-@task
 def get_config(ctx):  # type: (Context) -> None
     """Retrieve git configuration."""
-    scm = vcs_client(ctx)
+    scm = repo(ctx)
     for entry in scm.config:
         if entry.name == 'core':
             print(entry.value)
@@ -58,11 +60,11 @@ def config_to_dict(config: Config) -> Dict[str, Any]:
 
 
 @task
-def setup(
-    ctx, scope=None, update=False
-):  # type: (Context, Optional[str], bool) -> None
-    """Set VCS configuration."""
-    vcs = vcs_client(ctx)
+def config(
+    ctx, scope=None
+):  # type: (Context, Optional[str]) -> Dict[str, Any]
+    """Get git config as dictionary."""
+    vcs = repo(ctx)
     if scope == 'system':
         config = vcs.config.get_system_config()
     elif scope == 'global':
@@ -71,6 +73,15 @@ def setup(
         config = vcs.config.get_xdg_config()
     else:
         config = Config(os.path.join(ctx.repo_dir, 'config'))
+    return config_to_dict(config)
+
+
+@task
+def setup(
+    ctx, scope=None, update=False
+):  # type: (Context, Optional[str], bool) -> None
+    """Set VCS configuration."""
+    data = config(ctx, scope)
 
     # if 'user.name' not in config:
     #     username = pyip.inputStr(
@@ -87,7 +98,6 @@ def setup(
     #     config.set_multivar('user.email', regex='^.*$', value=email)
     #     print('user.email', config.get_multivar('user.email'))
 
-    data = config_to_dict(config)
     dump_config(
         ctx,
         data,

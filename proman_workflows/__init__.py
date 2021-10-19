@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # copyright: (c) 2021 by Jesse Johnson.
 # license: MPL-2.0, see LICENSE for more details.
 """Provide convenience tool to manage projects with Python."""
@@ -24,7 +23,7 @@ from proman_workflows import (
 )
 from proman_workflows.config import DocsConfig
 from proman_workflows.collection import Collection
-from proman_workflows import git
+from proman_workflows import git, init
 
 # from proman_workflows.vcs import Git
 
@@ -40,12 +39,12 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 def get_specfile(
-    basepath: str = config.basedir,
+    project_dir: str = config.project_dir,
     specfiles: List[str] = config.specfiles,
 ) -> Config:
     """Get source tree from path."""
     for specfile in specfiles:
-        filepath = os.path.join(basepath, specfile)
+        filepath = os.path.join(project_dir, specfile)
         if os.path.isfile(filepath):
             return Config(filepath=filepath)
     raise exception.PromanWorkflowException('no configuration found')
@@ -79,44 +78,46 @@ workflow = Program(
     binary_names=['workflow'],
 )
 
-project_namespace = Collection()
+project_namespace = Collection().from_module(init)
 project_namespace.configure(
     {
+        'dirs': asdict(dirs),
         'spec': specfile.data,
         'python_path': config.python_path,
         'repo_dir': config.repo_dir,
         'working_dir': config.working_dir,
         'templates_dir': config.templates_dir,
-        '_collections': [
-            {
-                'name': 'hooks',
-                'driver_name': 'git_hooks',
-                'driver_namespace': 'proman.workflow.scm',
-            },
-            {
-                'name': 'sort-headers',
-                'driver_name': 'isort',
-                'driver_namespace': 'proman.workflow.formatter',
-            },
-            {
-                'name': 'format',
-                'driver_name': 'black',
-                'driver_namespace': 'proman.workflow.formatter',
-            },
-            {
-                'name': 'gpg',
-                'driver_name': 'gpg',
-                'driver_namespace': 'proman.workflow.pki',
-            },
-            {
-                'name': 'tls',
-                'driver_name': 'tls',
-                'driver_namespace': 'proman.workflow.pki',
-            },
-        ],
     }
 )
-project_namespace.load_collections()
+project_namespace.load_collections(
+    collections=[
+        {
+            'name': 'hooks',
+            'driver_name': 'git_hooks',
+            'driver_namespace': 'proman.workflow.scm',
+        },
+        {
+            'name': 'sort-headers',
+            'driver_name': 'isort',
+            'driver_namespace': 'proman.workflow.formatter',
+        },
+        {
+            'name': 'format',
+            'driver_name': 'black',
+            'driver_namespace': 'proman.workflow.formatter',
+        },
+        {
+            'name': 'gpg',
+            'driver_name': 'gpg',
+            'driver_namespace': 'proman.workflow.pki',
+        },
+        {
+            'name': 'tls',
+            'driver_name': 'tls',
+            'driver_namespace': 'proman.workflow.pki',
+        },
+    ]
+)
 project_namespace.add_collection(git.namespace, name='vcs')
 project = Program(
     version=__version__,

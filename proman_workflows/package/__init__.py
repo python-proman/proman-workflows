@@ -50,16 +50,14 @@ def version(
 
 
 namespace = Collection()
-namespace.configure(
-    {
-        '_collections': [
-            {
-                'name': 'package',
-                'driver_name': 'poetry',
-                'driver_namespace': 'proman.workflow.package',
-            }
-        ]
-    }
+# namespace.configure({})
+namespace.load_collections(
+    collections=[
+        {
+            'name': 'package',
+            'driver_name': 'poetry',
+            'driver_namespace': 'proman.workflow.package',
+        }
+    ]
 )
-namespace.load_collections()
 namespace.add_task(version)

@@ -575,7 +575,7 @@ jinja2 = "*"
 
 [[package]]
 name = "keyring"
-version = "23.2.0"
+version = "23.2.1"
 description = "Store and access your passwords safely."
 category = "main"
 optional = false
@@ -1355,7 +1355,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "5805abb588a4535ef02a5db21bfc38f1a73a5540f43cc69fc5dcc029c2b30264"
+content-hash = "f8f85beeb5eaf8a8b2857f8924c5368c28c4716464aecb20ce665a4223a2cc7a"
 
 [metadata.files]
 anytree = [
@@ -1653,8 +1653,8 @@ jinja2-time = [
     {file = "jinja2_time-0.2.0-py2.py3-none-any.whl", hash = "sha256:d3eab6605e3ec8b7a0863df09cc1d23714908fa61aa6986a845c20ba488b4efa"},
 ]
 keyring = [
-    {file = "keyring-23.2.0-py3-none-any.whl", hash = "sha256:66a08700421ed0aaf317c6bf6543f7345f9ab9e7bed6e0ee072f7f6fcddbab75"},
-    {file = "keyring-23.2.0.tar.gz", hash = "sha256:1e1970dcecde00c59ff6033d69cee3b283cd0d7cbad78b0dc4cdd15c8a28bcf8"},
+    {file = "keyring-23.2.1-py3-none-any.whl", hash = "sha256:bd2145a237ed70c8ce72978b497619ddfcae640b6dcf494402d5143e37755c6e"},
+    {file = "keyring-23.2.1.tar.gz", hash = "sha256:6334aee6073db2fb1f30892697b1730105b5e9a77ce7e61fca6b435225493efe"},
 ]
 mac-alias = [
     {file = "mac_alias-2.2.0.tar.gz", hash = "sha256:0eb84a63f98bf54c2f9fbdc4de956a63e64eb8a4a124143a1c1f5a78326442f0"},

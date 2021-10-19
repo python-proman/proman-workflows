@@ -99,18 +99,16 @@ def coverage(
 
 
 namespace = Collection()
-namespace.configure(
-    {
-        '_collections': [
-            {
-                'name': 'site',
-                'driver_name': 'mkdocs',
-                'driver_namespace': 'proman.workflow.docs',
-            }
-        ]
-    }
+# namespace.configure({})
+namespace.load_collections(
+    collections=[
+        {
+            'name': 'site',
+            'driver_name': 'mkdocs',
+            'driver_namespace': 'proman.workflow.docs',
+        }
+    ]
 )
-namespace.load_collections()
 namespace.add_task(style)
 namespace.add_task(coverage)
 

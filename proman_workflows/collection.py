@@ -4,7 +4,7 @@
 """Convenience tools to manage drivers."""
 
 import logging
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from invoke import Collection as InvokeCollection
 
@@ -65,10 +65,12 @@ class Collection(InvokeCollection):
         if 'test' in self._configuration:
             print(self._configuration['test'])
 
-    def load_collections(self) -> None:
+    def load_collections(
+        self, collections: List[Dict[str, Any]] = []
+    ) -> None:
         """Load collections from configuration."""
-        if '_collections' in self._configuration:
-            for collection in self._configuration['_collections']:
+        if collections != []:
+            for collection in collections:
                 self.load_collection(**collection)
         else:
             print('no collection found in configuration')

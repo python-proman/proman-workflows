@@ -11,10 +11,7 @@ if TYPE_CHECKING:
 
 @task
 def build(
-    ctx,
-    update=False,
-    docker=True,
-    verbose=False
+    ctx, update=False, docker=True, verbose=False
 ):  # type: (Context, bool, bool, bool) -> None
     """Build executable."""
     args = ['--no-input']

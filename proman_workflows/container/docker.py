@@ -34,7 +34,7 @@ def start(
     if files != []:
         files = [f"--file={f}" for f in files]
 
-    with ctx.cd(ctx.project_path):
+    with ctx.cd(ctx.container_build_dir):
         ctx.run(
             "docker-compose {f} up -d {a}".format(
                 f='' if files == [] else ' '.join(files), a=' '.join(args)
@@ -58,7 +58,7 @@ def stop(
         args.append('--volumes')
     if remove_orphans:
         args.append('--remove-orphans')
-    with ctx.cd(ctx.project_path):
+    with ctx.cd(ctx.container_build_dir):
         ctx.run("docker-compose down {a}".format(a=' '.join(args)))
 
 

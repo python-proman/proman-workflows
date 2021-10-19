@@ -5,7 +5,7 @@ description = "Convenience tools to manage projects with Python."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 readme = "README.md"
 classifiers = ["License :: OSI Approved :: Apache Software License"]
-include = ["proman_workflows/templates"]
+include = ["proman_workflows/_vendor/gitignore", "proman_workflows/templates"]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
@@ -19,6 +19,8 @@ stevedore = "^3.4.0"
 briefcase = "^0.3.5"
 pygit2 = "^1.6.1"
 PyInputPlus = "^0.2.12"
+keyring = "^23.2.1"
+SecretStorage = {version = "^3.3.1", platform = "linux"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -100,20 +102,20 @@ project = "proman_workflows:project.run"
 workflow = "proman_workflows.__main__:workflow.run"
 
 # TODO: deprecate flit
-[tool.flit.metadata]
-module = "proman_workflows"
-author = "Jesse P. Johnson"
-author-email = "jpj6652@gmail.com"
-home-page = "https://github.com/proman/proman-workflows"
-requires = ["compendium", "invoke", "jinja2", "proman-common", "stevedore"]
-classifiers = ["License :: OSI Approved :: Apache Software License"]
-
-[tool.flit.entrypoints."proman.precommit.validate"]
-conventional_commits = "proman_workflows:precommit"
-
-[tool.flit.scripts]
-project = "proman_workflows:project.run"
-workflow = "proman_workflows:workflow.run"
+# [tool.flit.metadata]
+# module = "proman_workflows"
+# author = "Jesse P. Johnson"
+# author-email = "jpj6652@gmail.com"
+# home-page = "https://github.com/proman/proman-workflows"
+# requires = ["compendium", "invoke", "keyring", "jinja2", "proman-common", "stevedore"]
+# classifiers = ["License :: OSI Approved :: Apache Software License"]
+#
+# [tool.flit.entrypoints."proman.precommit.validate"]
+# conventional_commits = "proman_workflows:precommit"
+#
+# [tool.flit.scripts]
+# project = "proman_workflows:project.run"
+# workflow = "proman_workflows:workflow.run"
 
 [tool.isort]
 profile = "black"

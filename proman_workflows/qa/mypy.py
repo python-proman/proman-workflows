@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 def run(ctx, path='.'):  # type: (Context, str) -> None
     """Check project source types."""
     with ctx.cd(ctx.working_dir):
-        ctx.run("mypy {}".format(path))
+        ctx.run(f"mypy {path}")
 
 
 namespace = Collection(run)

@@ -8,15 +8,13 @@
 from ..collection import Collection
 
 namespace = Collection()
-namespace.configure(
-    {
-        '_collections': [
-            {
-                'name': 'exec',
-                'driver_name': 'briefcase',
-                'driver_namespace': 'proman.workflow.executable',
-            }
-        ]
-    }
+# namespace.configure({})
+namespace.load_collections(
+    collections=[
+        {
+            'name': 'exec',
+            'driver_name': 'briefcase',
+            'driver_namespace': 'proman.workflow.executable',
+        }
+    ]
 )
-namespace.load_collections()

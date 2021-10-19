@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: MPL-2.0, see LICENSE for more details.
 """Provide CLI for git-tools."""
@@ -9,20 +8,22 @@ import sys
 from dataclasses import dataclass, field
 
 # from pprint import pprint
-from pygit2 import discover_repository
-from typing import Optional, Tuple
-from urllib.parse import urljoin, urlparse
+from typing import List
 
 from compendium.loader import ConfigFile
+from pygit2 import discover_repository
+from typing import Tuple
 
-INDEX_URL = urlparse('https://pypi.org')
+# from typing import Optional, Tuple
+# from urllib.parse import urljoin, urlparse
+
 VENV_PATH = os.getenv('VIRTUAL_ENV', None)
 PATHS = [VENV_PATH] if VENV_PATH else []
 
 # TODO check VCS for paths
 python_path = sys.executable
 repo_dir = discover_repository(os.getcwd())
-basedir = os.path.abspath(os.path.join(repo_dir, os.pardir))
+project_dir = os.path.abspath(os.path.join(repo_dir, os.pardir))
 specfiles = ['pyproject.toml', 'setup.cfg']
 
 if shutil.which('podman'):
@@ -33,25 +34,86 @@ elif shutil.which('docker'):
 templates_dir: str = os.path.join(os.path.dirname(__file__), 'templates')
 
 # Paths
-project_path = os.getenv('PROJECT_PATH', '.')
-working_dir = basedir
+container_build_dir = os.getenv('CONTAINER_BUILD_DIR', '.')
+working_dir = project_dir
 
-# Settings
-environment = os.getenv('FLASK_ENV', 'development')
+
+@dataclass
+class ProjectDirs:
+    """Project pachage."""
+
+    python_path: str = sys.executable
+    specfiles: List[str] = field(
+        default_factory=list,
+    )
+
+    repo_dir: str = discover_repository(os.getcwd())
+    base_dir: str = os.path.abspath(os.path.join(repo_dir, os.pardir))
+    templates_dir: str = field(init=False)
+    container_build_dir: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        """Initialize project settings."""
+        if not self.specfiles:
+            self.specfiles = ['pyproject.toml', 'setup.cfg']
+        if not self.templates_dir:
+            self.templates_dir = os.path.join(self.base_dir, 'templates')
+        if not self.container_build_dir:
+            self.container_build_dir = self.base_dir
+
+
+# @dataclass
+# class Credentials:
+#     """Manage credentials."""
+#
+#     username: Optional[str] = None
+#     password: Optional[str] = field(default=None, repr=False)
+#     interactive: bool = True
+#
+#     def __post_init__(self) -> None:
+#         """Initialize GPG settings."""
+#         if self.interactive:
+#             if not self.username:
+#                 self.username = pyip.inputStr(
+#                     prompt='Enter username: ',
+#                     limit=255,
+#                 )
+#             if not self.password:
+#                 self.password = pyip.inputPassword(
+#                     prompt='Enter password: ',
+#                     limit=255,
+#                 )
 
 
 @dataclass
 class GPGConfig:
     """Manage GPG keys."""
 
-    gpg_home: str = os.path.join(os.path.expanduser('~'), '.gnupg')
+    # commit_signing_key: str
+    # package_signing_key: str
+    home_dir: str = os.path.join(os.path.expanduser('~'), '.gnupg')
+
+
+@dataclass
+class ContainerConfig:
+    """Manage container configuration."""
+
+    runtime: str
+
+    def __post_init__(self) -> None:
+        """Initialize container config."""
+        if self.runtime:
+            if shutil.which('podman'):
+                self.runtime = 'podman'
+            elif shutil.which('docker'):
+                self.runtime = 'docker'
 
 
 @dataclass
 class HooksConfig:
     """Manage hooks config."""
 
-    hooks_dir: str = os.path.join(basedir, '.git', 'hooks')
+    hooks_dir: str = os.path.join(project_dir, '.git', 'hooks')
     hooks: Tuple[str, ...] = (
         'applypatch-msg',
         'pre-applypatch',
@@ -84,39 +146,43 @@ class HooksConfig:
 
 
 @dataclass
-class Config(ConfigFile):
-    """Manage settings from configuration file."""
-
-    filepath: str
-    index_url: str = urljoin(INDEX_URL.geturl(), 'simple')
-    python_versions: tuple = ()
-    digest_algorithm: str = 'sha256'
-    include_prereleases: bool = False
-    lookup_memory: Optional[str] = None
-    writable: bool = True
-
-    def __post_init__(self) -> None:
-        """Initialize settings from configuration."""
-        super().__init__(self.filepath)
-        if os.path.isfile(self.filepath):
-            self.load()
-
-
-@dataclass
-class WebConfig:
+class WebConfig(ProjectDirs):
     """Manage web configuration."""
 
-    webapp_dir: str = basedir
-    static_dir: str = 'static'
-    webui_dir: str = field(init=False)
+    environment = os.getenv('FLASK_ENV', 'development')
+    webapp_dir: str = field(init=False)
+    static_dir: str = field(init=False)
 
     def __post_init__(self) -> None:
         """Initialize settings."""
-        self.webui_dir: str = os.path.join(self.static_dir, 'webui')
+        if not self.webapp_dir:
+            self.webapp_dir: str = os.path.join(self.base_dir, 'ui')
+        if not self.static_dir:
+            self.static_dir: str = os.path.join(self.webapp_dir, 'static')
 
 
 @dataclass
 class DocsConfig:
     """Manage documentation configuration."""
 
-    working_dir: str = os.getenv('DOCS_DIR', basedir)
+    working_dir: str = os.getenv('DOCS_DIR', project_dir)
+
+
+@dataclass
+class GlobalConfig(ConfigFile):
+    """Configuration for project management."""
+
+    writable: bool = True
+    directory: str = os.path.join(os.path.expanduser('~'), '.config')
+    filepath: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        """Initialize settings from configuration."""
+        self.filepath = os.path.join(self.directory, 'proman.toml')
+        super().__init__(
+            self.filepath,
+            writable=self.writable,
+            separator='.',
+        )
+        if os.path.isfile(self.filepath):
+            self.load()
