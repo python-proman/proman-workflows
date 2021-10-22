@@ -27,19 +27,28 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
 
     res = pyip.inputYesNo('Perform adanced GPG setup (y/n): ')
     if res == 'yes':
+        # TODO: enum auto
+        KEY_TYPES = [
+            'RSA',
+            'ElGamal',
+            'DSA',
+            'ECDH',
+            'ECDSA',
+            'EdDSA',
+        ]
         key_type = pyip.inputMenu(
-            [
-                'RSA',
-                'ElGamal',
-                'DSA',
-                'ECDH',
-                'ECDSA',
-                'EdDSA',
-            ],
+            KEY_TYPES,
             prompt='Select GPG key type:\n',
             default='EdDSA',
             numbered=True,
         )
+        subkey_type = pyip.inputMenu(
+            KEY_TYPES,
+            prompt='Select GPG subkey type:\n',
+            default='EdDSA',
+            numbered=True,
+        )
+
         # key_length = pyip.inputInt('Enter key length: ')
         expire_date = pyip.inputStr(
             prompt='Enter expiration date: ',
@@ -56,8 +65,9 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
         comment='primary',
         key_type=key_type,
         key_length=4096,
+        subkey_type=subkey_type,
+        subkey_length=4096,
         expire_date='1y',
-        subkey=False,
     )
     return key
 
@@ -122,7 +132,8 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
 
         signingkey = None
         if res == 'Create a new subkey':
-            signingkey = create_signingkey(ctx, name, email)
+            key = create_signingkey(ctx, name, email)
+            signingkey = key['keyid']
 
         elif res == 'Choose an existing key':
             selection = pyip.inputMenu(
