@@ -72,7 +72,7 @@ def generate(
 def cleanup(ctx, path=None):  # type: (Context, Optional[str]) -> None
     """Cleanup certificates."""
     if path:
-        filesystem.rmdir(ctx, path)
+        filesystem.rm(ctx, path)
     ctx.run('mkcert -uninstall')
 
 

@@ -17,6 +17,8 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 class Collection(InvokeCollection):
     """Provide Invoke integration with Stevedore."""
 
+    # TODO: would pre/post executor be usefull here
+
     @staticmethod
     def get_driver(
         name: Optional[str] = None, **kwargs: Any
@@ -55,7 +57,7 @@ class Collection(InvokeCollection):
         default: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """Add collection dynamically from entrypoint."""
+        """Add collection from entrypoint."""
         driver_manager = self.get_driver(name=name, **kwargs)
         self.add_collection(
             driver_manager.driver,
@@ -65,12 +67,7 @@ class Collection(InvokeCollection):
         if 'test' in self._configuration:
             print(self._configuration['test'])
 
-    def load_collections(
-        self, collections: List[Dict[str, Any]] = []
-    ) -> None:
+    def load_collections(self, collections: List[Dict[str, Any]]) -> None:
         """Load collections from configuration."""
-        if collections != []:
-            for collection in collections:
-                self.load_collection(**collection)
-        else:
-            print('no collection found in configuration')
+        for collection in collections:
+            self.load_collection(**collection)

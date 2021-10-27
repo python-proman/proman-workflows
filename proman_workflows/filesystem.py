@@ -37,12 +37,18 @@ def mkdir(ctx, path):  # type: (Context, str) -> None
 
 
 @task
-def rmdir(ctx, path):  # type: (Context, str) -> None
+def rm(ctx, path):  # type: (Context, str) -> None
     """Remove directory path."""
-    try:
-        shutil.rmtree(path)
-    except OSError as err:
-        print(f"unable to delete direcotry path due to: {err}")
+    if os.path.exists(path):
+        if os.path.isfile(path):
+            os.remove(path)
+        if os.path.isdir(path):
+            try:
+                shutil.rmtree(path)
+            except OSError as err:
+                print(f"unable to delete direcotry path due to: {err}")
+    else:
+        print(f"path does not exists: {path}")
 
 
 @task(iterable=['path'])

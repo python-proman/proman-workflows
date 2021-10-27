@@ -43,10 +43,7 @@ class ProjectDirs:
     """Project pachage."""
 
     python_path: str = sys.executable
-    specfiles: List[str] = field(
-        default_factory=list,
-    )
-
+    specfiles: List[str] = field(default_factory=list)
     repo_dir: str = discover_repository(os.getcwd())
     base_dir: str = os.path.abspath(os.path.join(repo_dir, os.pardir))
     templates_dir: str = field(init=False)
@@ -172,17 +169,24 @@ class DocsConfig:
 class GlobalConfig(ConfigFile):
     """Configuration for project management."""
 
+    name: str
     writable: bool = True
-    directory: str = os.path.join(os.path.expanduser('~'), '.config')
+    directory: str = field(init=False)
     filepath: str = field(init=False)
 
     def __post_init__(self) -> None:
         """Initialize settings from configuration."""
+        self.directory = os.path.join(
+            os.path.expanduser('~'), '.config', self.name
+        )
         self.filepath = os.path.join(self.directory, 'proman.toml')
         super().__init__(
             self.filepath,
             writable=self.writable,
             separator='.',
         )
-        if os.path.isfile(self.filepath):
+        if os.path.exists(self.filepath) and os.path.isfile(self.filepath):
             self.load()
+        elif not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+            self.dump()

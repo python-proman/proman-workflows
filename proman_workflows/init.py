@@ -10,7 +10,8 @@ from typing import TYPE_CHECKING, Any, Dict
 import pyinputplus as pyip
 from invoke import Collection, task
 
-from . import git
+# TODO: switch to executor
+from .git import config as vcs_config
 
 # from .config import GlobalConfig
 from .pki import gpg
@@ -34,18 +35,18 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
             'DSA',
             'ECDH',
             'ECDSA',
-            'EdDSA',
+            'EDDSA',
         ]
         key_type = pyip.inputMenu(
             KEY_TYPES,
             prompt='Select GPG key type:\n',
-            default='EdDSA',
+            default='EDDSA',
             numbered=True,
         )
         subkey_type = pyip.inputMenu(
             KEY_TYPES,
             prompt='Select GPG subkey type:\n',
-            default='EdDSA',
+            default='EDDSA',
             numbered=True,
         )
 
@@ -75,7 +76,7 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
 def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
     """Ensure version control system is setup."""
     print('Check git user info is setup.', end='\n\n')
-    gitconfig = git.config(ctx, scope='global')
+    gitconfig = vcs_config.load(ctx, scope='global')
 
     # select gpg if found else generate gpg key
     # setup gpg commit signing
@@ -160,7 +161,7 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
     # from pprint import pprint
     # pprint(ctx.config['gpg'])
 
-    git.dump_config(
+    vcs_config.dump(
         ctx,
         gitconfig,
         template_name='gitconfig',
