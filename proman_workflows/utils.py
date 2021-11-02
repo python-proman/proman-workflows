@@ -9,24 +9,25 @@ from typing import TYPE_CHECKING, List, Optional
 from invoke import Collection, task
 
 if TYPE_CHECKING:
-    from invoke import Context
+    from invoke import Context, Result
 
 
-@task(iterable=["name"])
+@task
 def find(
     ctx,  # type: Context
-    name=[],  # type: List[str]
+    name,  # type: str
+    path='.',  # type: str
     mindepth=None,  # type: Optional[int]
     maxdepth=None,  # type: Optional[int]
-):  # type: (...) -> None
+):  # type: (...) -> List[Result]
     """Clean project dependencies and build."""
     args = []
     if mindepth:
         args.append(f"-mindepth {mindepth}")
     if maxdepth:
         args.append(f"-maxdepth {maxdepth}")
-    for n in name:
-        ctx.run(f"find . {' '.join(args)}")
+    result = ctx.run(f"find {path} {' '.join(args)}")
+    return result
 
 
 @task(iterable=['path'])

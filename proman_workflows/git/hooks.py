@@ -3,13 +3,11 @@
 import os
 import shutil
 
-from dataclasses import asdict
 from typing import TYPE_CHECKING, List
 
 from invoke import Collection, task
 
 # from proman_workflows import git, filesystem, templates
-from proman_workflows.config import HooksConfig
 from . import config
 
 if TYPE_CHECKING:
@@ -65,10 +63,4 @@ def execute(ctx, name):  # type: (Context, str) -> None
     print(f"{name} hook executed")
 
 
-hooks_config = HooksConfig()
-namespace = Collection()
-namespace.configure(asdict(hooks_config))
-namespace.add_task(execute)
-namespace.add_task(index)
-namespace.add_task(remove)
-namespace.add_task(setup)
+namespace = Collection(execute, index, remove, setup)

@@ -92,9 +92,9 @@ project_namespace.configure(
 project_namespace.load_collections(
     collections=[
         {
-            'name': 'hooks',
-            'driver_name': 'git_hooks',
-            'driver_namespace': 'proman.workflow.scm',
+            'name': 'vcs',
+            'driver_name': 'git',
+            'driver_namespace': 'proman.workflow.vcs',
         },
         {
             'name': 'sort-headers',

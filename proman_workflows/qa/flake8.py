@@ -40,7 +40,6 @@ def run(
     statistics=False,  # type: bool
     enable_extensions=None,  # type: Optional[str]
     exit_zero=False,  # type: bool
-    install_hook=None,  # type: Optional[str]
     jobs=None,  # type: Optional[str]
     tee=False,  # type: bool
     benchmark=False,  # type: bool
@@ -103,8 +102,6 @@ def run(
         args.append(f"--enable-extensions {enable_extensions}")
     if exit_zero:
         args.append('--exit-zero')
-    if install_hook:
-        args.append(f"--install-hook {install_hook}")
     if jobs:
         args.append(f"--jobs {jobs}")
     if tee:

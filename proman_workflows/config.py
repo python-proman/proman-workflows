@@ -12,7 +12,6 @@ from typing import List
 
 from compendium.loader import ConfigFile
 from pygit2 import discover_repository
-from typing import Tuple
 
 # from typing import Optional, Tuple
 # from urllib.parse import urljoin, urlparse
@@ -43,20 +42,50 @@ class ProjectDirs:
     """Project pachage."""
 
     python_path: str = sys.executable
-    specfiles: List[str] = field(default_factory=list)
     repo_dir: str = discover_repository(os.getcwd())
     base_dir: str = os.path.abspath(os.path.join(repo_dir, os.pardir))
+    hooks_dir: str = field(init=False)
     templates_dir: str = field(init=False)
     container_build_dir: str = field(init=False)
+    specfiles: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         """Initialize project settings."""
         if not self.specfiles:
             self.specfiles = ['pyproject.toml', 'setup.cfg']
+        if not self.hooks_dir:
+            self.hooks_dir = os.path.join(self.repo_dir, 'hooks')
         if not self.templates_dir:
             self.templates_dir = os.path.join(self.base_dir, 'templates')
         if not self.container_build_dir:
             self.container_build_dir = self.base_dir
+
+
+@dataclass
+class GlobalConfig(ConfigFile):
+    """Configuration for project management."""
+
+    name: str
+    writable: bool = True
+    directory: str = field(init=False)
+    filepath: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        """Initialize settings from configuration."""
+        self.directory = os.path.join(
+            os.path.expanduser('~'), '.config', self.name
+        )
+        self.filepath = os.path.join(self.directory, 'proman.toml')
+        super().__init__(
+            self.filepath,
+            writable=self.writable,
+            separator='.',
+        )
+        if os.path.exists(self.filepath) and os.path.isfile(self.filepath):
+            self.load()
+        elif not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+            self.dump()
 
 
 # @dataclass
@@ -92,54 +121,10 @@ class GPGConfig:
 
 
 @dataclass
-class ContainerConfig:
-    """Manage container configuration."""
+class DocsConfig:
+    """Manage documentation configuration."""
 
-    runtime: str
-
-    def __post_init__(self) -> None:
-        """Initialize container config."""
-        if self.runtime:
-            if shutil.which('podman'):
-                self.runtime = 'podman'
-            elif shutil.which('docker'):
-                self.runtime = 'docker'
-
-
-@dataclass
-class HooksConfig:
-    """Manage hooks config."""
-
-    hooks_dir: str = os.path.join(project_dir, '.git', 'hooks')
-    hooks: Tuple[str, ...] = (
-        'applypatch-msg',
-        'pre-applypatch',
-        'post-applypatch',
-        'pre-commit',
-        'pre-merge-commit',
-        'prepare-commit-msg',
-        'post-commit',
-        'pre-rebase',
-        'post-checkout',
-        'post-merge',
-        'pre-push',
-        'pre-recieve',
-        'update',
-        'post-recieve',
-        'post-update',
-        'reference-transaction',
-        'push-to-checkout',
-        'pre-auto-gc',
-        'post-rewrite',
-        'rebase',
-        'sendemail-validate',
-        'fsmonitor-watchman',
-        'p4-changelist',
-        'p4-prepare-changelist',
-        'p4-post-changelist',
-        'p4-pre-submit',
-        'post-index-change',
-    )
+    working_dir: str = os.getenv('DOCS_DIR', project_dir)
 
 
 @dataclass
@@ -159,34 +144,15 @@ class WebConfig(ProjectDirs):
 
 
 @dataclass
-class DocsConfig:
-    """Manage documentation configuration."""
+class ContainerConfig:
+    """Manage container configuration."""
 
-    working_dir: str = os.getenv('DOCS_DIR', project_dir)
-
-
-@dataclass
-class GlobalConfig(ConfigFile):
-    """Configuration for project management."""
-
-    name: str
-    writable: bool = True
-    directory: str = field(init=False)
-    filepath: str = field(init=False)
+    runtime: str
 
     def __post_init__(self) -> None:
-        """Initialize settings from configuration."""
-        self.directory = os.path.join(
-            os.path.expanduser('~'), '.config', self.name
-        )
-        self.filepath = os.path.join(self.directory, 'proman.toml')
-        super().__init__(
-            self.filepath,
-            writable=self.writable,
-            separator='.',
-        )
-        if os.path.exists(self.filepath) and os.path.isfile(self.filepath):
-            self.load()
-        elif not os.path.exists(self.directory):
-            os.makedirs(self.directory)
-            self.dump()
+        """Initialize container config."""
+        if self.runtime:
+            if shutil.which('podman'):
+                self.runtime = 'podman'
+            elif shutil.which('docker'):
+                self.runtime = 'docker'

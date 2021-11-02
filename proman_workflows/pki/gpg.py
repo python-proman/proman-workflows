@@ -13,7 +13,6 @@ if TYPE_CHECKING:
     from gnupg import GenKey, ListKeys
     from invoke import Context
 
-
 # [
 #     'curve25519',  # cv25519, or ed25519
 #     'nistp256',  # maybe untrustworthy
@@ -122,14 +121,14 @@ def agent(
 
 
 @task
-def config(
+def gpg(
     ctx,  # type: Context
     gnupghome=os.path.join(os.path.expanduser('~'), '.gnupg'),  # type: str
     keyring=None,  # type: Optional[str]
     secret_keyring=None,  # type: Optional[str]
 ):  # type: (...) -> None
     """Get gpg instance."""
-    if 'gpg' not in ctx:
+    if '__gpg' not in ctx:
         ctx.__gpg = GPG(
             gnupghome=gnupghome,
             keyring=keyring,
@@ -137,7 +136,7 @@ def config(
         )
 
 
-@task(pre=[config])
+@task(pre=[gpg])
 def list_keys(
     ctx, secret=False, keys=None, sigs=False
 ):  # type: (Context, bool, Optional[str], bool) -> ListKeys
@@ -147,7 +146,7 @@ def list_keys(
     return keys
 
 
-@task(pre=[config])
+@task(pre=[gpg])
 def get_key(
     ctx, query, secret=False, sigs=False
 ):  # type: (Context, str, bool, bool) -> List[GenKey]
@@ -163,7 +162,7 @@ def get_key(
     return keys
 
 
-@task(pre=[config])
+@task(pre=[gpg])
 def export_key(
     ctx, key, keypath, secret=False
 ):  # type: (Context, str, str, bool) -> None
@@ -173,7 +172,7 @@ def export_key(
         f.write(ascii_armored_keys)
 
 
-@task(pre=[config])
+@task(pre=[gpg])
 def delete_key(
     ctx,
     query,
@@ -194,7 +193,7 @@ def delete_key(
             )
 
 
-@task(pre=[config], iterable=['key_usage', 'subkey_usage'])
+@task(pre=[gpg], iterable=['key_usage', 'subkey_usage'])
 def gen_key(
     ctx,  # type: Context
     name,  # type: str
@@ -277,7 +276,6 @@ namespace.configure(
         },
     }
 )
-namespace.add_task(config)
 namespace.add_task(list_keys)
 namespace.add_task(get_key)
 namespace.add_task(delete_key)

@@ -40,10 +40,10 @@ pyfakefs = "^4.5.0"
 types-Jinja2 = "^2.11.2"
 tox = "^3.24.0"
 black = "^21.7b0"
+python-gilt = "^1.2.3"
 
 # [tool.poetry.extras]
 # gnome = ["secretstorage"]
-python-gilt = "^1.2.3"
 # kde = ["dbus-python"]
 
 [tool.poetry.plugins."proman.precommit.validate"]
@@ -53,8 +53,8 @@ conventional_commits = "proman_workflows:precommit"
 gpg = "proman_workflows.pki.gpg:namespace"
 tls = "proman_workflows.pki.tls:namespace"
 
-[tool.poetry.plugins."proman.workflow.scm"]
-git_hooks = "proman_workflows.git.hooks:namespace"
+[tool.poetry.plugins."proman.workflow.vcs"]
+git = "proman_workflows.git:namespace"
 
 [tool.poetry.plugins."proman.workflow.package"]
 flit = "proman_workflows.package.flit:namespace"
@@ -98,8 +98,7 @@ mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
 [tool.poetry.scripts]
 project = "proman_workflows:project.run"
-# workflow = "proman_workflows:workflow.run"
-workflow = "proman_workflows.__main__:workflow.run"
+workflow = "proman_workflows:workflow.run"
 
 # TODO: deprecate flit
 # [tool.flit.metadata]
