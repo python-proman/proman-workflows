@@ -1,12 +1,4 @@
 ---
 - git: https://github.com/github/gitignore.git
   version: master
-  files:
-    - src: Global/Emacs.gitignore
-      dst: proman_workflows/_vendor/gitignore/
-    - src: Global/Vim.gitignore
-      dst: proman_workflows/_vendor/gitignore/
-    - src: Global/VirtualEnv.gitignore
-      dst: proman_workflows/_vendor/gitignore/
-    - src: Python.gitignore
-      dst: proman_workflows/_vendor/gitignore/
+  dst: proman_workflows/_vendor/gitignore/
