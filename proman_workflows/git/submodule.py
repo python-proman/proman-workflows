@@ -7,10 +7,10 @@ import os
 from typing import TYPE_CHECKING, List, Optional
 
 from invoke import Collection, task
-from pygit2 import Keypair, Repository, RemoteCallbacks
+from pygit2 import Keypair, RemoteCallbacks, Repository
 
-from . import config
 from .. import filesystem
+from . import config
 
 if TYPE_CHECKING:
     from invoke import Context

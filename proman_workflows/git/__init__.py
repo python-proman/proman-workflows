@@ -5,10 +5,11 @@ from typing import TYPE_CHECKING
 from invoke import Collection, task
 from pygit2 import Repository
 
-# import pyinputplus as pyip
-
 from .config import config_tasks
 from .submodule import submodule_tasks
+
+# import pyinputplus as pyip
+
 
 if TYPE_CHECKING:
     from invoke import Context

@@ -13,15 +13,27 @@ if TYPE_CHECKING:
     from gnupg import GenKey, ListKeys
     from invoke import Context
 
-# [
+ELYPTICAL_KEY_TYPES = [
+    'ECDH',
+    'ECDSA',
+    'EDDSA',
+]
+KEY_TYPES = [
+    'DSA',
+    'ELG',
+    'RSA',
+] + ELYPTICAL_KEY_TYPES
+
+# TODO: need better way of mapping curves
+# ELYPTICAL_CURVES = [
 #     'curve25519',  # cv25519, or ed25519
-#     'nistp256',  # maybe untrustworthy
-#     'nistp384',  # maybe untrustworthy
-#     'nistp521',  # maybe untrustworthy
-#     'secp256k1'
-#     # 'brainpoolP256r1',
-#     # 'brainpoolP384r1',
-#     # 'brainpoolP512r1',
+#     'nistp256',  # nothing up my sleeve?
+#     'nistp384',  # nothing up my sleeve?
+#     'nistp521',  # nothing up my sleeve?
+#     'secp256k1',
+#     # 'brainpoolP256r1',  # verifiable?
+#     # 'brainpoolP384r1',  # verifiable?
+#     # 'brainpoolP512r1',  # verifiable?
 # ]
 
 
@@ -226,9 +238,9 @@ def gen_key(
     # handle
 
     settings['key_type'] = key_type
-    if key_type in ['DSA', 'ELG', 'RSA']:
-        settings['subkey_length'] = key_length
-    elif key_type in ['ECDH', 'ECDSA', 'EDDSA']:
+    if key_type not in ELYPTICAL_KEY_TYPES:
+        settings['key_length'] = key_length
+    elif key_type in ELYPTICAL_KEY_TYPES:
         if key_curve:
             # and key_curve in KEY_CURVES:
             settings['key_curve'] = key_curve
@@ -236,9 +248,9 @@ def gen_key(
         settings['key_usage'] = ','.join(key_usage)
 
     settings['subkey_type'] = subkey_type
-    if subkey_type in ['DSA', 'ELG', 'RSA']:
+    if subkey_type not in ELYPTICAL_KEY_TYPES:
         settings['subkey_length'] = subkey_length
-    elif subkey_type in ['ECDH', 'ECDSA', 'EDDSA']:
+    elif subkey_type in ELYPTICAL_KEY_TYPES:
         if subkey_curve:
             # and subkey_curve in KEY_CURVES:
             settings['subkey_curve'] = subkey_curve

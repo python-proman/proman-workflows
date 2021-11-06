@@ -2,7 +2,6 @@
 
 import os
 import shutil
-
 from typing import TYPE_CHECKING, List
 
 from invoke import Collection, task

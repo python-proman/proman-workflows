@@ -16,14 +16,15 @@ from proman_workflows import (
     container,
     docs,
     exception,
+    git,
+    init,
     package,
     qa,
     security,
     utils,
 )
-from proman_workflows.config import DocsConfig
 from proman_workflows.collection import Collection
-from proman_workflows import git, init
+from proman_workflows.config import DocsConfig
 
 # from proman_workflows.vcs import Git
 

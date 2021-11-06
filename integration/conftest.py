@@ -5,8 +5,8 @@ import shutil
 from typing import TYPE_CHECKING
 
 import pytest
-from invoke import MockContext
 from gnupg import GPG
+from invoke import MockContext
 
 if TYPE_CHECKING:
     from invoke import Context
