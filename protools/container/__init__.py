@@ -12,12 +12,12 @@ namespace.load_collections(
         {
             'name': 'docker',
             'driver_name': 'docker',
-            'driver_namespace': 'proman.workflow.container',
+            'driver_namespace': 'protools.container',
         },
         {
             'name': 'podman',
             'driver_name': 'podman',
-            'driver_namespace': 'proman.workflow.container',
+            'driver_namespace': 'protools.container',
         },
     ]
 )

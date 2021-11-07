@@ -30,7 +30,7 @@ from protools.config import DocsConfig
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
-__title__ = 'proman-workflows'
+__title__ = 'protoolss'
 __description__ = 'Convenience module to manage project tools with Python.'
 __version__ = '0.1.0'
 __license__ = 'MPL-2.0'
@@ -51,7 +51,7 @@ def get_specfile(
     raise exception.PromanWorkflowException('no configuration found')
 
 
-dirs = AppDirs(project_name='proman-workflows')
+dirs = AppDirs(project_name='protoolss')
 specfile = get_specfile()
 docs_config = DocsConfig()
 
@@ -95,27 +95,27 @@ protools_namespace.load_collections(
         {
             'name': 'vcs',
             'driver_name': 'git',
-            'driver_namespace': 'proman.workflow.vcs',
+            'driver_namespace': 'protools.vcs',
         },
         {
             'name': 'sort-headers',
             'driver_name': 'isort',
-            'driver_namespace': 'proman.workflow.formatter',
+            'driver_namespace': 'protools.formatter',
         },
         {
             'name': 'format',
             'driver_name': 'black',
-            'driver_namespace': 'proman.workflow.formatter',
+            'driver_namespace': 'protools.formatter',
         },
         {
             'name': 'gpg',
             'driver_name': 'gpg',
-            'driver_namespace': 'proman.workflow.pki',
+            'driver_namespace': 'protools.pki',
         },
         {
             'name': 'tls',
             'driver_name': 'tls',
-            'driver_namespace': 'proman.workflow.pki',
+            'driver_namespace': 'protools.pki',
         },
     ]
 )

@@ -17,27 +17,27 @@ namespace.load_collections(
         {
             'name': 'sort-headers',
             'driver_name': 'isort',
-            'driver_namespace': 'proman.workflow.formatter',
+            'driver_namespace': 'protools.formatter',
         },
         {
             'name': 'style',
             'driver_name': 'black',
-            'driver_namespace': 'proman.workflow.formatter',
+            'driver_namespace': 'protools.formatter',
         },
         {
             'name': 'typing',
             'driver_name': 'mypy',
-            'driver_namespace': 'proman.workflow.typing',
+            'driver_namespace': 'protools.typing',
         },
         {
             'name': 'lint',
             'driver_name': 'flake8',
-            'driver_namespace': 'proman.workflow.lint',
+            'driver_namespace': 'protools.lint',
         },
         {
             'name': 'unit-tests',
             'driver_name': 'pytest',
-            'driver_namespace': 'proman.workflow.unit_tests',
+            'driver_namespace': 'protools.unit_tests',
         },
     ]
 )

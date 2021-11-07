@@ -37,12 +37,12 @@ setup_tasks.load_collections(
         {
             'name': 'vcs',
             'driver_name': 'git',
-            'driver_namespace': 'proman.workflow.vcs',
+            'driver_namespace': 'protools.vcs',
         },
         {
             'name': 'gpg',
             'driver_name': 'gpg',
-            'driver_namespace': 'proman.workflow.pki',
+            'driver_namespace': 'protools.pki',
         },
     ]
 )

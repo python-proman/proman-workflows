@@ -105,7 +105,7 @@ namespace.load_collections(
         {
             'name': 'site',
             'driver_name': 'mkdocs',
-            'driver_namespace': 'proman.workflow.docs',
+            'driver_namespace': 'protools.docs',
         }
     ]
 )
