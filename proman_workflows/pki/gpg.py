@@ -188,11 +188,11 @@ def export_key(
 def delete_key(
     ctx,
     query,
+    passphrase,
     # secret=True,
     sigs=False,
-    passphrase='',
     expect_passphrase=True,
-):  # type: (Context, str, bool, Optional[str], bool) -> None
+):  # type: (Context, str, str, bool, bool) -> None
     """Delete GPG key."""
     for secret in (True, False):
         keys = get_key(ctx, query, secret, sigs)
@@ -258,7 +258,6 @@ def gen_key(
         settings['subkey_usage'] = ','.join(subkey_usage)
 
     settings['expire_date'] = expire_date
-    settings['no_protection'] = True if password == '' else False
 
     input_data = ctx.__gpg.gen_key_input(
         name_real=name,

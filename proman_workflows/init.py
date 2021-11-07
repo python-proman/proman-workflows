@@ -4,6 +4,7 @@
 
 import logging
 import os
+import shutil
 from typing import TYPE_CHECKING, Any, Dict
 
 import keyring
@@ -73,7 +74,7 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
             settings['subkey_length'] = pyip.inputMenu(
                 [1024, 2048, 3076, 4096],
                 prompt='Select key size:\n',
-                default=4096
+                default=4096,
             )
         # elif key_type in ELYPTICAL_KEY_TYPES:
         #     if key_curve:
@@ -152,17 +153,13 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
         result = __setup.execute(
             ('gpg.list_keys', {'secret': False, 'keys': None, 'sigs': False})
         )
-        gpg_keys = [
-            y
-            for x, y in result.items()
-            if x.name == 'list_keys'
-        ][0]
+        gpg_keys = [y for x, y in result.items() if x.name == 'list_keys'][0]
 
         choices = ['Create a new subkey', 'Skip']
         if gpg_keys != []:
             print(
                 'A GPG key was found but user.signingkey is undefined:',
-                end='\n\n'
+                end='\n\n',
             )
             choices = [
                 f"{k['keyid']}:{k['uids'][0]}" for k in gpg_keys
@@ -171,7 +168,7 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
         selection = pyip.inputMenu(
             choices=choices,
             prompt='Create a key or use an existing one:\n',
-            numbered=True
+            numbered=True,
         )
 
         signingkey = None
@@ -200,7 +197,7 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
                 'template_name': 'gitconfig',
                 'dest': os.path.join(os.path.expanduser('~'), '.gitconfig'),
                 'update': update,
-            }
+            },
         )
     )
     return gitconfig
@@ -219,7 +216,9 @@ def setup_githooks(ctx):  # type: (Context) -> None
 @task
 def setup(ctx, update=False):  # type: (Context, bool) -> None
     """Configure workspace for project development."""
-    os.system('clear')
+    clear = shutil.which('clear') or shutil.which('cls')
+    if clear:
+        ctx.run(clear)
     print('This tool will assist with environment setup.', end='\n\n')
 
     setup_gitconfig(ctx, update)

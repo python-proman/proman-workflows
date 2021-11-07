@@ -6,8 +6,8 @@ from invoke import Collection, task
 from pygit2 import Repository
 
 from .config import config_tasks
-from .submodule import submodule_tasks
 
+# from .submodule import submodule_tasks
 # import pyinputplus as pyip
 
 
@@ -23,4 +23,4 @@ def repo(ctx):  # type: (Context) -> Repository
 
 namespace = Collection()
 namespace.add_collection(config_tasks, 'config')
-namespace.add_collection(submodule_tasks, 'submodule')
+# namespace.add_collection(submodule_tasks, 'submodule')
