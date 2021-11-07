@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, List
 
 import pytest
 
-from proman_workflows.pki import gpg
+from protools.pki import gpg
 
 if TYPE_CHECKING:
     from invoke import Context

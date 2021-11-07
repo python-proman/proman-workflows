@@ -1,5 +1,5 @@
-# from proman_workflows.controller import IntegrationController
-from proman_workflows import get_release_controller
+# from protools.controller import IntegrationController
+from protools import get_release_controller
 
 # controller = get_release_controller()
 # print(controller.config.retrieve('/tool/proman/release/files'))

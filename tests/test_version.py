@@ -1,8 +1,7 @@
-# type: ignore
 """Add version tests."""
-from proman_workflows import __version__
+from protools import __version__
 
 
-def test_version():
+def test_version() -> None:
     """Test version."""
     assert __version__ == '0.1.0'

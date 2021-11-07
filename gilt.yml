@@ -1,4 +1,4 @@
 ---
 - git: https://github.com/github/gitignore.git
   version: master
-  dst: proman_workflows/_vendor/gitignore/
+  dst: protools/_vendor/gitignore/

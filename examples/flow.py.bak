@@ -1,8 +1,8 @@
 import pytest
 from transitions.core import MachineError
 
-from proman_workflows import repo
-from proman_workflows.vcs import GitFlow
+from protools import repo
+from protools.vcs import GitFlow
 
 workflow = GitFlow(repo, branch='feat-test-123')
 assert workflow.get_initial_state() == 'feature'

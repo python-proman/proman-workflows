@@ -1,5 +1,5 @@
 # type: ignore
-from proman_workflows.version import PythonVersion
+from proman_version.version import PythonVersion
 
 lcl = PythonVersion('1.0.0')
 

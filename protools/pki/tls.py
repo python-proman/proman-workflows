@@ -69,11 +69,11 @@ def generate(
 
 
 @task
-def cleanup(ctx, path=None):  # type: (Context, Optional[str]) -> None
+def clean(ctx, path=None):  # type: (Context, Optional[str]) -> None
     """Cleanup certificates."""
     if path:
         filesystem.rm(ctx, path)
     ctx.run('mkcert -uninstall')
 
 
-namespace = Collection(cleanup, generate, setup)
+namespace = Collection(clean, generate, setup)

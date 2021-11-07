@@ -11,7 +11,7 @@ from invoke import Program
 from proman_common.config import Config
 from proman_common.filepaths import AppDirs
 
-from proman_workflows import (
+from protools import (
     config,
     container,
     docs,
@@ -23,10 +23,10 @@ from proman_workflows import (
     security,
     utils,
 )
-from proman_workflows.collection import Collection
-from proman_workflows.config import DocsConfig
+from protools.collection import Collection
+from protools.config import DocsConfig
 
-# from proman_workflows.vcs import Git
+# from protools.vcs import Git
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
@@ -79,8 +79,8 @@ workflow = Program(
     binary_names=['workflow'],
 )
 
-project_namespace = Collection().from_module(init)
-project_namespace.configure(
+protools_namespace = Collection().from_module(init)
+protools_namespace.configure(
     {
         'dirs': asdict(dirs),
         'spec': specfile.data,
@@ -90,7 +90,7 @@ project_namespace.configure(
         'templates_dir': config.templates_dir,
     }
 )
-project_namespace.load_collections(
+protools_namespace.load_collections(
     collections=[
         {
             'name': 'vcs',
@@ -119,16 +119,16 @@ project_namespace.load_collections(
         },
     ]
 )
-project_namespace.add_collection(git.namespace, name='vcs')
-project = Program(
+protools_namespace.add_collection(git.namespace, name='vcs')
+protools = Program(
     version=__version__,
-    namespace=project_namespace,
+    namespace=protools_namespace,
     name=__title__,
     binary='project',
     binary_names=['project'],
 )
 
 __all__ = [
-    'project',
+    'protools',
     'workflow',
 ]

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, List
 
 from invoke import Collection, task
 
-# from proman_workflows import git, filesystem, templates
+# from protools import git, filesystem, templates
 from . import config
 
 if TYPE_CHECKING:

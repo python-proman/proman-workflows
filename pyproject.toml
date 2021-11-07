@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "proman_workflows"
+name = "protools"
 version = "0.1.0"
 description = "Convenience tools to manage projects with Python."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 readme = "README.md"
 classifiers = ["License :: OSI Approved :: Apache Software License"]
-include = ["proman_workflows/_vendor/gitignore", "proman_workflows/templates"]
+include = ["protools/_vendor/gitignore", "protools/templates"]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
@@ -47,62 +47,62 @@ twine = "^3.5.0"
 # kde = ["dbus-python"]
 
 [tool.poetry.plugins."proman.precommit.validate"]
-conventional_commits = "proman_workflows:precommit"
+conventional_commits = "protools:precommit"
 
 [tool.poetry.plugins."proman.workflow.pki"]
-gpg = "proman_workflows.pki.gpg:namespace"
-tls = "proman_workflows.pki.tls:namespace"
+gpg = "protools.pki.gpg:namespace"
+tls = "protools.pki.tls:namespace"
 
 [tool.poetry.plugins."proman.workflow.vcs"]
-git = "proman_workflows.git:namespace"
+git = "protools.git:namespace"
 
 [tool.poetry.plugins."proman.workflow.package"]
-flit = "proman_workflows.package.flit:namespace"
-poetry = "proman_workflows.package.poetry:namespace"
-setuptools = "proman_workflows.package.setuptools:namespace"
-twine = "proman_workflows.package.twine:namespace"
+flit = "protools.package.flit:namespace"
+poetry = "protools.package.poetry:namespace"
+setuptools = "protools.package.setuptools:namespace"
+twine = "protools.package.twine:namespace"
 
 [tool.poetry.plugins."proman.workflow.executable"]
-briefcase = "proman_workflows.executable.briefcase:namespace"
-# pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
+briefcase = "protools.executable.briefcase:namespace"
+# pyinstaller = "protools.executable.pyinstaller:namespace"
 
 [tool.poetry.plugins."proman.workflow.lint"]
-flake8 = "proman_workflows.qa.flake8:namespace"
+flake8 = "protools.qa.flake8:namespace"
 
 [tool.poetry.plugins."proman.workflow.formatter"]
-autopep8 = "proman_workflows.qa.autopep8:namespace"
-black = "proman_workflows.qa.black:namespace"
-isort = "proman_workflows.qa.isort:namespace"
+autopep8 = "protools.qa.autopep8:namespace"
+black = "protools.qa.black:namespace"
+isort = "protools.qa.isort:namespace"
 
 [tool.poetry.plugins."proman.workflow.unit_tests"]
-pytest = "proman_workflows.qa.pytest:namespace"
+pytest = "protools.qa.pytest:namespace"
 
 # [tool.poetry.plugins."proman.workflow.coverage"]
-# pytest = "proman_workflows.qa.pytest:namespace"
+# pytest = "protools.qa.pytest:namespace"
 
 [tool.poetry.plugins."proman.workflow.typing"]
-mypy = "proman_workflows.qa.mypy:namespace"
+mypy = "protools.qa.mypy:namespace"
 
 [tool.poetry.plugins."proman.workflow.sca"]
-bandit = "proman_workflows.security.bandit:namespace"
-safety = "proman_workflows.security.safety:namespace"
+bandit = "protools.security.bandit:namespace"
+safety = "protools.security.safety:namespace"
 
 [tool.poetry.plugins."proman.workflow.container"]
-docker = "proman_workflows.container.docker:namespace"
-podman = "proman_workflows.container.podman:namespace"
+docker = "protools.container.docker:namespace"
+podman = "protools.container.podman:namespace"
 
 [tool.poetry.plugins."proman.workflow.docs"]
-mkdocs = "proman_workflows.docs.mkdocs:namespace"
+mkdocs = "protools.docs.mkdocs:namespace"
 
 [tool.poetry.plugins."proman.workflow.integration"]
 
 [tool.poetry.scripts]
-project = "proman_workflows:project.run"
-workflow = "proman_workflows:workflow.run"
+protools-workflow = "protools:protools.run"
+protools = "protools:tools.run"
 
 # TODO: deprecate flit
 # [tool.flit.metadata]
-# module = "proman_workflows"
+# module = "protools"
 # author = "Jesse P. Johnson"
 # author-email = "jpj6652@gmail.com"
 # home-page = "https://github.com/proman/proman-workflows"
@@ -110,11 +110,11 @@ workflow = "proman_workflows:workflow.run"
 # classifiers = ["License :: OSI Approved :: Apache Software License"]
 #
 # [tool.flit.entrypoints."proman.precommit.validate"]
-# conventional_commits = "proman_workflows:precommit"
+# conventional_commits = "protools:precommit"
 #
 # [tool.flit.scripts]
-# project = "proman_workflows:project.run"
-# workflow = "proman_workflows:workflow.run"
+# project = "protools:project.run"
+# workflow = "protools:workflow.run"
 
 [tool.isort]
 profile = "black"
