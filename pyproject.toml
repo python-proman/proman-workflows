@@ -34,7 +34,6 @@ safety = "^1.9.0"
 mkdocs = "^1.2.2"
 mkdocs-material = "^7.2.0"
 mkdocstrings = "^0.15.2"
-flit = "^3.2.0"
 mypy = "^0.910"
 pyfakefs = "^4.5.0"
 types-Jinja2 = "^2.11.2"
@@ -44,6 +43,7 @@ python-gilt = "^1.2.3"
 
 # [tool.poetry.extras]
 # gnome = ["secretstorage"]
+twine = "^3.5.0"
 # kde = ["dbus-python"]
 
 [tool.poetry.plugins."proman.precommit.validate"]
