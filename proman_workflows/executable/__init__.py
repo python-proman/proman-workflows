@@ -14,7 +14,7 @@ namespace.load_collections(
         {
             'name': 'exec',
             'driver_name': 'briefcase',
-            'driver_namespace': 'protools.executable',
+            'driver_namespace': 'proman.workflows.executable',
         }
     ]
 )

@@ -9,17 +9,15 @@ namespace = Collection()
 # namespace.configure({})
 namespace.load_collections(
     collections=[
-        {
-            'name': 'docker',
-            'driver_name': 'docker',
-            'driver_namespace': 'protools.container',
-        },
+        # {
+        #     'name': 'docker',
+        #     'driver_name': 'docker_compose',
+        #     'driver_namespace': 'proman.workflows.container.compose',
+        # },
         {
             'name': 'podman',
-            'driver_name': 'podman',
-            'driver_namespace': 'protools.container',
+            'driver_name': 'podman_compose',
+            'driver_namespace': 'proman.workflows.container.compose',
         },
     ]
 )
-
-__all__ = ['namespace']

@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "protools"
-version = "0.1.0"
-description = "Convenience tools to manage projects with Python."
+name = "proman-workflows"
+version = "0.1.0-a1"
+description = "Task-runner to automate projects."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 readme = "README.md"
 classifiers = ["License :: OSI Approved :: Apache Software License"]
-include = ["protools/_vendor/gitignore", "protools/templates"]
+include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
@@ -23,10 +23,11 @@ keyring = "^23.2.1"
 SecretStorage = {version = "^3.3.1", platform = "linux"}
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+black = "^21.7b0"
+docstr-coverage = "^1.2.0"
 flake8 = "^3.8.3"
 pydocstyle = "^5.0.2"
-docstr-coverage = "^1.2.0"
+pytest = "^5.2"
 pytest-cov = "^2.10.0"
 isort = "^5.9.2"
 bandit = "^1.6.2"
@@ -38,83 +39,76 @@ mypy = "^0.910"
 pyfakefs = "^4.5.0"
 types-Jinja2 = "^2.11.2"
 tox = "^3.24.0"
-black = "^21.7b0"
 python-gilt = "^1.2.3"
-
-# [tool.poetry.extras]
-# gnome = ["secretstorage"]
 twine = "^3.5.0"
-# kde = ["dbus-python"]
 
-[tool.poetry.plugins."proman.precommit.validate"]
-conventional_commits = "protools:precommit"
+[tool.poetry.extras]
+kde = ["dbus-python"]
 
-[tool.poetry.plugins."protools.pki"]
-gpg = "protools.pki.gpg:namespace"
-tls = "protools.pki.tls:namespace"
+[tool.poetry.plugins."proman.workflows.pki"]
+gpg = "proman_workflows.pki.gpg:namespace"
+tls = "proman_workflows.pki.tls:namespace"
 
-[tool.poetry.plugins."protools.vcs"]
-git = "protools.git:namespace"
+[tool.poetry.plugins."proman.workflows.vcs"]
+git = "proman_workflows.git:namespace"
 
-[tool.poetry.plugins."protools.package"]
-flit = "protools.package.flit:namespace"
-poetry = "protools.package.poetry:namespace"
-setuptools = "protools.package.setuptools:namespace"
-twine = "protools.package.twine:namespace"
+[tool.poetry.plugins."proman.workflows.package"]
+flit = "proman_workflows.package.flit:namespace"
+poetry = "proman_workflows.package.poetry:namespace"
+setuptools = "proman_workflows.package.setuptools:namespace"
+twine = "proman_workflows.package.twine:namespace"
 
-[tool.poetry.plugins."protools.executable"]
-briefcase = "protools.executable.briefcase:namespace"
-# pyinstaller = "protools.executable.pyinstaller:namespace"
+[tool.poetry.plugins."proman.workflows.executable"]
+briefcase = "proman_workflows.executable.briefcase:namespace"
+# pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
 
-[tool.poetry.plugins."protools.lint"]
-flake8 = "protools.qa.flake8:namespace"
+[tool.poetry.plugins."proman.workflows.lint"]
+flake8 = "proman_workflows.qa.flake8:namespace"
 
-[tool.poetry.plugins."protools.formatter"]
-autopep8 = "protools.qa.autopep8:namespace"
-black = "protools.qa.black:namespace"
-isort = "protools.qa.isort:namespace"
+[tool.poetry.plugins."proman.workflows.formatter"]
+autopep8 = "proman_workflows.qa.autopep8:namespace"
+black = "proman_workflows.qa.black:namespace"
+isort = "proman_workflows.qa.isort:namespace"
 
-[tool.poetry.plugins."protools.unit_tests"]
-pytest = "protools.qa.pytest:namespace"
+[tool.poetry.plugins."proman.workflows.unit_tests"]
+pytest = "proman_workflows.qa.pytest:namespace"
 
-# [tool.poetry.plugins."protools.coverage"]
-# pytest = "protools.qa.pytest:namespace"
+# [tool.poetry.plugins."proman.workflows.coverage"]
+# pytest = "proman_workflows.qa.pytest:namespace"
 
-[tool.poetry.plugins."protools.typing"]
-mypy = "protools.qa.mypy:namespace"
+[tool.poetry.plugins."proman.workflows.typing"]
+mypy = "proman_workflows.qa.mypy:namespace"
 
-[tool.poetry.plugins."protools.sca"]
-bandit = "protools.security.bandit:namespace"
-safety = "protools.security.safety:namespace"
+[tool.poetry.plugins."proman.workflows.sca"]
+bandit = "proman_workflows.security.bandit:namespace"
+safety = "proman_workflows.security.safety:namespace"
 
-[tool.poetry.plugins."protools.container"]
-docker = "protools.container.docker:namespace"
-podman = "protools.container.podman:namespace"
+[tool.poetry.plugins."proman.workflows.container.compose"]
+docker_compose = "proman_workflows.container.docker:namespace"
+podman_compose = "proman_workflows.container.podman:namespace"
 
-[tool.poetry.plugins."protools.docs"]
-mkdocs = "protools.docs.mkdocs:namespace"
-
-[tool.poetry.plugins."protools.integration"]
+[tool.poetry.plugins."proman.workflows.docs"]
+mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
 [tool.poetry.scripts]
-protools-workflow = "protools:protools.run"
-protools = "protools:workflow.run"
+workflow-tools = "proman_workflows:tools.run"
+workflow = "proman_workflows:workflow.run"
 
 # TODO: deprecate flit
 # [tool.flit.metadata]
-# module = "protools"
+# module = "proman.workflows"
 # author = "Jesse P. Johnson"
 # author-email = "jpj6652@gmail.com"
-# home-page = "https://github.com/proman/protoolss"
+# home-page = "https://github.com/python-protools/proman-workflows"
 # requires = ["compendium", "invoke", "keyring", "jinja2", "proman-common", "stevedore"]
 # classifiers = ["License :: OSI Approved :: Apache Software License"]
 #
 # [tool.flit.entrypoints."proman.precommit.validate"]
-# conventional_commits = "protools:precommit"
+# conventional_commits = "workflows:precommit"
 #
 # [tool.flit.scripts]
-# project = "protools:project.run"
-# workflow = "protools:workflow.run"
+# project = "workflows:project.run"
+# workflow = "workflows:workflow.run"
 
 [tool.isort]
 profile = "black"

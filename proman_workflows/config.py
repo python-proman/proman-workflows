@@ -38,8 +38,17 @@ working_dir = project_dir
 
 
 @dataclass
+class Plugin:
+    """Provide proman_workflows plugin."""
+
+    name: str
+    driver_name: str
+    driver_namespace: str
+
+
+@dataclass
 class ProjectDirs:
-    """Project pachage."""
+    """Project package."""
 
     python_path: str = sys.executable
     repo_dir: str = discover_repository(os.getcwd())

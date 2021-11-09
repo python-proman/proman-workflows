@@ -11,7 +11,7 @@ from invoke import Program
 from proman_common.config import Config
 from proman_common.filepaths import AppDirs
 
-from protools import (
+from proman_workflows import (
     config,
     container,
     docs,
@@ -23,14 +23,14 @@ from protools import (
     security,
     utils,
 )
-from protools.collection import Collection
-from protools.config import DocsConfig
+from proman_workflows.collection import Collection
+from proman_workflows.config import DocsConfig
 
-# from protools.vcs import Git
+# from proman_workflows.vcs import Git
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
-__title__ = 'protoolss'
+__title__ = 'proman_workflows'
 __description__ = 'Convenience module to manage project tools with Python.'
 __version__ = '0.1.0'
 __license__ = 'MPL-2.0'
@@ -51,12 +51,12 @@ def get_specfile(
     raise exception.PromanWorkflowException('no configuration found')
 
 
-dirs = AppDirs(project_name='protoolss')
+dirs = AppDirs(project_name='proman_workflows')
 specfile = get_specfile()
 docs_config = DocsConfig()
 
-workflow_namespace = Collection()
-workflow_namespace.configure(
+tools_namespace = Collection()
+tools_namespace.configure(
     {
         'dirs': asdict(dirs),
         'spec': specfile.data,
@@ -65,70 +65,70 @@ workflow_namespace.configure(
         'container_runtime': config.container_runtime,
     }
 )
-workflow_namespace.add_collection(container.namespace, name='container')
-workflow_namespace.add_collection(docs.namespace, name='docs')
-workflow_namespace.add_collection(package.namespace, name='dist')
-workflow_namespace.add_collection(qa.namespace, name='qa')
-workflow_namespace.add_collection(security.namespace, name='sec')
-workflow_namespace.add_collection(utils.tasks, name='utils')
-workflow = Program(
+tools_namespace.add_collection(container.namespace, name='container')
+tools_namespace.add_collection(docs.namespace, name='docs')
+tools_namespace.add_collection(package.namespace, name='dist')
+tools_namespace.add_collection(qa.namespace, name='qa')
+tools_namespace.add_collection(security.namespace, name='sec')
+tools_namespace.add_collection(utils.tasks, name='utils')
+tools = Program(
     version=__version__,
-    namespace=workflow_namespace,
+    namespace=tools_namespace,
     name=__title__,
-    binary='workflow',
-    binary_names=['workflow'],
+    binary='tools',
+    binary_names=['tools'],
 )
 
-protools_namespace = Collection().from_module(init)
-protools_namespace.configure(
+workflow_namespace = Collection().from_module(init)
+workflow_namespace.configure(
     {
         'dirs': asdict(dirs),
-        'spec': specfile.data,
         'python_path': config.python_path,
         'repo_dir': config.repo_dir,
         'working_dir': config.working_dir,
         'templates_dir': config.templates_dir,
+        **specfile.data,
     }
 )
-protools_namespace.load_collections(
+workflow_namespace.load_collections(
     collections=[
         {
             'name': 'vcs',
             'driver_name': 'git',
-            'driver_namespace': 'protools.vcs',
+            'driver_namespace': 'proman.workflows.vcs',
         },
         {
             'name': 'sort-headers',
             'driver_name': 'isort',
-            'driver_namespace': 'protools.formatter',
+            'driver_namespace': 'proman.workflows.formatter',
         },
         {
             'name': 'format',
             'driver_name': 'black',
-            'driver_namespace': 'protools.formatter',
+            'driver_namespace': 'proman.workflows.formatter',
         },
         {
             'name': 'gpg',
             'driver_name': 'gpg',
-            'driver_namespace': 'protools.pki',
+            'driver_namespace': 'proman.workflows.pki',
         },
         {
             'name': 'tls',
             'driver_name': 'tls',
-            'driver_namespace': 'protools.pki',
+            'driver_namespace': 'proman.workflows.pki',
         },
     ]
 )
-protools_namespace.add_collection(git.namespace, name='vcs')
-protools = Program(
+workflow_namespace.add_collection(git.namespace, name='vcs')
+workflow = Program(
     version=__version__,
-    namespace=protools_namespace,
+    namespace=workflow_namespace,
     name=__title__,
     binary='project',
     binary_names=['project'],
 )
 
 __all__ = [
-    'protools',
     'workflow',
+    'tools',
 ]

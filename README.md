@@ -1,4 +1,4 @@
-# proman-workflows
+# python-workflows
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://spdx.org/licenses/MPL-2.0)
 [![Build Status](https://travis-ci.org/kuwv/python-convential-commits-parser.svg?branch=master)](https://travis-ci.org/python-proman/proman-workflows)
@@ -10,4 +10,4 @@ Convenience tools to manage Git capabilities with Python.
 
 ## Install
 
-`pip install proman-source`
+`pip install python-workflows`

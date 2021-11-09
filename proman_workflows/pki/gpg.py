@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 from gnupg import GPG
 from invoke import Collection, task
 
-from protools.config import GPGConfig
+from proman_workflows.config import GPGConfig
 
 if TYPE_CHECKING:
     from gnupg import GenKey, ListKeys

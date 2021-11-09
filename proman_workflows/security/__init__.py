@@ -5,7 +5,7 @@
 
 import logging
 
-from protools.collection import Collection
+from proman_workflows.collection import Collection
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -17,12 +17,12 @@ namespace.load_collections(
         {
             'name': 'sast',
             'driver_name': 'bandit',
-            'driver_namespace': 'protools.sca',
+            'driver_namespace': 'proman.workflows.sca',
         },
         {
             'name': 'dependency-scan',
             'driver_name': 'safety',
-            'driver_namespace': 'protools.sca',
+            'driver_namespace': 'proman.workflows.sca',
         },
     ]
 )

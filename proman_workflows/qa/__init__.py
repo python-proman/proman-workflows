@@ -5,7 +5,7 @@
 
 import logging
 
-from protools.collection import Collection
+from proman_workflows.collection import Collection
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -17,27 +17,27 @@ namespace.load_collections(
         {
             'name': 'sort-headers',
             'driver_name': 'isort',
-            'driver_namespace': 'protools.formatter',
+            'driver_namespace': 'proman.workflows.formatter',
         },
         {
             'name': 'style',
             'driver_name': 'black',
-            'driver_namespace': 'protools.formatter',
+            'driver_namespace': 'proman.workflows.formatter',
         },
         {
             'name': 'typing',
             'driver_name': 'mypy',
-            'driver_namespace': 'protools.typing',
+            'driver_namespace': 'proman.workflows.typing',
         },
         {
             'name': 'lint',
             'driver_name': 'flake8',
-            'driver_namespace': 'protools.lint',
+            'driver_namespace': 'proman.workflows.lint',
         },
         {
             'name': 'unit-tests',
             'driver_name': 'pytest',
-            'driver_namespace': 'protools.unit_tests',
+            'driver_namespace': 'proman.workflows.unit_tests',
         },
     ]
 )

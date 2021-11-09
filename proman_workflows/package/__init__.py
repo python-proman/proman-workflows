@@ -56,7 +56,7 @@ namespace.load_collections(
         {
             'name': 'package',
             'driver_name': 'poetry',
-            'driver_namespace': 'protools.package',
+            'driver_namespace': 'proman.workflows.package',
         }
     ]
 )
