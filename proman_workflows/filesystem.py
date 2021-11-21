@@ -14,6 +14,16 @@ if TYPE_CHECKING:
     from invoke import Context
 
 
+# async def rwalk(
+#     path: str, stop: Optional[str] = None
+# ) -> AsyncGenerator[str, str]:
+#     """Walk the reverse path of a directory."""
+#     current_path = os.path.abspath(path)
+#     for _ in path.split(os.sep):
+#         yield current_path
+#         current_path = os.path.abspath(os.path.join(current_path, '..'))
+
+
 @task
 def write(ctx, content, dest, executable=False, update=False):
     # type: (Context, str, str, bool, bool) -> None

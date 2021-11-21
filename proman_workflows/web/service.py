@@ -33,5 +33,5 @@ def start(ctx, certs_path='./nginx/certs'):  # type: (Context, str) -> None
 def stop(ctx, certs_path='./nginx/certs'):  # type: (Context, str) -> None
     """Stop all services."""
     docker.stop(ctx)
-    tls.cleanup(ctx)
+    tls.clean(ctx)
     filesystem.rm(ctx, certs_path)

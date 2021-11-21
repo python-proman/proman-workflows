@@ -5,16 +5,16 @@
 
 # import importlib
 
-from ..collection import Collection
+from invoke import Collection
 
 namespace = Collection()
 # namespace.configure({})
-namespace.load_collections(
-    collections=[
-        {
-            'name': 'exec',
-            'driver_name': 'briefcase',
-            'driver_namespace': 'proman.workflows.executable',
-        }
-    ]
-)
+# namespace.load_collections(
+#     plugins=[
+#         {
+#             'name': 'exec',
+#             'driver_name': 'briefcase',
+#             'driver_namespace': 'proman.workflows.executable',
+#         }
+#     ]
+# )

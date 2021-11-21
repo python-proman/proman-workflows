@@ -9,8 +9,6 @@ from typing import TYPE_CHECKING
 
 from invoke import task
 
-from .. import config
-
 if TYPE_CHECKING:
     from invoke import Context
 
@@ -20,7 +18,7 @@ def start(
     ctx, hostname='localhost', port=8080, workers=4
 ):  # type: (Context, str, int, int) -> None
     """Start webapp."""
-    with ctx.cd(config.webapp_dir):
+    with ctx.cd(ctx.webapp_dir):
         ctx.run(
             textwrap.dedent(
                 f"""\

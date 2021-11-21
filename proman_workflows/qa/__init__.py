@@ -11,29 +11,8 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # Assemble collections for namespace
 namespace = Collection()
-# namespace.configure({})
 namespace.load_collections(
-    collections=[
-        {
-            'name': 'sort-headers',
-            'driver_name': 'isort',
-            'driver_namespace': 'proman.workflows.formatter',
-        },
-        {
-            'name': 'style',
-            'driver_name': 'black',
-            'driver_namespace': 'proman.workflows.formatter',
-        },
-        {
-            'name': 'typing',
-            'driver_name': 'mypy',
-            'driver_namespace': 'proman.workflows.typing',
-        },
-        {
-            'name': 'lint',
-            'driver_name': 'flake8',
-            'driver_namespace': 'proman.workflows.lint',
-        },
+    plugins=[
         {
             'name': 'unit-tests',
             'driver_name': 'pytest',

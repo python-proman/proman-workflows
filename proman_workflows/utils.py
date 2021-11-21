@@ -129,4 +129,4 @@ def pkill(
     ctx.run(f"pkill {' '.join(args)}")
 
 
-tasks = Collection(clean)
+namespace = Collection(clean)

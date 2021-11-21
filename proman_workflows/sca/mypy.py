@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 @task
 def run(ctx, path='.'):  # type: (Context, str) -> None
     """Check project source types."""
-    with ctx.cd(ctx.working_dir):
+    with ctx.cd(ctx.project_dir):
         ctx.run(f"mypy {path}")
 
 

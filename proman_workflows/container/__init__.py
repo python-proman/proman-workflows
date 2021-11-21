@@ -5,19 +5,19 @@
 
 from ..collection import Collection
 
-namespace = Collection()
-# namespace.configure({})
-namespace.load_collections(
-    collections=[
-        # {
-        #     'name': 'docker',
-        #     'driver_name': 'docker_compose',
-        #     'driver_namespace': 'proman.workflows.container.compose',
-        # },
-        {
-            'name': 'podman',
-            'driver_name': 'podman_compose',
-            'driver_namespace': 'proman.workflows.container.compose',
-        },
-    ]
+namespace = Collection(
+    configuration={
+        'plugins': [
+            # {
+            #     'name': 'docker',
+            #     'driver_name': 'docker_compose',
+            #     'driver_namespace': 'proman.workflows.container.compose',
+            # },
+            {
+                'name': 'podman',
+                'driver_name': 'podman_compose',
+                'driver_namespace': 'proman.workflows.container.compose',
+            },
+        ]
+    }
 )

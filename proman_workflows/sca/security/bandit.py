@@ -79,7 +79,7 @@ def check(
     if exit_zero:
         args.append('--exit-zero')
     args.append(target)
-    with ctx.cd(ctx.working_dir):
+    with ctx.cd(ctx.project_dir):
         ctx.run(f"bandit {' '.join(args)}")
 
 

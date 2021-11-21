@@ -67,7 +67,7 @@ def run(
         args.append('--only-modified')
     if interactive:
         args.append('--interactive')
-    args.append(path if path else ctx.working_dir)
+    args.append(path if path else ctx.project_dir)
     ctx.run(f"isort {' '.join(args)}")
 
 

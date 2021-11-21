@@ -6,35 +6,17 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass, field
-
-# from pprint import pprint
-from typing import List
-
-from compendium.loader import ConfigFile
-from pygit2 import discover_repository
-
+from typing import Any, Dict, List, Optional
 # from typing import Optional, Tuple
 # from urllib.parse import urljoin, urlparse
 
+from compendium.loader import ConfigFile
+from invoke.config import Config as InvokeConfig
+from invoke.config import merge_dicts
+from pygit2 import discover_repository
+
 VENV_PATH = os.getenv('VIRTUAL_ENV', None)
 PATHS = [VENV_PATH] if VENV_PATH else []
-
-# TODO check VCS for paths
-python_path = sys.executable
-repo_dir = discover_repository(os.getcwd())
-project_dir = os.path.abspath(os.path.join(repo_dir, os.pardir))
-specfiles = ['pyproject.toml', 'setup.cfg']
-
-if shutil.which('podman'):
-    container_runtime = 'podman'
-elif shutil.which('docker'):
-    container_runtime = 'docker'
-
-templates_dir: str = os.path.join(os.path.dirname(__file__), 'templates')
-
-# Paths
-container_build_dir = os.getenv('CONTAINER_BUILD_DIR', '.')
-working_dir = project_dir
 
 
 @dataclass
@@ -46,27 +28,74 @@ class Plugin:
     driver_namespace: str
 
 
+class WorkflowConfig(InvokeConfig):
+    """Provide project configuration."""
+
+    prefix = 'workflow'
+
+    @staticmethod
+    def global_defaults() -> Dict[str, Any]:
+        """Set global defaults."""
+        defaults = InvokeConfig.global_defaults()
+        default_plugins = {
+            'plugins': [
+                {
+                    'name': 'vcs',
+                    'driver_name': 'git',
+                    'driver_namespace': 'proman.workflows.vcs',
+                },
+                {
+                    'name': 'sort-headers',
+                    'driver_name': 'isort',
+                    'driver_namespace': 'proman.workflows.formatter',
+                },
+                {
+                    'name': 'format',
+                    'driver_name': 'black',
+                    'driver_namespace': 'proman.workflows.formatter',
+                },
+                {
+                    'name': 'gpg',
+                    'driver_name': 'gpg',
+                    'driver_namespace': 'proman.workflows.pki',
+                },
+                {
+                    'name': 'tls',
+                    'driver_name': 'tls',
+                    'driver_namespace': 'proman.workflows.pki',
+                },
+            ]
+        }
+        return merge_dicts(defaults, default_plugins)
+
+
 @dataclass
 class ProjectDirs:
     """Project package."""
 
+    working_dir: str = os.getcwd()
     python_path: str = sys.executable
     repo_dir: str = discover_repository(os.getcwd())
     base_dir: str = os.path.abspath(os.path.join(repo_dir, os.pardir))
+    project_dir: str = field(init=False)
     hooks_dir: str = field(init=False)
     templates_dir: str = field(init=False)
     container_build_dir: str = field(init=False)
-    specfiles: List[str] = field(default_factory=list)
+    specfiles: List[str] = field(default_factory=list, repr=False)
 
     def __post_init__(self) -> None:
         """Initialize project settings."""
-        if not self.specfiles:
+        if self.specfiles == []:
             self.specfiles = ['pyproject.toml', 'setup.cfg']
-        if not self.hooks_dir:
+        if not hasattr(self, 'project_dir'):
+            self.project_dir = os.path.abspath(
+                os.path.join(self.repo_dir, os.pardir)
+            )
+        if not hasattr(self, 'hooks_dir'):
             self.hooks_dir = os.path.join(self.repo_dir, 'hooks')
-        if not self.templates_dir:
+        if not hasattr(self, 'templates_dir'):
             self.templates_dir = os.path.join(self.base_dir, 'templates')
-        if not self.container_build_dir:
+        if not hasattr(self, 'container_build_dir'):
             self.container_build_dir = self.base_dir
 
 
@@ -133,7 +162,10 @@ class GPGConfig:
 class DocsConfig:
     """Manage documentation configuration."""
 
-    working_dir: str = os.getenv('DOCS_DIR', project_dir)
+    def __post_init__(self) -> None:
+        """Initialize docs path."""
+        if hasattr(self, 'base_dir'):
+            print(self.base_dir)  # type: ignore
 
 
 @dataclass
@@ -146,22 +178,31 @@ class WebConfig(ProjectDirs):
 
     def __post_init__(self) -> None:
         """Initialize settings."""
-        if not self.webapp_dir:
+        if not hasattr(self, 'webapp_dir'):
             self.webapp_dir: str = os.path.join(self.base_dir, 'ui')
-        if not self.static_dir:
+        if not hasattr(self, 'static_dir'):
             self.static_dir: str = os.path.join(self.webapp_dir, 'static')
 
 
 @dataclass
-class ContainerConfig:
+class Container:
     """Manage container configuration."""
 
-    runtime: str
+    runtime: Optional[str] = None
 
     def __post_init__(self) -> None:
         """Initialize container config."""
-        if self.runtime:
+        if not hasattr(self, 'runtime'):
             if shutil.which('podman'):
                 self.runtime = 'podman'
             elif shutil.which('docker'):
                 self.runtime = 'docker'
+
+
+@dataclass
+class ProjectConfig(ProjectDirs):
+    """Configure project settings."""
+
+    docs: Dict[str, Any] = field(default_factory=dict)
+    specfile: Dict[str, Any] = field(default_factory=dict)
+    plugins: List[Plugin] = field(default_factory=list)

@@ -35,12 +35,12 @@ safety = "^1.9.0"
 mkdocs = "^1.2.2"
 mkdocs-material = "^7.2.0"
 mkdocstrings = "^0.15.2"
-mypy = "^0.910"
 pyfakefs = "^4.5.0"
 types-Jinja2 = "^2.11.2"
 tox = "^3.24.0"
 python-gilt = "^1.2.3"
 twine = "^3.5.0"
+mypy = "^0.910"
 
 [tool.poetry.extras]
 kde = ["dbus-python"]
@@ -62,26 +62,22 @@ twine = "proman_workflows.package.twine:namespace"
 briefcase = "proman_workflows.executable.briefcase:namespace"
 # pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
 
-[tool.poetry.plugins."proman.workflows.lint"]
-flake8 = "proman_workflows.qa.flake8:namespace"
-
 [tool.poetry.plugins."proman.workflows.formatter"]
-autopep8 = "proman_workflows.qa.autopep8:namespace"
-black = "proman_workflows.qa.black:namespace"
-isort = "proman_workflows.qa.isort:namespace"
+autopep8 = "proman_workflows.sca.autopep8:namespace"
+black = "proman_workflows.sca.black:namespace"
+isort = "proman_workflows.sca.isort:namespace"
+
+[tool.poetry.plugins."proman.workflows.sca"]
+flake8 = "proman_workflows.sca.flake8:namespace"
+mypy = "proman_workflows.sca.mypy:namespace"
+bandit = "proman_workflows.sca.security.bandit:namespace"
+safety = "proman_workflows.sca.security.safety:namespace"
 
 [tool.poetry.plugins."proman.workflows.unit_tests"]
 pytest = "proman_workflows.qa.pytest:namespace"
 
 # [tool.poetry.plugins."proman.workflows.coverage"]
 # pytest = "proman_workflows.qa.pytest:namespace"
-
-[tool.poetry.plugins."proman.workflows.typing"]
-mypy = "proman_workflows.qa.mypy:namespace"
-
-[tool.poetry.plugins."proman.workflows.sca"]
-bandit = "proman_workflows.security.bandit:namespace"
-safety = "proman_workflows.security.safety:namespace"
 
 [tool.poetry.plugins."proman.workflows.container.compose"]
 docker_compose = "proman_workflows.container.docker:namespace"
@@ -90,9 +86,16 @@ podman_compose = "proman_workflows.container.podman:namespace"
 [tool.poetry.plugins."proman.workflows.docs"]
 mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
+# mock cli namespace
+[tool.poetry.plugins."proman.workflows.mock"]
+check = "proman_workflows.mock.check:namespace"
+
 [tool.poetry.scripts]
-workflow-tools = "proman_workflows:tools.run"
+# workflow-tools = "proman_workflows:tools.run"
+workflow-tools = "proman_workflows.tools:tools.run"
 workflow = "proman_workflows:workflow.run"
+# mock command
+check = "proman_workflows.check:workflow.run"
 
 # TODO: deprecate flit
 # [tool.flit.metadata]
@@ -109,6 +112,26 @@ workflow = "proman_workflows:workflow.run"
 # [tool.flit.scripts]
 # project = "workflows:project.run"
 # workflow = "workflows:workflow.run"
+
+[tool.proman.workflows.drivers.unit_tests]
+name = "sort-headers"
+driver_name = "isort"
+driver_namespace = "proman.workflows.formatter"
+
+[tool.proman.workflows.drivers.docs]
+name = "sort-headers"
+driver_name = "isort"
+driver_namespace = "proman.workflows.formatter"
+
+[[tool.proman.workflows.plugins]]
+name = "sort-headers"
+driver_name = "isort"
+driver_namespace = "proman.workflows.formatter"
+
+# [[tool.proman.workflows.plugins]]
+# name = "vcs"
+# driver_name = "git"
+# driver_namespace = "proman.workflows.vcs"
 
 [tool.isort]
 profile = "black"

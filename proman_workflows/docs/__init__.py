@@ -98,10 +98,10 @@ def coverage(
     ctx.run(f"docstr-coverage {' '.join(args)}")
 
 
-namespace = Collection()
+namespace = Collection(style, coverage)
 # namespace.configure({})
 namespace.load_collections(
-    collections=[
+    plugins=[
         {
             'name': 'site',
             'driver_name': 'mkdocs',
@@ -109,7 +109,5 @@ namespace.load_collections(
         }
     ]
 )
-namespace.add_task(style)
-namespace.add_task(coverage)
 
 __all__ = ['style', 'coverage', 'namespace']

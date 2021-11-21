@@ -50,6 +50,7 @@ def publish(
 ):  # type: (...) -> None
     """Publish package to a PyPI repository."""
     args = ['--no-interaction']
+    # TODO: check if credentials exist run setup otherwise
     if repository_url:
         args.append(f"--repository={repository_url}")
     if username:

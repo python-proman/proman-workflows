@@ -5,6 +5,7 @@
 import logging
 import os
 from dataclasses import asdict
+from pprint import pprint  # noqa
 from typing import List
 
 from invoke import Program
@@ -12,21 +13,20 @@ from proman_common.config import Config
 from proman_common.filepaths import AppDirs
 
 from proman_workflows import (
-    config,
-    container,
-    docs,
+    # container,
+    # docs,
+    # init,
     exception,
-    git,
-    init,
-    package,
-    qa,
-    security,
-    utils,
+    # package,
+    # qa,
+    # sca,
+    stlc,
+    # utils,
+)
+from proman_workflows.config import (
+    DocsConfig, ProjectConfig, ProjectDirs, WorkflowConfig
 )
 from proman_workflows.collection import Collection
-from proman_workflows.config import DocsConfig
-
-# from proman_workflows.vcs import Git
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
@@ -39,96 +39,84 @@ __copyright__ = 'Copyright 2021 Jesse Johnson.'
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
-def get_specfile(
-    project_dir: str = config.project_dir,
-    specfiles: List[str] = config.specfiles,
-) -> Config:
+class WorkflowProgram(Program):
+    """Provide workflow integration with invoke program."""
+
+    def parse_collection(self) -> None:
+        """Patch collection parse to load project config."""
+        super().parse_collection()
+        if self.namespace is not None:
+            self.config.set_project_location(os.getcwd())
+            self.config.load_project()
+
+
+def get_specfile(project_dir: str, specfiles: List[str]) -> Config:
     """Get source tree from path."""
     for specfile in specfiles:
         filepath = os.path.join(project_dir, specfile)
         if os.path.isfile(filepath):
-            return Config(filepath=filepath)
+            config = Config(filepath=filepath)
+            config.combine(config.retrieve('.tool.proman.workflows'))
+            return config
     raise exception.PromanWorkflowException('no configuration found')
 
 
-dirs = AppDirs(project_name='proman_workflows')
-specfile = get_specfile()
-docs_config = DocsConfig()
-
-tools_namespace = Collection()
-tools_namespace.configure(
-    {
-        'dirs': asdict(dirs),
-        'spec': specfile.data,
-        'docs': asdict(docs_config),
-        'working_dir': config.working_dir,
-        'container_runtime': config.container_runtime,
-    }
+app_dirs = AppDirs(project_name='proman_workflows')
+project_dirs = ProjectDirs()
+specfile = get_specfile(
+    project_dir=project_dirs.project_dir,
+    specfiles=project_dirs.specfiles,
 )
-tools_namespace.add_collection(container.namespace, name='container')
-tools_namespace.add_collection(docs.namespace, name='docs')
-tools_namespace.add_collection(package.namespace, name='dist')
-tools_namespace.add_collection(qa.namespace, name='qa')
-tools_namespace.add_collection(security.namespace, name='sec')
-tools_namespace.add_collection(utils.tasks, name='utils')
-tools = Program(
-    version=__version__,
-    namespace=tools_namespace,
-    name=__title__,
-    binary='tools',
-    binary_names=['tools'],
+project_config = ProjectConfig(
+    docs=asdict(DocsConfig()),
+    specfile=specfile.data,
+    # plugins=specfile['tool']['proman']['workflows']['plugins'],
+    # plugins=[
+    #     config.Plugin(
+    #         name='vcs',
+    #         driver_name='git',
+    #         driver_namespace='proman.workflows.vcs',
+    #     ),
+    #     config.Plugin(
+    #         name='sort-headers',
+    #         driver_name='isort',
+    #         driver_namespace='proman.workflows.formatter',
+    #     ),
+    #     config.Plugin(
+    #         name='format',
+    #         driver_name='black',
+    #         driver_namespace='proman.workflows.formatter',
+    #     ),
+    #     config.Plugin(
+    #         name='gpg',
+    #         driver_name='gpg',
+    #         driver_namespace='proman.workflows.pki',
+    #     ),
+    #     config.Plugin(
+    #         name='tls',
+    #         driver_name='tls',
+    #         driver_namespace='proman.workflows.pki',
+    #     ),
+    # ]
 )
+# pprint(asdict(project_config))
 
-workflow_namespace = Collection().from_module(init)
+workflow_namespace = Collection().from_module(stlc)
 workflow_namespace.configure(
     {
-        'dirs': asdict(dirs),
-        'python_path': config.python_path,
-        'repo_dir': config.repo_dir,
-        'working_dir': config.working_dir,
-        'templates_dir': config.templates_dir,
-        **specfile.data,
+        **asdict(app_dirs),
+        **asdict(project_config),
     }
 )
-workflow_namespace.load_collections(
-    collections=[
-        {
-            'name': 'vcs',
-            'driver_name': 'git',
-            'driver_namespace': 'proman.workflows.vcs',
-        },
-        {
-            'name': 'sort-headers',
-            'driver_name': 'isort',
-            'driver_namespace': 'proman.workflows.formatter',
-        },
-        {
-            'name': 'format',
-            'driver_name': 'black',
-            'driver_namespace': 'proman.workflows.formatter',
-        },
-        {
-            'name': 'gpg',
-            'driver_name': 'gpg',
-            'driver_namespace': 'proman.workflows.pki',
-        },
-        {
-            'name': 'tls',
-            'driver_name': 'tls',
-            'driver_namespace': 'proman.workflows.pki',
-        },
-    ]
-)
-workflow_namespace.add_collection(git.namespace, name='vcs')
-workflow = Program(
-    version=__version__,
-    namespace=workflow_namespace,
+# workflow_namespace.load_collections(plugins=asdict(project_config)['plugins'])
+# workflow_namespace.add_collection(init.namespace, name='init')
+workflow = WorkflowProgram(
     name=__title__,
-    binary='project',
-    binary_names=['project'],
+    namespace=workflow_namespace,
+    binary='workflow',
+    binary_names=['workflow'],
+    config_class=WorkflowConfig,
+    version=__version__,
 )
 
-__all__ = [
-    'workflow',
-    'tools',
-]
+__all__ = ['workflow', 'tools']

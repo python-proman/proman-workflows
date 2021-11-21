@@ -32,7 +32,7 @@ def run(
         args.append(f"--durations-min={durations_min}")
     if maxfail:
         args.append(f"--maxfail={maxfail}")
-    with ctx.cd(ctx.working_dir):
+    with ctx.cd(ctx.project_dir):
         ctx.run(f"pytest {' '.join(args)}")
 
 
@@ -69,7 +69,7 @@ def coverage(
             args.append(f"--cov-context={context}")
         if report:
             args.append(f"--cov-report={report}")
-    with ctx.cd(ctx.working_dir):
+    with ctx.cd(ctx.project_dir):
         ctx.run(f"pytest {' '.join(args)}")
 
 

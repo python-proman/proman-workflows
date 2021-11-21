@@ -68,7 +68,7 @@ def remove(ctx, name):  # type: (Context, str) -> None
     else:
         raise Exception('no submodules found within project')
 
-    gitmodules_path = os.path.join(ctx.working_dir, '.gitmodules')
+    gitmodules_path = os.path.join(ctx.project_dir, '.gitmodules')
     if os.path.exists(gitmodules_path):
         data = config.load(ctx, gitmodules_path)
         if 'submodule' in data['sections']:
@@ -92,7 +92,7 @@ def remove(ctx, name):  # type: (Context, str) -> None
 
             # remove submodule from project
             filesystem.rm(
-                ctx, os.path.join(ctx.working_dir, submodule['path'])
+                ctx, os.path.join(ctx.project_dir, submodule['path'])
             )
         else:
             raise Exception(f"'{name}' submodule does not exist")

@@ -7,6 +7,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from invoke import Collection as InvokeCollection
+from invoke.config import merge_dicts
 
 # from stevedore.extension import ExtensionManager
 from stevedore.driver import DriverManager
@@ -19,8 +20,18 @@ class Collection(InvokeCollection):
 
     # TODO: would pre/post executor be usefull here
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize collection."""
+        configuration = kwargs.pop('configuration', {})
+        super().__init__(*args, **kwargs)
+        self._configuration = merge_dicts(
+            self._configuration, configuration  # type: ignore
+        )
+        if 'plugins' in self._configuration:
+            self.load_collections(self._configuration['plugins'])
+
     @staticmethod
-    def get_driver(
+    def _get_driver(
         name: Optional[str] = None, **kwargs: Any
     ) -> 'DriverManager':
         """Get driver for collection."""
@@ -41,7 +52,7 @@ class Collection(InvokeCollection):
         **kwargs: Any,
     ) -> 'Collection':
         """Add module dynamically from entrypoint."""
-        driver_manager = cls.get_driver(name=name, **kwargs)
+        driver_manager = cls._get_driver(name=name, **kwargs)
         collection = cls.from_module(
             driver_manager.driver,
             name=name,
@@ -58,16 +69,16 @@ class Collection(InvokeCollection):
         **kwargs: Any,
     ) -> None:
         """Add collection from entrypoint."""
-        driver_manager = self.get_driver(name=name, **kwargs)
+        driver_manager = self._get_driver(name=name, **kwargs)
         self.add_collection(
             driver_manager.driver,
             name=name,
             default=default,
         )
-        if 'test' in self._configuration:
-            print(self._configuration['test'])
 
-    def load_collections(self, collections: List[Dict[str, Any]]) -> None:
+    def load_collections(self, plugins: List[Dict[str, Any]] = []) -> None:
         """Load collections from configuration."""
-        for collection in collections:
-            self.load_collection(**collection)
+        if 'plugins' in self._configuration:
+            plugins += self._configuration['plugins']
+        for plugin in plugins:
+            self.load_collection(**plugin)

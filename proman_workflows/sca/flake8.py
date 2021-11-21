@@ -120,7 +120,7 @@ def run(
         args.append(f"--include-in-doctest {include_in_doctest}")
     if exclude_from_doctest:
         args.append(f"--exclude-from-doctest {exclude_from_doctest}")
-    with ctx.cd(ctx.working_dir):
+    with ctx.cd(ctx.project_dir):
         ctx.run(f"flake8 {' '.join(args)}")
 
 

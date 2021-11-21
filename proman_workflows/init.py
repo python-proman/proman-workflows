@@ -5,6 +5,7 @@
 import logging
 import os
 import shutil
+from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, Dict
 
 import keyring
@@ -12,41 +13,44 @@ import pyinputplus as pyip
 from invoke import Executor, task
 
 # TODO: switch to executor
-from . import config
-from .collection import Collection
+from .config import ProjectDirs
 from .pki.gpg import ELYPTICAL_KEY_TYPES, KEY_TYPES
+from .collection import Collection
 
 if TYPE_CHECKING:
     from gpg import GenKey
     from invoke import Context
 
 
-setup_tasks = Collection()
-setup_tasks.configure(
-    {
-        # 'dirs': asdict(dirs),
-        # 'spec': specfile.data,
-        'python_path': config.python_path,
-        'repo_dir': config.repo_dir,
-        'working_dir': config.working_dir,
-        'templates_dir': config.templates_dir,
+@task
+def _setup_executor(ctx):  # type: (Context) -> None
+    """Set context."""
+    configuration = {
+        'plugins': [
+            {
+                'name': 'vcs',
+                'driver_name': 'git',
+                'driver_namespace': 'proman.workflows.vcs',
+            },
+            {
+                'name': 'gpg',
+                'driver_name': 'gpg',
+                'driver_namespace': 'proman.workflows.pki',
+            },
+        ],
+        **asdict(ProjectDirs())
     }
-)
-setup_tasks.load_collections(
-    collections=[
-        {
-            'name': 'vcs',
-            'driver_name': 'git',
-            'driver_namespace': 'proman.workflows.vcs',
-        },
-        {
-            'name': 'gpg',
-            'driver_name': 'gpg',
-            'driver_namespace': 'proman.workflows.pki',
-        },
-    ]
-)
-__setup = Executor(setup_tasks)
+    length = len(configuration['plugins']) - 1
+    if 'plugins' in ctx:
+        for i, plugin in enumerate(configuration['plugins']):
+            for update in ctx['plugins']:
+                if update['name'] == plugin['name']:
+                    configuration['plugins'][i].update(plugin)
+                elif i == length and update not in configuration['plugins']:
+                    configuration['plugins'].append(update)
+
+    setup_tasks = Collection(configuration=configuration)
+    ctx.__executor = Executor(setup_tasks)
 
 
 def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
@@ -100,7 +104,7 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
         'Enter GPG password: ', limit=255
     )
 
-    key = __setup.execute(('gpg.gen_key', settings))
+    key = ctx.__executor.execute(('gpg.gen_key', settings))
 
     signingkey = key['keyid']
     if not keyring.get_password(f"{name}-signingkey", signingkey):
@@ -114,7 +118,7 @@ def create_signingkey(ctx, name, email):  # type: (Context, str, str) -> GenKey
 def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
     """Ensure version control system is setup."""
     print('Check git user info is setup.', end='\n\n')
-    result = __setup.execute(('vcs.config.load', {'scope': 'global'}))
+    result = ctx.__executor.execute(('vcs.config.load', {'scope': 'global'}))
     gitconfig = [y for x, y in result.items() if x.name == 'load'][0]
 
     # select gpg if found else generate gpg key
@@ -150,7 +154,7 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
         logging.info(f"{err}: no gpg signingkey defined")
         print('missing', end='\n\n')
 
-        result = __setup.execute(
+        result = ctx.__executor.execute(
             ('gpg.list_keys', {'secret': False, 'keys': None, 'sigs': False})
         )
         gpg_keys = [y for x, y in result.items() if x.name == 'list_keys'][0]
@@ -189,7 +193,7 @@ def setup_gitconfig(ctx, update):  # type: (Context, bool) -> Dict[str, Any]
     # TODO: setup gpg commit signing
     # TODO: setup gpg package signing
 
-    __setup.execute(
+    ctx.__executor.execute(
         (
             'vcs.config.dump',
             {
@@ -213,7 +217,7 @@ def setup_githooks(ctx):  # type: (Context) -> None
     ...
 
 
-@task
+@task(_setup_executor)
 def setup(ctx, update=False):  # type: (Context, bool) -> None
     """Configure workspace for project development."""
     clear = shutil.which('clear') or shutil.which('cls')
@@ -221,15 +225,17 @@ def setup(ctx, update=False):  # type: (Context, bool) -> None
         ctx.run(clear)
     print('This tool will assist with environment setup.', end='\n\n')
 
-    from pprint import pprint
+    # from pprint import pprint
+    # pprint(ctx.config.tool.proman.workflows)
+    # pprint(ctx.config.__dict__)
+    # pprint(ctx.yey)
 
-    pprint(ctx.config.__dict__)
-    # setup_gitconfig(ctx, update)
+    setup_gitconfig(ctx, update)
     # setup_gitignore(ctx)
     # setup_githooks(ctx)
 
     # if not os.path.exists(config.directory):
-    #     os.mkdir(ctx.dirs.config_dir)
+    #     os.mkdir(ctx.config_dir)
 
     # if update or not os.path.exists(config.filepath):
     #     config.dump()

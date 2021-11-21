@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 @task(name='format')
 def style(ctx):  # type: (Context) -> None
     """Format project source code to PEP8 standard."""
-    ctx.run(f"autopep8 --in-place --recursive {ctx.working_dir}")
+    ctx.run(f"autopep8 --in-place --recursive {ctx.project_dir}")
 
 
 namespace = Collection(style)

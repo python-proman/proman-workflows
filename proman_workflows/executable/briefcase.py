@@ -17,7 +17,7 @@ def build(
     args = ['--no-input']
     if update:
         args.append('--update')
-    if not docker or ctx.container_runtime != 'docker':
+    if not docker or ctx.container.runtime != 'docker':
         args.append('--no-docker')
     if verbose:
         args.append('--verbosity')
@@ -44,7 +44,7 @@ def package(
         args.append('--no-sign')
     if adhoc_sign:
         args.append('--adhoc-sign')
-    if not docker or ctx.container_runtime != 'docker':
+    if not docker or ctx.container.runtime != 'docker':
         args.append('--no-docker')
     if verbose:
         args.append('--verbosity')

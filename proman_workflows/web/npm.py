@@ -7,29 +7,27 @@ from typing import Optional
 
 from invoke import Context, task
 
-from .. import config
-
 
 @task
 def install(
-    ctx, path=config.webui_dir, also='dev'
-):  # type: (Context, str, str) -> None
+    ctx, path=None, also='dev'
+):  # type: (Context, Optional[str], str) -> None
     """Install WebUI dependencies."""
-    with ctx.cd(path):
+    with ctx.cd(path or ctx.webui_dir):
         ctx.run(f"npm install --also={also}")
 
 
 @task(pre=[install])
-def build(ctx, path=config.webui_dir):  # type: (Context, str) -> None
+def build(ctx, path=None):  # type: (Context, Optional[str]) -> None
     """Build static content."""
-    with ctx.cd(path):
+    with ctx.cd(path or ctx.webui_dir):
         ctx.run('npm run build')
 
 
 @task
 def start(
-    ctx, host=None, port=8000, browser=False, path=config.webui_dir
-):  # type: (Context, Optional[str], int, bool, str) -> None
+    ctx, host=None, port=8000, browser=False, path=None
+):  # type: (Context, Optional[str], int, bool, Optional[str]) -> None
     """Start webui development."""
     args = []
     if browser:
@@ -38,10 +36,10 @@ def start(
         args.append(f"--host={host}")
     if port:
         args.append(f"--port={port}")
-    with ctx.cd(path):
-        print("npx vue-cli-service serve {}".format(' '.join(args)))
+    with ctx.cd(path or ctx.webui_dir):
+        print(f"npx vue-cli-service serve {' '.join(args)}")
         ctx.run(
-            "npx vue-cli-service serve",  # {}".format(' '.join(args)),
+            'npx vue-cli-service serve',  # {}".format(' '.join(args)),
             asynchronous=True,
         )
 

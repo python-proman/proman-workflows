@@ -272,11 +272,16 @@ def gen_key(
     return key
 
 
-settings = GPGConfig()
-namespace = Collection()
+namespace = Collection(
+    list_keys,
+    get_key,
+    delete_key,
+    export_key,
+    gen_key,
+)
 namespace.configure(
     {
-        'settings': asdict(settings),
+        'settings': asdict(GPGConfig()),
         'signing': {
             'developers': {
                 'required': True,
@@ -287,8 +292,3 @@ namespace.configure(
         },
     }
 )
-namespace.add_task(list_keys)
-namespace.add_task(get_key)
-namespace.add_task(delete_key)
-namespace.add_task(export_key)
-namespace.add_task(gen_key)

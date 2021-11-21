@@ -23,7 +23,7 @@ def version(
     message=None,
 ):  # type: (Context, Optional[str], bool, bool, Optional[str]) -> None
     """Update project version and apply tags."""
-    version = ctx.spec['tool']['poetry']['version']
+    version = ctx.specfile['tool']['poetry']['version']
     if (
         'dev' in version
         or ('a' in version or 'alpha' in version)
@@ -49,15 +49,15 @@ def version(
     ctx.run(f"bumpversion {' '.join(args)}")
 
 
-namespace = Collection()
-# namespace.configure({})
-namespace.load_collections(
-    collections=[
-        {
-            'name': 'package',
-            'driver_name': 'poetry',
-            'driver_namespace': 'proman.workflows.package',
-        }
-    ]
+namespace = Collection(
+    configuration={
+        'plugins': [
+            {
+                'name': 'package',
+                'driver_name': 'poetry',
+                'driver_namespace': 'proman.workflows.package',
+            }
+        ]
+    }
 )
 namespace.add_task(version)
