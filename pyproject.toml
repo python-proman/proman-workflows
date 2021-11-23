@@ -87,15 +87,15 @@ podman_compose = "proman_workflows.container.podman:namespace"
 mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
 # mock cli namespace
-[tool.poetry.plugins."proman.workflows.mock"]
-check = "proman_workflows.mock.check:namespace"
+# [tool.poetry.plugins."proman.workflows.mock"]
+# check = "proman_workflows.mock.check:namespace"
 
 [tool.poetry.scripts]
 # workflow-tools = "proman_workflows:tools.run"
 workflow-tools = "proman_workflows.tools:tools.run"
 workflow = "proman_workflows:workflow.run"
 # mock command
-check = "proman_workflows.check:workflow.run"
+# check = "proman_workflows.check:workflow.run"
 
 # TODO: deprecate flit
 # [tool.flit.metadata]

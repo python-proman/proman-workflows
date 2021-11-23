@@ -17,9 +17,6 @@ from proman_workflows import (
     # docs,
     # init,
     exception,
-    # package,
-    # qa,
-    # sca,
     stlc,
     # utils,
 )
@@ -44,10 +41,10 @@ class WorkflowProgram(Program):
 
     def parse_collection(self) -> None:
         """Patch collection parse to load project config."""
-        super().parse_collection()
         if self.namespace is not None:
             self.config.set_project_location(os.getcwd())
             self.config.load_project()
+        super().parse_collection()
 
 
 def get_specfile(project_dir: str, specfiles: List[str]) -> Config:
@@ -70,34 +67,7 @@ specfile = get_specfile(
 project_config = ProjectConfig(
     docs=asdict(DocsConfig()),
     specfile=specfile.data,
-    # plugins=specfile['tool']['proman']['workflows']['plugins'],
-    # plugins=[
-    #     config.Plugin(
-    #         name='vcs',
-    #         driver_name='git',
-    #         driver_namespace='proman.workflows.vcs',
-    #     ),
-    #     config.Plugin(
-    #         name='sort-headers',
-    #         driver_name='isort',
-    #         driver_namespace='proman.workflows.formatter',
-    #     ),
-    #     config.Plugin(
-    #         name='format',
-    #         driver_name='black',
-    #         driver_namespace='proman.workflows.formatter',
-    #     ),
-    #     config.Plugin(
-    #         name='gpg',
-    #         driver_name='gpg',
-    #         driver_namespace='proman.workflows.pki',
-    #     ),
-    #     config.Plugin(
-    #         name='tls',
-    #         driver_name='tls',
-    #         driver_namespace='proman.workflows.pki',
-    #     ),
-    # ]
+    # plugins=specfile.retrieve('.tool.proman.workflows.plugins') or [],
 )
 # pprint(asdict(project_config))
 
@@ -105,7 +75,8 @@ workflow_namespace = Collection().from_module(stlc)
 workflow_namespace.configure(
     {
         **asdict(app_dirs),
-        **asdict(project_config),
+        **specfile,
+        # **asdict(project_config),
     }
 )
 # workflow_namespace.load_collections(plugins=asdict(project_config)['plugins'])

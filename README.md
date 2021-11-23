@@ -6,7 +6,7 @@
 
 ## Overview
 
-Convenience tools to manage Git capabilities with Python.
+Convenience tools to manage Software Testing Lifecycle with Python.
 
 ## Install
 

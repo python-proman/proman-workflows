@@ -4,8 +4,8 @@
 
 import logging
 # import os
-# import shutil
-# from dataclasses import asdict
+from dataclasses import asdict
+from pprint import pprint
 from typing import TYPE_CHECKING
 
 from invoke import Executor, task
@@ -23,7 +23,13 @@ from proman_workflows import (
     # utils,
 )
 from proman_workflows.collection import Collection
-from proman_workflows.config import WorkflowConfig
+from proman_workflows.config import (
+    Job,
+    # Plugin,
+    Phase,
+    ProjectConfig,
+    WorkflowConfig
+)
 
 if TYPE_CHECKING:
     from invoke import Context
@@ -32,9 +38,21 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 @task
+def execute_jobs(ctx, task_name):  # type: (Context, str) -> None
+    config = [p for p in ctx.phases if p['name'] == task_name][0]
+    jobs = [(j['command'], j['args']) for j in config['jobs']]
+    try:
+        Executor(
+            qa.namespace,
+            config=WorkflowConfig(ctx.config),
+        ).execute(*jobs)
+    except Exception as err:
+        print(err)
+
+
+@task
 def static_analysis(ctx):  # type: (Context) -> None
     """Perform static code analysis."""
-    from pprint import pprint
     if 'plugins' in ctx:
         pprint(ctx.plugins)
     else:
@@ -68,16 +86,8 @@ def build(ctx):  # type: (Context) -> None
 @task
 def unit_test(ctx):  # type: (Context) -> None
     """Perform unit-testing."""
-    from pprint import pprint
-    pprint(ctx.config.__dict__)
     # print(qa.namespace.task_names)
-    try:
-        Executor(
-            qa.namespace,
-            config=WorkflowConfig(ctx.config),
-        ).execute('unit-tests.run')
-    except Exception as err:
-        print(err)
+    execute_jobs(ctx, task_name='unit-test')
 
 
 @task
@@ -111,39 +121,81 @@ def publish(ctx):  # type: (Context) -> None
     ).execute('package.publish')
 
 
-# project_config = config.ProjectConfig(
-#     docs=asdict(DocsConfig()),
-#     plugins=[
-#         config.Plugin(
-#             name='vcs',
-#             driver_name='git',
-#             driver_namespace='proman.workflows.vcs',
-#         ),
-#         config.Plugin(
-#             name='sort-headers',
-#             driver_name='isort',
-#             driver_namespace='proman.workflows.formatter',
-#         ),
-#         config.Plugin(
-#             name='format',
-#             driver_name='black',
-#             driver_namespace='proman.workflows.formatter',
-#         ),
-#         config.Plugin(
-#             name='gpg',
-#             driver_name='gpg',
-#             driver_namespace='proman.workflows.pki',
-#         ),
-#         config.Plugin(
-#             name='tls',
-#             driver_name='tls',
-#             driver_namespace='proman.workflows.pki',
-#         ),
-#     ]
-# )
+project_config = ProjectConfig(
+    # plugins=[
+    #     Plugin(
+    #         name='poetry',
+    #         driver_name='package',
+    #         driver_namespace='proman_workflows.package.poetry',
+    #     ),
+    #     Plugin(
+    #         name='vcs',
+    #         driver_name='git',
+    #         driver_namespace='proman.workflows.vcs',
+    #     ),
+    #     Plugin(
+    #         name='sort-headers',
+    #         driver_name='isort',
+    #         driver_namespace='proman.workflows.formatter',
+    #     ),
+    #     Plugin(
+    #         name='format',
+    #         driver_name='black',
+    #         driver_namespace='proman.workflows.formatter',
+    #     ),
+    #     Plugin(
+    #         name='unit-tests',
+    #         driver_name='pytest',
+    #         driver_namespace='proman.workflows.unit_tests',
+    #     ),
+    # ],
+    phases=[
+        Phase(
+            name='install',
+            plugins=['poetry'],
+            jobs=[Job(command='poetry.install', args={})],
+        ),
+        Phase(
+            name='static-analysis',
+            # plugins=[],
+            jobs=[Job(command='', args={})],
+
+        ),
+        Phase(
+            name='build',
+            plugins=['poetry'],
+            jobs=[Job(command='poetry.build', args={})],
+        ),
+        Phase(
+            name='unit-test',
+            # plugins=[],
+            jobs=[Job(command='unit-tests.run', args={})],
+        ),
+        Phase(
+            name='acceptance-test',
+            # plugins=[],
+            jobs=[Job(command='', args={})],
+        ),
+        Phase(
+            name='integration-test',
+            # plugins=[],
+            jobs=[Job(command='', args={})],
+        ),
+        Phase(
+            name='system-test',
+            # plugins=[],
+            jobs=[Job(command='', args={})],
+        ),
+        Phase(
+            name='publish',
+            plugins=['poetry'],
+            jobs=[Job(command='poetry.publish', args={})],
+        )
+    ]
+)
 namespace = Collection(
-    static_analysis,
     install,
+    static_analysis,
     build,
     unit_test,
     acceptance_test,
@@ -151,7 +203,8 @@ namespace = Collection(
     system_test,
     publish,
 )
-# namespace.configure(asdict(project_config))
+pprint(asdict(project_config))
+namespace.configure(asdict(project_config))
 # namespace.load_collections()
 
 __all__ = ['namespace']

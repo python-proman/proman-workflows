@@ -19,15 +19,6 @@ VENV_PATH = os.getenv('VIRTUAL_ENV', None)
 PATHS = [VENV_PATH] if VENV_PATH else []
 
 
-@dataclass
-class Plugin:
-    """Provide proman_workflows plugin."""
-
-    name: str
-    driver_name: str
-    driver_namespace: str
-
-
 class WorkflowConfig(InvokeConfig):
     """Provide project configuration."""
 
@@ -200,9 +191,36 @@ class Container:
 
 
 @dataclass
+class Plugin:
+    """Provide proman_workflows plugin."""
+
+    name: str
+    driver_name: str
+    driver_namespace: str
+
+
+@dataclass
+class Job:
+    """Provide proman_workflows plugin."""
+
+    command: str
+    args: Dict[str, Any] = field(default_factory=dict, repr=False)
+
+
+@dataclass
+class Phase:
+    """Provide proman_workflows plugin."""
+
+    name: str
+    plugins: Optional[List[str]] = field(default=None)
+    jobs: List[Job] = field(default_factory=list, repr=False)
+
+
+@dataclass
 class ProjectConfig(ProjectDirs):
     """Configure project settings."""
 
     docs: Dict[str, Any] = field(default_factory=dict)
     specfile: Dict[str, Any] = field(default_factory=dict)
     plugins: List[Plugin] = field(default_factory=list)
+    phases: List[Phase] = field(default_factory=list)

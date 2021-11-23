@@ -73,4 +73,4 @@ def coverage(
         ctx.run(f"pytest {' '.join(args)}")
 
 
-namespace = Collection(run)
+namespace = Collection(coverage, run)
