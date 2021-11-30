@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: MPL-2.0, see LICENSE for more details.
-"""Test configuration file."""
+"""Provide CLI management."""
 
-# import os
+from mock_workflow import workflow
 
-
-# def test_create_config():
-#     config = Config('test')
+if __name__ == '__main__':
+    workflow.run()

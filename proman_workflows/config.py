@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 
 from compendium.loader import ConfigFile
 from invoke.config import Config as InvokeConfig
-from invoke.config import merge_dicts
+# from invoke.config import merge_dicts
 from pygit2 import discover_repository
 
 VENV_PATH = os.getenv('VIRTUAL_ENV', None)
@@ -24,40 +24,52 @@ class WorkflowConfig(InvokeConfig):
 
     prefix = 'workflow'
 
-    @staticmethod
-    def global_defaults() -> Dict[str, Any]:
-        """Set global defaults."""
-        defaults = InvokeConfig.global_defaults()
-        default_plugins = {
-            'plugins': [
-                {
-                    'name': 'vcs',
-                    'driver_name': 'git',
-                    'driver_namespace': 'proman.workflows.vcs',
-                },
-                {
-                    'name': 'sort-headers',
-                    'driver_name': 'isort',
-                    'driver_namespace': 'proman.workflows.formatter',
-                },
-                {
-                    'name': 'format',
-                    'driver_name': 'black',
-                    'driver_namespace': 'proman.workflows.formatter',
-                },
-                {
-                    'name': 'gpg',
-                    'driver_name': 'gpg',
-                    'driver_namespace': 'proman.workflows.pki',
-                },
-                {
-                    'name': 'tls',
-                    'driver_name': 'tls',
-                    'driver_namespace': 'proman.workflows.pki',
-                },
-            ]
-        }
-        return merge_dicts(defaults, default_plugins)
+    # @staticmethod
+    # def global_defaults() -> Dict[str, Any]:
+    #     """Set global defaults."""
+    #     defaults = InvokeConfig.global_defaults()
+    #     default_plugins = {
+    #         'plugins': [
+    #             {
+    #                 'name': 'package',
+    #                 'driver_name': 'poetry',
+    #                 'driver_namespace': 'proman.workflows.package',
+    #             },
+    #             # [tool.poetry.plugins."proman.workflows.vcs"]
+    #             # git = "proman_workflows.git:namespace"
+    #             {
+    #                 'name': 'vcs',
+    #                 'driver_name': 'git',
+    #                 'driver_namespace': 'proman.workflows.vcs',
+    #             },
+    #             {
+    #                 'name': 'sort-headers',
+    #                 'driver_name': 'isort',
+    #                 'driver_namespace': 'proman.workflows.formatter',
+    #             },
+    #             {
+    #                 'name': 'format',
+    #                 'driver_name': 'black',
+    #                 'driver_namespace': 'proman.workflows.formatter',
+    #             },
+    #             {
+    #                 'name': 'unit-tests',
+    #                 'driver_name': 'pytest',
+    #                 'driver_namespace': 'proman.workflows.unit_tests',
+    #             },
+    #             {
+    #                 'name': 'gpg',
+    #                 'driver_name': 'gpg',
+    #                 'driver_namespace': 'proman.workflows.pki',
+    #             },
+    #             {
+    #                 'name': 'tls',
+    #                 'driver_name': 'tls',
+    #                 'driver_namespace': 'proman.workflows.pki',
+    #             },
+    #         ]
+    #     }
+    #     return merge_dicts(defaults, default_plugins)
 
 
 @dataclass

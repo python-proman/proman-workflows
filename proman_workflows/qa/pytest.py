@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 @task
 def run(
     ctx,  # type: Context
+    marker=None,  # type: str
     capture=None,  # type: Optional[str]
     debugger=None,  # type: Optional[str]
     durations=None,  # type: Optional[int]
@@ -21,7 +22,11 @@ def run(
     maxfail=None,  # type: Optional[int]
 ):  # type: (...) -> None
     """Perform unit tests."""
+    from pprint import pprint
+    pprint(ctx.config.__dict__)
     args = []
+    if marker:
+        args.append(f"-m {marker}")
     if capture:
         args.append(f"--capture={capture}")
     if debugger:

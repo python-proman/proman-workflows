@@ -14,6 +14,18 @@ dev = ["check-manifest"]
 test = ["coverage"]
 
 [[package]]
+name = "argufy"
+version = "0.1.2a4"
+description = "Inspection based parser based on argparse."
+category = "dev"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+colorama = ">=0.4.4,<0.5.0"
+docstring-parser = ">=0.7.2,<0.8.0"
+
+[[package]]
 name = "arrow"
 version = "1.2.1"
 description = "Better dates & times for Python"
@@ -205,7 +217,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "compendium"
-version = "0.1.1a0"
+version = "0.1.1a2"
 description = "Simple layered configuraion tool"
 category = "main"
 optional = false
@@ -213,7 +225,6 @@ python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
 anytree = ">=2.8.0,<3.0.0"
-dataclasses = {version = ">=0.8,<0.9", markers = "python_version >= \"3.6\" and python_version < \"3.7\""}
 dpath = ">=2.0.1,<3.0.0"
 "ruamel.yaml" = ">=0.16.10,<0.17.0"
 tomlkit = ">=0.7.0,<0.8.0"
@@ -311,6 +322,14 @@ click = "*"
 [package.extras]
 lint = ["flake8 (==3.8.2)", "black (==19.10b0)", "isort (==5.6.4)"]
 test = ["pytest (==5.4.2)", "pytest-mock"]
+
+[[package]]
+name = "docstring-parser"
+version = "0.7.3"
+description = ""
+category = "dev"
+optional = false
+python-versions = "~=3.5"
 
 [[package]]
 name = "docutils"
@@ -556,6 +575,18 @@ docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [[package]]
+name = "lark-parser"
+version = "0.10.1"
+description = "a modern parsing library"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+nearley = ["js2py"]
+regex = ["regex"]
+
+[[package]]
 name = "mac-alias"
 version = "2.2.0"
 description = "Generate/parse Mac OS Alias records from Python"
@@ -712,14 +743,14 @@ python-versions = "*"
 
 [[package]]
 name = "packaging"
-version = "21.2"
+version = "20.9"
 description = "Core utilities for Python packages"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
-pyparsing = ">=2.0.2,<3"
+pyparsing = ">=2.0.2"
 
 [[package]]
 name = "pathspec"
@@ -798,6 +829,24 @@ keyring = ">=23.0.1,<24.0.0"
 [package.extras]
 gnome = ["SecretStorage (>=3.3.1,<4.0.0)"]
 kde = ["dbus-python (>=1.2.16,<2.0.0)"]
+
+[[package]]
+name = "proman-versioning"
+version = "0.1.1a3"
+description = "Project Manager Versioning tool."
+category = "dev"
+optional = false
+python-versions = ">=3.6.2,<4.0.0"
+
+[package.dependencies]
+argufy = ">=0.1.1-alpha.12,<0.2.0"
+cffi = ">=1.15.0,<2.0.0"
+compendium = ">=0.1.1-alpha.2,<0.2.0"
+jinja2 = ">=2.11.2,<3.0.0"
+lark-parser = ">=0.10.0,<0.11.0"
+packaging = ">=20.9,<21.0"
+pygit2 = ">=1.6.1,<2.0.0"
+transitions = ">=0.8.4,<0.9.0"
 
 [[package]]
 name = "py"
@@ -1273,6 +1322,21 @@ notebook = ["ipywidgets (>=6)"]
 telegram = ["requests"]
 
 [[package]]
+name = "transitions"
+version = "0.8.10"
+description = "A lightweight, object-oriented Python state machine implementation with many extensions."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+diagrams = ["pygraphviz"]
+test = ["pytest"]
+
+[[package]]
 name = "twine"
 version = "3.6.0"
 description = "Collection of utilities for publishing packages on PyPI"
@@ -1405,12 +1469,16 @@ kde = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "74b553bc6361ac1404467558a3b491b8fc084dbdc5b4be279b37c5317dec0865"
+content-hash = "5326fbe159a9acd94b770a895001730e46e32bcce84d2c1f48023dd6f7b74a6e"
 
 [metadata.files]
 anytree = [
     {file = "anytree-2.8.0-py2.py3-none-any.whl", hash = "sha256:14c55ac77492b11532395049a03b773d14c7e30b22aa012e337b1e983de31521"},
     {file = "anytree-2.8.0.tar.gz", hash = "sha256:3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab"},
+]
+argufy = [
+    {file = "argufy-0.1.2a4-py3-none-any.whl", hash = "sha256:91382a57f455a88287369126682102b5b6af84e3437316f1a12367d768a94553"},
+    {file = "argufy-0.1.2a4.tar.gz", hash = "sha256:4d9519a159a61061df642fe302f37d8bf7591af82efe68ea6695f57f2671c5ad"},
 ]
 arrow = [
     {file = "arrow-1.2.1-py3-none-any.whl", hash = "sha256:6b2914ef3997d1fd7b37a71ce9dd61a6e329d09e1c7b44f4d3099ca4a5c0933e"},
@@ -1521,8 +1589,8 @@ colorama = [
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 compendium = [
-    {file = "compendium-0.1.1a0-py3-none-any.whl", hash = "sha256:30b1aa596bde41ae97279bb434559e79ac421bdf45ba49d727811887655a0c98"},
-    {file = "compendium-0.1.1a0.tar.gz", hash = "sha256:8f053e10e866eee31bf5db32fe5184e05d435f373575fbd388c6d0617c2bf84e"},
+    {file = "compendium-0.1.1a2-py3-none-any.whl", hash = "sha256:7d69e0e15a3dd27e714a55a5fa57407d22e5f31348a80707ce96e53c5ca6235f"},
+    {file = "compendium-0.1.1a2.tar.gz", hash = "sha256:6e754fa75d182d501a72caafcfd348ba8e1c82d96a07b43ec24b4c1612e91438"},
 ]
 cookiecutter = [
     {file = "cookiecutter-1.7.3-py2.py3-none-any.whl", hash = "sha256:f8671531fa96ab14339d0c59b4f662a4f12a2ecacd94a0f70a3500843da588e2"},
@@ -1614,6 +1682,9 @@ docstr-coverage = [
     {file = "docstr_coverage-1.4.0-py3-none-any.whl", hash = "sha256:2592429b0332f3d89aa83f5dae120b1e170f2cf73aba60339be4b806b334a5ba"},
     {file = "docstr_coverage-1.4.0.tar.gz", hash = "sha256:e3fdb27f74a85167c5c0d48c97652d177f8105d170a0b4e58500d452974ef148"},
 ]
+docstring-parser = [
+    {file = "docstring_parser-0.7.3.tar.gz", hash = "sha256:cde5fbf8b846433dfbde1e0f96b7f909336a634d5df34a38cb75050c7346734a"},
+]
 docutils = [
     {file = "docutils-0.18-py2.py3-none-any.whl", hash = "sha256:a31688b2ea858517fa54293e5d5df06fbb875fb1f7e4c64529271b77781ca8fc"},
     {file = "docutils-0.18.tar.gz", hash = "sha256:c1d5dab2b11d16397406a282e53953fe495a46d69ae329f55aa98a5c4e3c5fbb"},
@@ -1693,6 +1764,9 @@ jinja2-time = [
 keyring = [
     {file = "keyring-23.2.1-py3-none-any.whl", hash = "sha256:bd2145a237ed70c8ce72978b497619ddfcae640b6dcf494402d5143e37755c6e"},
     {file = "keyring-23.2.1.tar.gz", hash = "sha256:6334aee6073db2fb1f30892697b1730105b5e9a77ce7e61fca6b435225493efe"},
+]
+lark-parser = [
+    {file = "lark-parser-0.10.1.tar.gz", hash = "sha256:42f367612a1bbc4cf9d8c8eb1b209d8a9b397d55af75620c9e6f53e502235996"},
 ]
 mac-alias = [
     {file = "mac_alias-2.2.0.tar.gz", hash = "sha256:0eb84a63f98bf54c2f9fbdc4de956a63e64eb8a4a124143a1c1f5a78326442f0"},
@@ -1819,8 +1893,8 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 packaging = [
-    {file = "packaging-21.2-py3-none-any.whl", hash = "sha256:14317396d1e8cdb122989b916fa2c7e9ca8e2be9e8060a6eff75b6b7b4d8a7e0"},
-    {file = "packaging-21.2.tar.gz", hash = "sha256:096d689d78ca690e4cd8a89568ba06d07ca097e3306a4381635073ca91479966"},
+    {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
+    {file = "packaging-20.9.tar.gz", hash = "sha256:5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
@@ -1849,6 +1923,10 @@ poyo = [
 proman-common = [
     {file = "proman_common-0.1.1a1-py3-none-any.whl", hash = "sha256:7370a02133cface4b5322a794ddde092f9cd8c17f8768d2c785ce5dc3a0696ab"},
     {file = "proman_common-0.1.1a1.tar.gz", hash = "sha256:bd959ec560df2773ae7980a385f00d070e969f0a0147ad76f13e443634e9ba7f"},
+]
+proman-versioning = [
+    {file = "proman-versioning-0.1.1a3.tar.gz", hash = "sha256:bdda30a6d750eca25fc6e7306d57f70be43ac2fea60dc0bc8f92e132561f1c0b"},
+    {file = "proman_versioning-0.1.1a3-py3-none-any.whl", hash = "sha256:b5622f52c04ac9333c62a4cbdb3d082e1800562acc4a7c94d9881516af852324"},
 ]
 py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
@@ -2131,6 +2209,10 @@ tox = [
 tqdm = [
     {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
     {file = "tqdm-4.62.3.tar.gz", hash = "sha256:d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d"},
+]
+transitions = [
+    {file = "transitions-0.8.10-py2.py3-none-any.whl", hash = "sha256:2e9de3c453fafe3a8afef2c2bdc47e30a7a73e32d88f793ad4c1b6246f0cc364"},
+    {file = "transitions-0.8.10.tar.gz", hash = "sha256:b0385975a842e885c1a55c719d2f90164471665794d39d51f9eb3f11e1d9c8ac"},
 ]
 twine = [
     {file = "twine-3.6.0-py3-none-any.whl", hash = "sha256:916070f8ecbd1985ebed5dbb02b9bda9a092882a96d7069d542d4fc0bb5c673c"},

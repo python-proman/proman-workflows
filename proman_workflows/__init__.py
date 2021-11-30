@@ -86,7 +86,7 @@ workflow = WorkflowProgram(
     namespace=workflow_namespace,
     binary='workflow',
     binary_names=['workflow'],
-    config_class=WorkflowConfig,
+    # config_class=WorkflowConfig,
     version=__version__,
 )
 

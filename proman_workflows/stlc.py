@@ -37,13 +37,17 @@ if TYPE_CHECKING:
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
-@task
-def execute_jobs(ctx, task_name):  # type: (Context, str) -> None
+def execute(
+    ctx, collection, task_name
+):  # type: (Context, Collection, str) -> None
+    """Execute tasks within collection."""
+    for x in ctx.phases:
+        print(x)
     config = [p for p in ctx.phases if p['name'] == task_name][0]
     jobs = [(j['command'], j['args']) for j in config['jobs']]
     try:
         Executor(
-            qa.namespace,
+            collection,
             config=WorkflowConfig(ctx.config),
         ).execute(*jobs)
     except Exception as err:
@@ -62,53 +66,45 @@ def static_analysis(ctx):  # type: (Context) -> None
     #     sca.namespace,
     #     config=WorkflowConfig(ctx.config)
     # ).execute('package.publish')
+    execute(ctx, collection=package.namespace, task_name='static-analysis')
 
 
 @task
 def install(ctx):  # type: (Context) -> None
     """Perform install."""
-    # Executor(
-    #     package.namespace,
-    #     config=WorkflowConfig(ctx.config),
-    # ).execute('package.install')
-    ...
+    execute(ctx, collection=package.namespace, task_name='install')
 
 
 @task
 def build(ctx):  # type: (Context) -> None
     """Perform build."""
-    Executor(
-        package.namespace,
-        config=WorkflowConfig(ctx.config),
-    ).execute('package.build')
+    execute(ctx, collection=package.namespace, task_name='build')
 
 
 @task
 def unit_test(ctx):  # type: (Context) -> None
     """Perform unit-testing."""
-    # print(qa.namespace.task_names)
-    execute_jobs(ctx, task_name='unit-test')
+    print(qa.namespace.task_names)
+    # pprint(ctx.config.__dict__['_defaults']['plugins'])
+    execute(ctx, collection=qa.namespace, task_name='unit-test')
 
 
 @task
 def integration_test(ctx):  # type: (Context) -> None
     """Perform integration testing."""
-    # Executor(.namespace, config=WorkflowConfig(ctx.config)).execute('')
-    ...
+    execute(ctx, collection=qa.namespace, task_name='integration-test')
 
 
 @task
 def system_test(ctx):  # type: (Context) -> None
     """Perform system testing."""
-    # Executor(.namespace, config=WorkflowConfig(ctx.config)).execute('')
-    ...
+    execute(ctx, collection=qa.namespace, task_name='system-test')
 
 
 @task
 def acceptance_test(ctx):  # type: (Context) -> None
     """Perform acceptance testing."""
-    # Executor(.namespace, config=WorkflowConfig(ctx.config)).execute('')
-    ...
+    execute(ctx, collection=qa.namespace, task_name='acceptance-test')
 
 
 @task
@@ -157,7 +153,6 @@ project_config = ProjectConfig(
         ),
         Phase(
             name='static-analysis',
-            # plugins=[],
             jobs=[Job(command='', args={})],
 
         ),
@@ -168,22 +163,18 @@ project_config = ProjectConfig(
         ),
         Phase(
             name='unit-test',
-            # plugins=[],
             jobs=[Job(command='unit-tests.run', args={})],
         ),
         Phase(
             name='acceptance-test',
-            # plugins=[],
             jobs=[Job(command='', args={})],
         ),
         Phase(
             name='integration-test',
-            # plugins=[],
             jobs=[Job(command='', args={})],
         ),
         Phase(
             name='system-test',
-            # plugins=[],
             jobs=[Job(command='', args={})],
         ),
         Phase(
@@ -203,7 +194,7 @@ namespace = Collection(
     system_test,
     publish,
 )
-pprint(asdict(project_config))
+# pprint(asdict(project_config))
 namespace.configure(asdict(project_config))
 # namespace.load_collections()
 

@@ -78,7 +78,5 @@ class Collection(InvokeCollection):
 
     def load_collections(self, plugins: List[Dict[str, Any]] = []) -> None:
         """Load collections from configuration."""
-        if 'plugins' in self._configuration:
-            plugins += self._configuration['plugins']
-        for plugin in plugins:
+        for plugin in plugins or self._configuration['plugins']:
             self.load_collection(**plugin)

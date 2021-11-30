@@ -41,6 +41,7 @@ tox = "^3.24.0"
 python-gilt = "^1.2.3"
 twine = "^3.5.0"
 mypy = "^0.910"
+proman-versioning = {version = "^0.1.1-alpha.3", allow-prereleases = true}
 
 [tool.poetry.extras]
 kde = ["dbus-python"]
@@ -87,8 +88,9 @@ podman_compose = "proman_workflows.container.podman:namespace"
 mkdocs = "proman_workflows.docs.mkdocs:namespace"
 
 # mock cli namespace
-# [tool.poetry.plugins."proman.workflows.mock"]
-# check = "proman_workflows.mock.check:namespace"
+[tool.poetry.plugins."proman.workflows.mock"]
+original = "mock_workflow.mock.original:namespace"
+update = "mock_workflow.mock.update:namespace"
 
 [tool.poetry.scripts]
 # workflow-tools = "proman_workflows:tools.run"
@@ -113,15 +115,15 @@ workflow = "proman_workflows:workflow.run"
 # project = "workflows:project.run"
 # workflow = "workflows:workflow.run"
 
-[tool.proman.workflows.drivers.unit_tests]
-name = "sort-headers"
-driver_name = "isort"
-driver_namespace = "proman.workflows.formatter"
-
-[tool.proman.workflows.drivers.docs]
-name = "sort-headers"
-driver_name = "isort"
-driver_namespace = "proman.workflows.formatter"
+# [tool.proman.workflows.drivers.unit_tests]
+# name = "sort-headers"
+# driver_name = "isort"
+# driver_namespace = "proman.workflows.formatter"
+#
+# [tool.proman.workflows.drivers.docs]
+# name = "sort-headers"
+# driver_name = "isort"
+# driver_namespace = "proman.workflows.formatter"
 
 [[tool.proman.workflows.plugins]]
 name = "sort-headers"
