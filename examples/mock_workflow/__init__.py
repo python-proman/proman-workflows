@@ -9,9 +9,9 @@ from typing import TYPE_CHECKING
 from invoke import Executor, task
 
 # TODO: switch to executor
-from proman_workflows import __title__, __version__, WorkflowProgram
-from proman_workflows.config import Plugin, ProjectConfig, WorkflowConfig
+from proman_workflows import WorkflowProgram, __title__, __version__
 from proman_workflows.collection import Collection
+from proman_workflows.config import Plugin, ProjectConfig, WorkflowConfig
 
 from . import mock
 

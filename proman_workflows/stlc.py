@@ -1,9 +1,11 @@
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
 """Implement software testing life-cycle."""
+# TODO: refactor to dynamically populate tasks
 
 import logging
-# import os
+
+import os
 from dataclasses import asdict
 from pprint import pprint
 from typing import TYPE_CHECKING
@@ -12,23 +14,18 @@ from invoke import Executor, task
 
 # TODO: switch to executor
 from proman_workflows import (
-    # container,
-    # docs,
-    # init,
-    # exception,
+    # container,; docs,; init,; exception,; stlc,; utils,
+    formatter,
     package,
     qa,
     sca,
-    # stlc,
-    # utils,
 )
 from proman_workflows.collection import Collection
-from proman_workflows.config import (
+from proman_workflows.config import (  # Plugin,
     Job,
-    # Plugin,
     Phase,
     ProjectConfig,
-    WorkflowConfig
+    WorkflowConfig,
 )
 
 if TYPE_CHECKING:
@@ -61,12 +58,19 @@ def static_analysis(ctx):  # type: (Context) -> None
         pprint(ctx.plugins)
     else:
         pprint(ctx.config.__dict__)
-    print(sca.namespace.task_names)
+    print('task names', sca.namespace.task_names)
     # Executor(
     #     sca.namespace,
     #     config=WorkflowConfig(ctx.config)
     # ).execute('package.publish')
-    execute(ctx, collection=package.namespace, task_name='static-analysis')
+    execute(ctx, collection=sca.namespace, task_name='static-analysis')
+
+
+@task(name='style')
+def formatting(ctx):  # type: (Context) -> None
+    """Perform install."""
+    print('tasks', formatter.namespace.task_names)
+    execute(ctx, collection=formatter.namespace, task_name='formatter')
 
 
 @task
@@ -86,19 +90,22 @@ def unit_test(ctx):  # type: (Context) -> None
     """Perform unit-testing."""
     print(qa.namespace.task_names)
     # pprint(ctx.config.__dict__['_defaults']['plugins'])
+    ctx.project_dir = os.path.join(os.getcwd(), 'tests')
     execute(ctx, collection=qa.namespace, task_name='unit-test')
 
 
 @task
 def integration_test(ctx):  # type: (Context) -> None
     """Perform integration testing."""
+    print(qa.namespace.task_names)
+    ctx.project_dir = os.path.join(os.getcwd(), 'integration')
     execute(ctx, collection=qa.namespace, task_name='integration-test')
 
 
 @task
 def system_test(ctx):  # type: (Context) -> None
     """Perform system testing."""
-    execute(ctx, collection=qa.namespace, task_name='system-test')
+    execute(ctx, collection=system.namespace, task_name='system-test')
 
 
 @task
@@ -152,9 +159,18 @@ project_config = ProjectConfig(
             jobs=[Job(command='poetry.install', args={})],
         ),
         Phase(
+            name='formatter',
+            jobs=[
+                Job(command='sort-headers.run', args={}),
+                Job(command='format.run', args={}),
+            ],
+        ),
+        Phase(
             name='static-analysis',
-            jobs=[Job(command='', args={})],
-
+            jobs=[
+                Job(command='lint.run', args={}),
+                Job(command='type-checking.run', args={}),
+            ],
         ),
         Phase(
             name='build',
@@ -171,7 +187,7 @@ project_config = ProjectConfig(
         ),
         Phase(
             name='integration-test',
-            jobs=[Job(command='', args={})],
+            jobs=[Job(command='unit-tests.run', args={})],
         ),
         Phase(
             name='system-test',
@@ -181,10 +197,16 @@ project_config = ProjectConfig(
             name='publish',
             plugins=['poetry'],
             jobs=[Job(command='poetry.publish', args={})],
-        )
+        ),
+        # Phase(
+        #     name='deploy',
+        #     plugins=['ansible'],
+        #     jobs=[Job(command='system.run', args={})],
+        # ),
     ]
 )
 namespace = Collection(
+    formatting,
     install,
     static_analysis,
     build,

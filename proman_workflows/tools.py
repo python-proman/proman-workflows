@@ -5,7 +5,7 @@
 import logging
 from dataclasses import asdict
 
-from proman_workflows import __title__, __version__, config, WorkflowProgram
+from proman_workflows import WorkflowProgram, __title__, __version__, config
 from proman_workflows.collection import Collection
 from proman_workflows.config import DocsConfig, WorkflowConfig
 
@@ -39,7 +39,7 @@ project_config = config.ProjectConfig(
             driver_name='tls',
             driver_namespace='proman.workflows.pki',
         ),
-    ]
+    ],
 )
 namespace = Collection()
 namespace.configure(asdict(project_config))

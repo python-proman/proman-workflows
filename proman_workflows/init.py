@@ -12,10 +12,11 @@ import keyring
 import pyinputplus as pyip
 from invoke import Executor, task
 
+from .collection import Collection
+
 # TODO: switch to executor
 from .config import ProjectDirs
 from .pki.gpg import ELYPTICAL_KEY_TYPES, KEY_TYPES
-from .collection import Collection
 
 if TYPE_CHECKING:
     from gpg import GenKey
@@ -38,7 +39,7 @@ def _setup_executor(ctx):  # type: (Context) -> None
                 'driver_namespace': 'proman.workflows.pki',
             },
         ],
-        **asdict(ProjectDirs())
+        **asdict(ProjectDirs()),
     }
     length = len(configuration['plugins']) - 1
     if 'plugins' in ctx:

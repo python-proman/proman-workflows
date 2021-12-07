@@ -12,18 +12,17 @@ from invoke import Program
 from proman_common.config import Config
 from proman_common.filepaths import AppDirs
 
-from proman_workflows import (
-    # container,
-    # docs,
-    # init,
+from proman_workflows import (  # container,; docs,; init,; utils,
     exception,
     stlc,
-    # utils,
-)
-from proman_workflows.config import (
-    DocsConfig, ProjectConfig, ProjectDirs, WorkflowConfig
 )
 from proman_workflows.collection import Collection
+from proman_workflows.config import (
+    DocsConfig,
+    ProjectConfig,
+    ProjectDirs,
+    WorkflowConfig,
+)
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'

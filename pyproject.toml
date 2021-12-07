@@ -26,7 +26,6 @@ SecretStorage = {version = "^3.3.1", platform = "linux"}
 black = "^21.7b0"
 docstr-coverage = "^1.2.0"
 flake8 = "^3.8.3"
-pydocstyle = "^5.0.2"
 pytest = "^5.2"
 pytest-cov = "^2.10.0"
 isort = "^5.9.2"
@@ -42,6 +41,7 @@ python-gilt = "^1.2.3"
 twine = "^3.5.0"
 mypy = "^0.910"
 proman-versioning = {version = "^0.1.1-alpha.3", allow-prereleases = true}
+pydocstyle = {extras = ["toml"], version = "^6.1.1"}
 
 [tool.poetry.extras]
 kde = ["dbus-python"]
@@ -64,9 +64,9 @@ briefcase = "proman_workflows.executable.briefcase:namespace"
 # pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
 
 [tool.poetry.plugins."proman.workflows.formatter"]
-autopep8 = "proman_workflows.sca.autopep8:namespace"
-black = "proman_workflows.sca.black:namespace"
-isort = "proman_workflows.sca.isort:namespace"
+autopep8 = "proman_workflows.formatter.autopep8:namespace"
+black = "proman_workflows.formatter.black:namespace"
+isort = "proman_workflows.formatter.isort:namespace"
 
 [tool.poetry.plugins."proman.workflows.sca"]
 flake8 = "proman_workflows.sca.flake8:namespace"

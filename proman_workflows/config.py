@@ -7,13 +7,16 @@ import shutil
 import sys
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-# from typing import Optional, Tuple
-# from urllib.parse import urljoin, urlparse
 
 from compendium.loader import ConfigFile
 from invoke.config import Config as InvokeConfig
+
 # from invoke.config import merge_dicts
 from pygit2 import discover_repository
+
+# from typing import Optional, Tuple
+# from urllib.parse import urljoin, urlparse
+
 
 VENV_PATH = os.getenv('VIRTUAL_ENV', None)
 PATHS = [VENV_PATH] if VENV_PATH else []
