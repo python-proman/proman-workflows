@@ -6,6 +6,9 @@ authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 readme = "README.md"
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
+packages = [
+    { include = "proman_workflows", from = "src" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
@@ -134,6 +137,18 @@ driver_namespace = "proman.workflows.formatter"
 # name = "vcs"
 # driver_name = "git"
 # driver_namespace = "proman.workflows.vcs"
+
+[[tool.proman.versioning.files]]
+filepath = "pyproject.toml"
+pattern = "version = \"${version}\""
+
+[[tool.proman.versioning.files]]
+filepath = "src/proman_workflows/__init__.py"
+pattern = "__version__ = '${version}'"
+
+[[tool.proman.versioning.files]]
+filepath = "tests/test_version.py"
+pattern = "__version__ == '${version}'"
 
 [tool.isort]
 profile = "black"
