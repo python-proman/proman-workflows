@@ -6,7 +6,7 @@
 import logging
 from typing import Any, Optional
 
-from invoke import Executor, Runner
+from invoke import Runner  # Executor
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 

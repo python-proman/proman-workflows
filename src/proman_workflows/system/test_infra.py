@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
-"""Deploy stack using test-infra."""
+"""Run system tests using test-infra."""
 
 from typing import TYPE_CHECKING
 
@@ -12,19 +12,11 @@ if TYPE_CHECKING:
 
 
 @task
-def install(
-    ctx,  # type: Context
-):  # type: (...) -> None
-    """Install test-infra collections or roles."""
-    ...
-
-
-@task
 def run(
     ctx,  # type: Context
 ):  # type: (...) -> None
-    """Run test-infra deployment."""
-    ...
+    """Run test-infra tests."""
+    print('test-infra stub')
 
 
-namespace = Collection(install, run)
+namespace = Collection(run)

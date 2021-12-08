@@ -14,9 +14,14 @@ namespace = Collection(
     configuration={
         'plugins': [
             {
-                'name': 'unit-tests',
+                'name': 'unit-test',
                 'driver_name': 'pytest',
-                'driver_namespace': 'proman.workflows.unit_tests',
+                'driver_namespace': 'proman.workflows.qa',
+            },
+            {
+                'name': 'acceptance-test',
+                'driver_name': 'behave',
+                'driver_namespace': 'proman.workflows.qa',
             },
         ]
     }

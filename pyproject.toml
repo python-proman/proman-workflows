@@ -3,7 +3,11 @@ name = "proman-workflows"
 version = "0.1.0a2"
 description = "Task-runner to automate projects."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
+license = "MPL-2.0"
 readme = "README.md"
+homepage = "https://github.com/python-protools/proman-workflows"
+# documentation = "https://python-protools.github.io/proman-workflows"
+keywords = ["package management"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
 packages = [
@@ -77,8 +81,12 @@ mypy = "proman_workflows.sca.mypy:namespace"
 bandit = "proman_workflows.sca.security.bandit:namespace"
 safety = "proman_workflows.sca.security.safety:namespace"
 
-[tool.poetry.plugins."proman.workflows.unit_tests"]
+[tool.poetry.plugins."proman.workflows.qa"]
 pytest = "proman_workflows.qa.pytest:namespace"
+behave = "proman_workflows.qa.behave:namespace"
+
+[tool.poetry.plugins."proman.workflows.system"]
+test-infra = "proman_workflows.system.test_infra:namespace"
 
 # [tool.poetry.plugins."proman.workflows.coverage"]
 # pytest = "proman_workflows.qa.pytest:namespace"

@@ -4,7 +4,6 @@
 # TODO: refactor to dynamically populate tasks
 
 import logging
-
 import os
 from dataclasses import asdict
 from pprint import pprint
@@ -14,11 +13,11 @@ from invoke import Executor, task
 
 # TODO: switch to executor
 from proman_workflows import (
-    # container,; docs,; init,; exception,; stlc,; utils,
     formatter,
     package,
     qa,
     sca,
+    system,
 )
 from proman_workflows.collection import Collection
 from proman_workflows.config import (  # Plugin,
@@ -105,6 +104,7 @@ def integration_test(ctx):  # type: (Context) -> None
 @task
 def system_test(ctx):  # type: (Context) -> None
     """Perform system testing."""
+    print(system.namespace.task_names)
     execute(ctx, collection=system.namespace, task_name='system-test')
 
 
@@ -179,19 +179,19 @@ project_config = ProjectConfig(
         ),
         Phase(
             name='unit-test',
-            jobs=[Job(command='unit-tests.run', args={})],
+            jobs=[Job(command='unit-test.run', args={})],
         ),
         Phase(
             name='acceptance-test',
-            jobs=[Job(command='', args={})],
+            jobs=[Job(command='acceptance-test.run', args={})],
         ),
         Phase(
             name='integration-test',
-            jobs=[Job(command='unit-tests.run', args={})],
+            jobs=[Job(command='unit-test.run', args={})],
         ),
         Phase(
             name='system-test',
-            jobs=[Job(command='', args={})],
+            jobs=[Job(command='system-test.run', args={})],
         ),
         Phase(
             name='publish',

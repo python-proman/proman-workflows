@@ -18,6 +18,11 @@ namespace = Collection(
             #     'driver_name': 'ansible',
             #     'driver_namespace': 'proman.workflows.infra',
             # },
+            {
+                'name': 'system-test',
+                'driver_name': 'test-infra',
+                'driver_namespace': 'proman.workflows.system',
+            },
         ]
     }
 )

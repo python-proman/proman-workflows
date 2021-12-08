@@ -17,11 +17,10 @@ from proman_workflows import (  # container,; docs,; init,; utils,
     stlc,
 )
 from proman_workflows.collection import Collection
-from proman_workflows.config import (
+from proman_workflows.config import (  # WorkflowConfig,
     DocsConfig,
     ProjectConfig,
     ProjectDirs,
-    WorkflowConfig,  # noqa
 )
 
 __author__ = 'Jesse P. Johnson'
