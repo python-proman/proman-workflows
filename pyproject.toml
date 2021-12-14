@@ -11,7 +11,7 @@ keywords = ["package management"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
 packages = [
-    { include = "proman_workflows", from = "src" },
+    {include = "proman_workflows", from = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -51,7 +51,18 @@ proman-versioning = {version = "^0.1.1-alpha.3", allow-prereleases = true}
 pydocstyle = {extras = ["toml"], version = "^6.1.1"}
 
 [tool.poetry.extras]
-kde = ["dbus-python"]
+all = [
+  "black",
+  "flake8",
+  "pytest",
+  "isort",
+  "bandit",
+  "safety",
+  "pyfakefs",
+  "tox",
+  "twine",
+  "mypy",
+]
 
 [tool.poetry.plugins."proman.workflows.pki"]
 gpg = "proman_workflows.pki.gpg:namespace"
