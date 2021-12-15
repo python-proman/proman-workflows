@@ -34,7 +34,7 @@ __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
 __title__ = 'proman_workflows'
 __description__ = 'Convenience module to manage project tools with Python.'
-__version__ = '0.1.0a3'
+__version__ = '0.1.0a4'
 __license__ = 'MPL-2.0'
 __copyright__ = 'Copyright 2021 Jesse Johnson.'
 
