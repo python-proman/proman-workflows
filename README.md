@@ -34,6 +34,29 @@ additional dependencies can be install with:
 pip install proman-workflow[all]
 ```
 
+### Usage
+
+Currently, there are three command line utilities included with this install.
+This is due to the primary CLI tool being under heavy development.
+
+The `workflow-tools` command provides direct access to each of integrations
+provided by the task runner. It can either be used directory or extended as
+a library for additional workflows.
+
+The `workflow-setup` command
+
+The `workflow` command is the intended CLI for the task runner but is still
+under development. It will allow control of integrated tools through abstracted
+phases accessible to a developer. The functionality is still imited at this time.
+
+### Setup
+
+Setup a signing key for development:
+
+```
+workflow-tools setup
+```
+
 ## FAQ
 
 Q: Why should developers use this?

@@ -115,8 +115,8 @@ original = "mock_workflow.mock.original:namespace"
 update = "mock_workflow.mock.update:namespace"
 
 [tool.poetry.scripts]
-# workflow-tools = "proman_workflows:tools.run"
-workflow-tools = "proman_workflows.tools:tools.run"
+workflow-tools = "proman_workflows:workflow_tools.run"
+workflow-setup = "proman_workflows.setup:setup.run"
 workflow = "proman_workflows:workflow.run"
 # mock command
 # check = "proman_workflows.check:workflow.run"

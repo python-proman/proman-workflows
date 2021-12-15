@@ -12,9 +12,16 @@ from invoke import Program
 from proman_common.config import Config
 from proman_common.filepaths import AppDirs
 
-from proman_workflows import (  # container,; docs,; init,; utils,
+from proman_workflows import (
+    container,
+    docs,
     exception,
+    init,
+    package,
+    qa,
+    sca,
     stlc,
+    utils,
 )
 from proman_workflows.collection import Collection
 from proman_workflows.config import (  # WorkflowConfig,
@@ -69,6 +76,30 @@ project_config = ProjectConfig(
 )
 # pprint(asdict(project_config))
 
+workflow_namespace = Collection()
+# workflow_namespace.configure(
+#     {
+#         'dirs': asdict(dirs),
+#         'spec': specfile.data,
+#         'docs': asdict(docs_config),
+#         'working_dir': config.working_dir,
+#         'container_runtime': config.container_runtime,
+#     }
+# )
+workflow_namespace.add_collection(container.namespace, name='container')
+workflow_namespace.add_collection(docs.namespace, name='docs')
+workflow_namespace.add_collection(package.namespace, name='dist')
+workflow_namespace.add_collection(qa.namespace, name='qa')
+workflow_namespace.add_collection(sca.namespace, name='sec')
+workflow_namespace.add_collection(utils.namespace, name='utils')
+workflow_tools = Program(
+    version=__version__,
+    namespace=workflow_namespace,
+    name=__title__,
+    binary='workflow-tools',
+    binary_names=['workflow-tools'],
+)
+
 workflow_namespace = Collection().from_module(stlc)
 workflow_namespace.configure(
     {
@@ -78,7 +109,7 @@ workflow_namespace.configure(
     }
 )
 # workflow_namespace.load_collections(plugins=asdict(project_config)['plugins'])
-# workflow_namespace.add_collection(init.namespace, name='init')
+workflow_namespace.add_collection(init.namespace, name='init')
 workflow = WorkflowProgram(
     name=__title__,
     namespace=workflow_namespace,
