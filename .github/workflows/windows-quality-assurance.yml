@@ -29,9 +29,7 @@ jobs:
           poetry run workflow-tools sca.lint.run
           poetry run workflow-tools sca.type-checking.run
       - name: Perform tests
-        run: |
-          poetry run workflow-tools qa.unit-test.run
-          poetry run workflow-tools qa.unit-test.coverage
+        run: poetry run workflow-tools qa.unit-test.run
       # - name: Lint documentation
       #   run: |
       #     poetry run workflow doc.lint
