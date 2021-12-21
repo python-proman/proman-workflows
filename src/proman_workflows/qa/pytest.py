@@ -44,7 +44,7 @@ def run(
 @task
 def coverage(
     ctx,  # type: Context
-    project_dir,  # type: str
+    # project_dir,  # type: str
     coverage=True,  # type: bool
     coverage_on_fail=True,  # type: bool
     minimum=80,  # type: int
@@ -61,7 +61,7 @@ def coverage(
     if not coverage_on_fail:
         args.append('--no-cov-on-fail')
     else:
-        args.append(f"--cov={project_dir}")
+        # args.append(f"--cov={project_dir}")
         if configpath:
             args.append(f"--cov-config={configpath}")
         if minimum:
