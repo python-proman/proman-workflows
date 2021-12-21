@@ -28,6 +28,7 @@ pygit2 = "^1.6.1"
 PyInputPlus = "^0.2.12"
 keyring = "^23.2.1"
 SecretStorage = {version = "^3.3.1", platform = "linux"}
+"backports.cached-property" = {version = "^1.0.1", python = "~3.6 || ~3.7"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
