@@ -17,6 +17,7 @@ from proman_workflows import (
     docs,
     exception,
     init,
+    formatter,
     package,
     qa,
     sca,
@@ -88,9 +89,10 @@ workflow_namespace = Collection()
 # )
 workflow_namespace.add_collection(container.namespace, name='container')
 workflow_namespace.add_collection(docs.namespace, name='docs')
+workflow_namespace.add_collection(formatter.namespace, name='style')
 workflow_namespace.add_collection(package.namespace, name='dist')
 workflow_namespace.add_collection(qa.namespace, name='qa')
-workflow_namespace.add_collection(sca.namespace, name='sec')
+workflow_namespace.add_collection(sca.namespace, name='sca')
 workflow_namespace.add_collection(utils.namespace, name='utils')
 workflow_tools = Program(
     version=__version__,
