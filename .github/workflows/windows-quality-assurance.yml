@@ -36,5 +36,5 @@ jobs:
       #     poetry run workflow doc.test
       - name: Perform documentation tests
         run: |
-          poetry run workflow doc.coverage
-          poetry run workflow doc.site.build
+          poetry run workflow docs.coverage
+          poetry run workflow docs.site.build
