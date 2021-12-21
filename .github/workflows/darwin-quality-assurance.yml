@@ -24,8 +24,10 @@ jobs:
           poetry install
       - name: Lint
         run: |
-          poetry run workflow-tools qa.style --check
-          poetry run workflow-tools qa.lint
+          poetry run workflow-tools style.sort-headers.run --check
+          poetry run workflow-tools style.format.run --check
+          poetry run workflow-tools sca.lint.run
+          poetry run workflow-tools sca.type-checking.run
       - name: Perform tests
         run: |
           poetry run workflow-tools qa.unit-test.run
