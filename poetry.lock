@@ -156,6 +156,14 @@ requests = ">=2.22.0"
 toml = ">=0.10.0"
 
 [[package]]
+name = "cached-property"
+version = "1.5.2"
+description = "A decorator for caching properties in classes."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "certifi"
 version = "2021.10.8"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1441,7 +1449,7 @@ all = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "6a529730c1560f8cae19d6bc605adbd7dd7a2841a7d12700456b1ba8eac655d8"
+content-hash = "fb3b0061e632f1b87998df67c978f9d93379b88daadc8f649e524454af6cb515"
 
 [metadata.files]
 anytree = [
@@ -1487,6 +1495,10 @@ bleach = [
 briefcase = [
     {file = "briefcase-0.3.5-py2.py3-none-any.whl", hash = "sha256:03d44f1c9adbd026e64fab3fb367c40a209df081092e889d6188bafb8643bf42"},
     {file = "briefcase-0.3.5.tar.gz", hash = "sha256:0dfa55127d2e7fcb8fd83be39fd99d22f77c2e23afcfcd290a60066efe34f334"},
+]
+cached-property = [
+    {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
+    {file = "cached_property-1.5.2-py2.py3-none-any.whl", hash = "sha256:df4f613cf7ad9a588cc381aaf4a512d26265ecebd5eb9e1ba12f1319eb85a6a0"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
