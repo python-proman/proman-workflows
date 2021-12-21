@@ -16,8 +16,8 @@ from proman_workflows import (
     container,
     docs,
     exception,
-    init,
     formatter,
+    init,
     package,
     qa,
     sca,
@@ -66,27 +66,29 @@ def get_specfile(project_dir: str, specfiles: List[str]) -> Config:
 
 app_dirs = AppDirs(project_name='proman_workflows')
 project_dirs = ProjectDirs()
+docs_config = DocsConfig()
 specfile = get_specfile(
     project_dir=project_dirs.project_dir,
     specfiles=project_dirs.specfiles,
 )
 project_config = ProjectConfig(
-    docs=asdict(DocsConfig()),
+    docs=asdict(docs_config),
     specfile=specfile.data,
     # plugins=specfile.retrieve('.tool.proman.workflows.plugins') or [],
 )
 # pprint(asdict(project_config))
 
 workflow_namespace = Collection()
-# workflow_namespace.configure(
-#     {
-#         'dirs': asdict(dirs),
-#         'spec': specfile.data,
-#         'docs': asdict(docs_config),
-#         'working_dir': config.working_dir,
-#         'container_runtime': config.container_runtime,
-#     }
-# )
+workflow_namespace.configure(
+    {
+        'dirs': asdict(app_dirs),
+        'spec': specfile.data,
+        'docs': asdict(docs_config),
+        # 'working_dir': config.working_dir,
+        # 'container_runtime': config.container_runtime,
+        **asdict(project_dirs),
+    }
+)
 workflow_namespace.add_collection(container.namespace, name='container')
 workflow_namespace.add_collection(docs.namespace, name='docs')
 workflow_namespace.add_collection(formatter.namespace, name='style')

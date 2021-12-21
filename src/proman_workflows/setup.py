@@ -14,7 +14,7 @@ from invoke import Executor, task
 
 from proman_workflows import WorkflowProgram, __title__, __version__, config
 from proman_workflows.collection import Collection
-from proman_workflows.config import ProjectDirs, DocsConfig, WorkflowConfig
+from proman_workflows.config import DocsConfig, ProjectDirs, WorkflowConfig
 
 # TODO: switch to executor
 from proman_workflows.pki.gpg import ELYPTICAL_KEY_TYPES, KEY_TYPES

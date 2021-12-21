@@ -12,13 +12,7 @@ from typing import TYPE_CHECKING
 from invoke import Executor, task
 
 # TODO: switch to executor
-from proman_workflows import (
-    formatter,
-    package,
-    qa,
-    sca,
-    system,
-)
+from proman_workflows import formatter, package, qa, sca, system
 from proman_workflows.collection import Collection
 from proman_workflows.config import (  # Plugin,
     Job,
