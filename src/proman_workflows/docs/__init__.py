@@ -70,7 +70,7 @@ def coverage(
     path='.',  # type: str
 ):  # type: (...) -> None
     """Ensure all code is documented."""
-    args = []
+    args = [ctx.project_dir]
     if exclude:
         args.append(f"--exclude '{exclude}'")
     if skipmagic:
