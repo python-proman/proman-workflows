@@ -63,7 +63,7 @@ def coverage(
     skip_private=False,  # type: bool
     followlinks=False,  # type: bool
     docstr_ignore_file=None,  # type: Optional[str]
-    failunder=None,  # type: Optional[str]
+    failunder=90,  # type: int
     badge=None,  # type: Optional[str]
     percentage_only=False,  # type: bool
     verbose=None,  # type: Optional[int]
