@@ -29,7 +29,7 @@ jobs:
           poetry run workflow-tools sca.lint.run
           poetry run workflow-tools sca.type-checking.run
       - name: Perform tests
-        run: poetry run workflow-tools qa.unit-tests.run
+        run: poetry run workflow-tools qa.unit-test.run
       - name: Perform security checks
         run: |
           poetry run workflow-tools sec.sast.run
