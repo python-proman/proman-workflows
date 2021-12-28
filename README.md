@@ -15,7 +15,7 @@ the Software Development Lifecycle (SDLC) without burdening developers.
 The objectives for achieving this goal are:
 - Enforce use of commit signing
 - Introduce QA tools early in development
-- SAST scanning
+- SAST, SCA, and DAST integration
 - Encapulate processes for seamless integration with CI/CD systems
 - Make TUF compliant packages for PyPI
 
