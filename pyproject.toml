@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "proman-workflows"
-version = "0.1.0a4"
+version = "0.1.0a5"
 description = "Task-runner to automate projects."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
 license = "MPL-2.0"
