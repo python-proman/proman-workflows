@@ -78,7 +78,7 @@ setuptools = "proman_workflows.package.setuptools:namespace"
 twine = "proman_workflows.package.twine:namespace"
 
 [tool.poetry.plugins."proman.workflows.executable"]
-briefcase = "proman_workflows.executable.briefcase:namespace"
+# briefcase = "proman_workflows.executable.briefcase:namespace"
 # pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
 
 [tool.poetry.plugins."proman.workflows.formatter"]
