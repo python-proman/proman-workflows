@@ -45,9 +45,9 @@ tox = "^3.24.0"
 python-gilt = "^1.2.3"
 twine = "^3.5.0"
 mypy = "^0.910"
-proman-versioning = {version = "^0.1.1-alpha.3", allow-prereleases = true}
 pydocstyle = {extras = ["toml"], version = "^6.1.1"}
 importlib-metadata = {version = "~3.10", python = "~3.6"}
+proman-versioning = "^0.5.0-alpha.1"
 
 [tool.poetry.extras]
 briefcase = ["briefcase"]

@@ -492,6 +492,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "mdutils"
+version = "1.3.1"
+description = "Useful package for creating Markdown files while executing python code."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "mergedeep"
 version = "1.3.4"
 description = "A deep merge function for 🐍."
@@ -690,7 +698,7 @@ kde = ["dbus-python (>=1.2.16,<2.0.0)"]
 
 [[package]]
 name = "proman-versioning"
-version = "0.1.1b5"
+version = "0.5.0a1"
 description = "Project Manager Versioning tool."
 category = "dev"
 optional = false
@@ -699,9 +707,9 @@ python-versions = ">=3.6.2,<4.0.0"
 [package.dependencies]
 argufy = ">=0.1.1-alpha.12,<0.2.0"
 cffi = ">=1.15.0,<2.0.0"
-compendium = ">=0.1.1-alpha.2,<0.2.0"
-jinja2 = ">=2.11.2,<3.0.0"
+compendium = ">=0.1.1-beta.0,<0.2.0"
 lark-parser = ">=0.10.0,<0.11.0"
+mdutils = ">=1.3.1,<2.0.0"
 packaging = ">=21.3,<22.0"
 pygit2 = ">=1.6.1,<2.0.0"
 transitions = ">=0.8.4,<0.9.0"
@@ -1158,7 +1166,7 @@ telegram = ["requests"]
 
 [[package]]
 name = "transitions"
-version = "0.8.10"
+version = "0.8.11"
 description = "A lightweight, object-oriented Python state machine implementation with many extensions."
 category = "dev"
 optional = false
@@ -1304,7 +1312,7 @@ briefcase = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "f671b364dd57d3d542f32136e8cb3164d1615b9d55555d55d08ead3e701659fe"
+content-hash = "a2582982bf74e657809033a1d9100ab8141d812f6014abdc3a00b7aaa6eb176e"
 
 [metadata.files]
 anytree = [
@@ -1644,6 +1652,9 @@ mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
+mdutils = [
+    {file = "mdutils-1.3.1.tar.gz", hash = "sha256:b0695cf04654ae172f1f8c03ca0e55177c8fc7087160f0a907d0cedf3935d952"},
+]
 mergedeep = [
     {file = "mergedeep-1.3.4-py3-none-any.whl", hash = "sha256:70775750742b25c0d8f36c55aed03d24c3384d17c951b3175d898bd778ef0307"},
     {file = "mergedeep-1.3.4.tar.gz", hash = "sha256:0096d52e9dad9939c3d975a774666af186eda617e6ca84df4c94dec30004f2a8"},
@@ -1730,8 +1741,8 @@ proman-common = [
     {file = "proman_common-0.1.1a2.tar.gz", hash = "sha256:ff121a74a8cac3c9d3e98979b6e1a0ca66467cfd39a76d33e8833efa22f6bade"},
 ]
 proman-versioning = [
-    {file = "proman-versioning-0.1.1b5.tar.gz", hash = "sha256:fd3a62882fe35eed3b7965ce47467264baa6577b5d982adae4939b3a612d30d9"},
-    {file = "proman_versioning-0.1.1b5-py3-none-any.whl", hash = "sha256:6b92e20c4ec6203260c5f967f3a39a6772f42a34fbc40fb412d71e0226ce83a4"},
+    {file = "proman-versioning-0.5.0a1.tar.gz", hash = "sha256:71f4c1558f631da953decfe2a85d9f9525807db926c49b256d367167983f4098"},
+    {file = "proman_versioning-0.5.0a1-py3-none-any.whl", hash = "sha256:2bbb0cc5ba6e2e3f6618b39dff8a8229476165538a1c840c1d1d27d154e300d6"},
 ]
 py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
@@ -1972,8 +1983,8 @@ tqdm = [
     {file = "tqdm-4.62.3.tar.gz", hash = "sha256:d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d"},
 ]
 transitions = [
-    {file = "transitions-0.8.10-py2.py3-none-any.whl", hash = "sha256:2e9de3c453fafe3a8afef2c2bdc47e30a7a73e32d88f793ad4c1b6246f0cc364"},
-    {file = "transitions-0.8.10.tar.gz", hash = "sha256:b0385975a842e885c1a55c719d2f90164471665794d39d51f9eb3f11e1d9c8ac"},
+    {file = "transitions-0.8.11-py2.py3-none-any.whl", hash = "sha256:9525dd9b708b0a54bb4562a06a483d237e75c94547ba9831c81c6872d0ea1522"},
+    {file = "transitions-0.8.11.tar.gz", hash = "sha256:7b20d32906ea4d60ee6f6c1f5dc9c9f178802425c5b155213eb0f25c277f04e4"},
 ]
 twine = [
     {file = "twine-3.7.1-py3-none-any.whl", hash = "sha256:8c120845fc05270f9ee3e9d7ebbed29ea840e41f48cd059e04733f7e1d401345"},
