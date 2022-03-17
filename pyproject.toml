@@ -31,7 +31,6 @@ cached-property = {version = "^1.5.2", python = "~3.7"}
 black = "^21.7b0"
 docstr-coverage = "^1.2.0"
 flake8 = "^3.8.3"
-pytest = "^5.2"
 pytest-cov = "^2.10.0"
 isort = "^5.9.2"
 bandit = "^1.6.2"
@@ -48,6 +47,7 @@ mypy = "^0.910"
 pydocstyle = {extras = ["toml"], version = "^6.1.1"}
 importlib-metadata = {version = "~3.10", python = "~3.6"}
 proman-versioning = "^0.5.0-alpha.1"
+pytest = "^7.1.0"
 
 [tool.poetry.extras]
 briefcase = ["briefcase"]
