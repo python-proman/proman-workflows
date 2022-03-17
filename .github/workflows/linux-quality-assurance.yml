@@ -34,9 +34,9 @@ jobs:
       #   run: |
       #     poetry run workflow-tools sec.sast.run
       #     poetry run workflow-tools sec.dependency-scan.run
-      - name: Lint documentation
-        run: |
-          poetry run workflow-tools docs.style
-          poetry run workflow-tools docs.coverage
-      - name: Perform documentation build
-        run: poetry run workflow-tools docs.site.build
+      # - name: Lint documentation
+      #   run: |
+      #     poetry run workflow-tools docs.style
+      #     poetry run workflow-tools docs.coverage
+      # - name: Perform documentation build
+      #   run: poetry run workflow-tools docs.site.build
