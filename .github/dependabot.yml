@@ -1,0 +1,10 @@
+---
+version: 2
+updates:
+  - package-ecosystem: pipenv
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - pipenv dependencies
+      - triage-board

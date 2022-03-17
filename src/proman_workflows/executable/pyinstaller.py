@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Publish packages using Poetry."""
+"""Manage all-in-one executable builds with PyInstaller."""
 
 from typing import TYPE_CHECKING, Optional
 

@@ -16,14 +16,11 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-jinja2 = "^2.11.2"
 invoke = "^1.5.0"
 compendium = "^0.1.1-alpha.0"
 python-gnupg = "^0.4.7"
 proman-common = "^0.1.1-alpha.1"
-editables = "^0.2"
 stevedore = "^3.4.0"
-briefcase = "^0.3.5"
 PyInputPlus = "^0.2.12"
 keyring = "^23.2.1"
 SecretStorage = {version = "^3.3.1", platform = "linux"}
@@ -53,6 +50,7 @@ pydocstyle = {extras = ["toml"], version = "^6.1.1"}
 importlib-metadata = {version = "~3.10", python = "~3.6"}
 
 [tool.poetry.extras]
+briefcase = ["briefcase"]
 all = [
   "black",
   "flake8",
@@ -123,22 +121,6 @@ workflow = "proman_workflows:workflow.run"
 # mock command
 # check = "proman_workflows.check:workflow.run"
 
-# TODO: deprecate flit
-# [tool.flit.metadata]
-# module = "proman.workflows"
-# author = "Jesse P. Johnson"
-# author-email = "jpj6652@gmail.com"
-# home-page = "https://github.com/python-protools/proman-workflows"
-# requires = ["compendium", "invoke", "keyring", "jinja2", "proman-common", "stevedore"]
-# classifiers = ["License :: OSI Approved :: Apache Software License"]
-#
-# [tool.flit.entrypoints."proman.precommit.validate"]
-# conventional_commits = "workflows:precommit"
-#
-# [tool.flit.scripts]
-# project = "workflows:project.run"
-# workflow = "workflows:workflow.run"
-
 # [tool.proman.workflows.drivers.unit_tests]
 # name = "sort-headers"
 # driver_name = "isort"
@@ -207,7 +189,3 @@ ignore_missing_imports = true
 [build-system]
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-# requires = ["flit_core>=2,<4"]
-# build-backend = "flit_core.buildapi"
-# requires = ['setuptools>=40.8.0', 'wheel']
-# build-backend = 'setuptools.build_meta'
