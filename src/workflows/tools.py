@@ -9,23 +9,21 @@ from pprint import pprint  # noqa
 from typing import List
 
 from invoke import Program
-from proman_common.config import Config
-from proman_common.filepaths import AppDirs
+from common.config import Config
+from common.filepaths import AppDirs
 
-from proman_workflows import (
+from workflows import (
     container,
     docs,
     exception,
-    formatter,
-    init,
     package,
     qa,
     sca,
     stlc,
     utils,
 )
-from proman_workflows.collection import Collection
-from proman_workflows.config import (  # WorkflowConfig,
+from workflows.collection import Collection
+from workflows.config import (  # WorkflowConfig,
     DocsConfig,
     ProjectConfig,
     ProjectDirs,
@@ -33,11 +31,12 @@ from proman_workflows.config import (  # WorkflowConfig,
 
 __author__ = 'Jesse P. Johnson'
 __author_email__ = 'jpj6652@gmail.com'
-__title__ = 'proman_workflows'
+__title__ = 'workflows'
 __description__ = 'Convenience module to manage project tools with Python.'
-__version__ = '0.1.0a7'
+__version__ = '0.1.0a3'
 __license__ = 'MPL-2.0'
 __copyright__ = 'Copyright 2021 Jesse Johnson.'
+__all__ = ['workflow', 'workflow_tools']
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -64,34 +63,31 @@ def get_specfile(project_dir: str, specfiles: List[str]) -> Config:
     raise exception.PromanWorkflowException('no configuration found')
 
 
-app_dirs = AppDirs(project_name='proman_workflows')
+app_dirs = AppDirs(project_name='workflows')
 project_dirs = ProjectDirs()
-docs_config = DocsConfig()
 specfile = get_specfile(
     project_dir=project_dirs.project_dir,
     specfiles=project_dirs.specfiles,
 )
 project_config = ProjectConfig(
-    docs=asdict(docs_config),
+    docs=asdict(DocsConfig()),
     specfile=specfile.data,
     # plugins=specfile.retrieve('.tool.proman.workflows.plugins') or [],
 )
 # pprint(asdict(project_config))
 
 workflow_namespace = Collection()
-workflow_namespace.configure(
-    {
-        'dirs': asdict(app_dirs),
-        'spec': specfile.data,
-        'docs': asdict(docs_config),
-        # 'working_dir': config.working_dir,
-        # 'container_runtime': config.container_runtime,
-        **asdict(project_dirs),
-    }
-)
+# workflow_namespace.configure(
+#     {
+#         'dirs': asdict(dirs),
+#         'spec': specfile.data,
+#         'docs': asdict(docs_config),
+#         'working_dir': config.working_dir,
+#         'container_runtime': config.container_runtime,
+#     }
+# )
 workflow_namespace.add_collection(container.namespace, name='container')
 workflow_namespace.add_collection(docs.namespace, name='docs')
-workflow_namespace.add_collection(formatter.namespace, name='style')
 workflow_namespace.add_collection(package.namespace, name='dist')
 workflow_namespace.add_collection(qa.namespace, name='qa')
 workflow_namespace.add_collection(sca.namespace, name='sca')
@@ -113,7 +109,7 @@ workflow_namespace.configure(
     }
 )
 # workflow_namespace.load_collections(plugins=asdict(project_config)['plugins'])
-workflow_namespace.add_collection(init.namespace, name='init')
+# workflow_namespace.add_collection(init.namespace, name='init')
 workflow = WorkflowProgram(
     name=__title__,
     namespace=workflow_namespace,
@@ -122,5 +118,3 @@ workflow = WorkflowProgram(
     # config_class=WorkflowConfig,
     version=__version__,
 )
-
-__all__ = ['workflow', 'tools']

@@ -24,8 +24,8 @@ namespace = Collection(
                 'driver_name': 'mypy',
                 'driver_namespace': 'proman.workflows.sca',
             },
-            # bandit = "proman_workflows.sca.security.bandit:namespace"
-            # safety = "proman_workflows.sca.security.safety:namespace"
+            # bandit = "workflows.sca.security.bandit:namespace"
+            # safety = "workflows.sca.security.safety:namespace"
         ]
     }
 )

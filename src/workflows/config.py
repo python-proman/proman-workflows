@@ -39,7 +39,7 @@ class WorkflowConfig(InvokeConfig):
     #                 'driver_namespace': 'proman.workflows.package',
     #             },
     #             # [tool.poetry.plugins."proman.workflows.vcs"]
-    #             # git = "proman_workflows.git:namespace"
+    #             # git = "workflows.git:namespace"
     #             {
     #                 'name': 'vcs',
     #                 'driver_name': 'git',
@@ -81,6 +81,7 @@ class ProjectDirs:
 
     working_dir: str = os.getcwd()
     python_path: str = sys.executable
+    # TODO: should trigger setup when None
     repo_dir: str = discover_repository(os.getcwd())
     base_dir: str = os.path.abspath(os.path.join(repo_dir, os.pardir))
     project_dir: str = field(init=False)
@@ -207,7 +208,7 @@ class Container:
 
 @dataclass
 class Plugin:
-    """Provide proman_workflows plugin."""
+    """Provide workflows plugin."""
 
     name: str
     driver_name: str
@@ -216,7 +217,7 @@ class Plugin:
 
 @dataclass
 class Job:
-    """Provide proman_workflows plugin."""
+    """Provide workflows plugin."""
 
     command: str
     args: Dict[str, Any] = field(default_factory=dict, repr=False)
@@ -224,7 +225,7 @@ class Job:
 
 @dataclass
 class Phase:
-    """Provide proman_workflows plugin."""
+    """Provide workflows plugin."""
 
     name: str
     plugins: Optional[List[str]] = field(default=None)

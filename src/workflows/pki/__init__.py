@@ -5,7 +5,7 @@
 
 import logging
 
-from proman_workflows.collection import Collection
+from workflows.collection import Collection
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 

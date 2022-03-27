@@ -3,6 +3,6 @@
 # license: MPL-2.0, see LICENSE for more details.
 """Provide CLI management."""
 
-from proman_workflows import workflow
+from workflows import workflow
 
 workflow.run()

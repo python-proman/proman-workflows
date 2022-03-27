@@ -1,5 +1,5 @@
 """Add version tests."""
-from proman_workflows import __version__
+from workflows import __version__
 
 
 def test_version() -> None:

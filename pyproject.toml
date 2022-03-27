@@ -11,7 +11,7 @@ keywords = ["package management"]
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
 packages = [
-    {include = "proman_workflows", from = "src"},
+    {include = "workflows", from = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -65,49 +65,49 @@ all = [
 ]
 
 [tool.poetry.plugins."proman.workflows.pki"]
-gpg = "proman_workflows.pki.gpg:namespace"
-tls = "proman_workflows.pki.tls:namespace"
+gpg = "workflows.pki.gpg:namespace"
+tls = "workflows.pki.tls:namespace"
 
 [tool.poetry.plugins."proman.workflows.vcs"]
-git = "proman_workflows.git:namespace"
+git = "workflows.git:namespace"
 
 [tool.poetry.plugins."proman.workflows.package"]
-flit = "proman_workflows.package.flit:namespace"
-poetry = "proman_workflows.package.poetry:namespace"
-setuptools = "proman_workflows.package.setuptools:namespace"
-twine = "proman_workflows.package.twine:namespace"
+flit = "workflows.package.flit:namespace"
+poetry = "workflows.package.poetry:namespace"
+setuptools = "workflows.package.setuptools:namespace"
+twine = "workflows.package.twine:namespace"
 
 [tool.poetry.plugins."proman.workflows.executable"]
-# briefcase = "proman_workflows.executable.briefcase:namespace"
-# pyinstaller = "proman_workflows.executable.pyinstaller:namespace"
+# briefcase = "workflows.executable.briefcase:namespace"
+# pyinstaller = "workflows.executable.pyinstaller:namespace"
 
 [tool.poetry.plugins."proman.workflows.formatter"]
-autopep8 = "proman_workflows.formatter.autopep8:namespace"
-black = "proman_workflows.formatter.black:namespace"
-isort = "proman_workflows.formatter.isort:namespace"
+autopep8 = "workflows.formatter.autopep8:namespace"
+black = "workflows.formatter.black:namespace"
+isort = "workflows.formatter.isort:namespace"
 
 [tool.poetry.plugins."proman.workflows.sca"]
-flake8 = "proman_workflows.sca.flake8:namespace"
-mypy = "proman_workflows.sca.mypy:namespace"
-bandit = "proman_workflows.sca.security.bandit:namespace"
-safety = "proman_workflows.sca.security.safety:namespace"
+flake8 = "workflows.sca.flake8:namespace"
+mypy = "workflows.sca.mypy:namespace"
+bandit = "workflows.sca.security.bandit:namespace"
+safety = "workflows.sca.security.safety:namespace"
 
 [tool.poetry.plugins."proman.workflows.qa"]
-pytest = "proman_workflows.qa.pytest:namespace"
-behave = "proman_workflows.qa.behave:namespace"
+pytest = "workflows.qa.pytest:namespace"
+behave = "workflows.qa.behave:namespace"
 
 [tool.poetry.plugins."proman.workflows.system"]
-test-infra = "proman_workflows.system.test_infra:namespace"
+test-infra = "workflows.system.test_infra:namespace"
 
 # [tool.poetry.plugins."proman.workflows.coverage"]
-# pytest = "proman_workflows.qa.pytest:namespace"
+# pytest = "workflows.qa.pytest:namespace"
 
 [tool.poetry.plugins."proman.workflows.container.compose"]
-docker_compose = "proman_workflows.container.docker:namespace"
-podman_compose = "proman_workflows.container.podman:namespace"
+docker_compose = "workflows.container.docker:namespace"
+podman_compose = "workflows.container.podman:namespace"
 
 [tool.poetry.plugins."proman.workflows.docs"]
-mkdocs = "proman_workflows.docs.mkdocs:namespace"
+mkdocs = "workflows.docs.mkdocs:namespace"
 
 # mock cli namespace
 [tool.poetry.plugins."proman.workflows.mock"]
@@ -115,11 +115,11 @@ original = "mock_workflow.mock.original:namespace"
 update = "mock_workflow.mock.update:namespace"
 
 [tool.poetry.scripts]
-workflow-tools = "proman_workflows:workflow_tools.run"
-workflow-setup = "proman_workflows.setup:setup.run"
-workflow = "proman_workflows:workflow.run"
+workflow-tools = "workflows:workflow_tools.run"
+workflow-setup = "workflows.setup:setup.run"
+workflow = "workflows:workflow.run"
 # mock command
-# check = "proman_workflows.check:workflow.run"
+# check = "workflows.check:workflow.run"
 
 # [tool.proman.workflows.drivers.unit_tests]
 # name = "sort-headers"
@@ -146,7 +146,7 @@ filepath = "pyproject.toml"
 pattern = "version = \"${version}\""
 
 [[tool.proman.versioning.files]]
-filepath = "src/proman_workflows/__init__.py"
+filepath = "src/workflows/__init__.py"
 pattern = "__version__ = '${version}'"
 
 [[tool.proman.versioning.files]]

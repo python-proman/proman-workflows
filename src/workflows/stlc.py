@@ -12,9 +12,9 @@ from typing import TYPE_CHECKING
 from invoke import Executor, task
 
 # TODO: switch to executor
-from proman_workflows import formatter, package, qa, sca, system
-from proman_workflows.collection import Collection
-from proman_workflows.config import (  # Plugin,
+from workflows import formatter, package, qa, sca, system
+from workflows.collection import Collection
+from workflows.config import (  # Plugin,
     Job,
     Phase,
     ProjectConfig,
@@ -123,7 +123,7 @@ project_config = ProjectConfig(
     #     Plugin(
     #         name='poetry',
     #         driver_name='package',
-    #         driver_namespace='proman_workflows.package.poetry',
+    #         driver_namespace='workflows.package.poetry',
     #     ),
     #     Plugin(
     #         name='vcs',
