@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # copyright: (c) 2020 by Jesse Johnson.
 # license: Apache 2.0, see LICENSE for more details.
 """Build packages using flit."""
@@ -11,6 +10,7 @@ if TYPE_CHECKING:
     from invoke import Context
 
 
+# XXX: use build instead
 @task
 def build(
     ctx, kind=None, no_setup_py=True

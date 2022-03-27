@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Manage all-in-one executable builds with PyInstaller."""
 
 from typing import TYPE_CHECKING, Optional

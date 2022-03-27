@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Publish packages using Poetry."""
 
 from typing import TYPE_CHECKING, Optional
@@ -9,6 +8,7 @@ if TYPE_CHECKING:
     from invoke import Context
 
 
+# XXX: use build instead
 @task
 def build(ctx, kind=None):  # type: (Context, Optional[bool]) -> None
     """Build wheel package."""

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Publish executable using briefcase."""
 
 from typing import TYPE_CHECKING, Optional
