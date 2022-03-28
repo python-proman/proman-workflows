@@ -8,9 +8,12 @@ on:
 jobs:
   sca:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up Python 3.10"
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
     steps:
       - uses: actions/checkout@v2
       - name: "Set up Python ${{ matrix.python-version }}"
@@ -28,31 +31,11 @@ jobs:
           poetry run workflow-tools style.format.run --check
           poetry run workflow-tools sca.lint.run
           poetry run workflow-tools sca.type-checking.run
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
-    steps:
-      - uses: actions/checkout@v2
-      - name: "Set up Python ${{ matrix.python-version }}"
-        uses: actions/setup-python@v2
-        with:
-          python-version: "${{ matrix.python-version }}"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install poetry
-          poetry install
       # - name: Perform security checks
       #   run: |
       #     poetry run workflow-tools sec.sast.run
       #     poetry run workflow-tools sec.dependency-scan.run
-      - name: Perform build
-        run: poetry run workflow-tools dist.package.build
-      - name: Perform publish
-        run: poetry run workflow-tools dist.package.publish
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -64,8 +47,31 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install poetry
-      - name: Install package fro test-pypi
-        run: python3 -m pip install --index-url https://test.pypi.org/simple/
-      # - name: Perform tests
-      #   run: poetry run workflow-tools qa.unit-test.run
+          poetry install
+      - name: Perform build
+        run: poetry run workflow-tools dist.package.build
+      - name: Perform publish
+        run: |
+          poetry config repositories.test-pypi https://test.pypi.org/legacy/
+          poetry config pypi-tokey.test-pypi "$TESTPYPI_TOKEN"
+          poetry run workflow-tools dist.package.publish
+  # test:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: ['3.7', '3.8', '3.9', '3.10']
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: "Set up Python 3.10"
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.10
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         python -m pip install poetry
+  #     - name: Install package fro test-pypi
+  #       run: python3 -m pip install --index-url https://test.pypi.org/simple/
+  #     # - name: Perform tests
+  #     #   run: poetry run workflow-tools qa.unit-test.run
 
