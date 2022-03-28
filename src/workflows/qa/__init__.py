@@ -17,11 +17,6 @@ namespace = Collection(
                 'driver_name': 'pytest',
                 'driver_namespace': 'proman.workflows.qa',
             },
-            {
-                'name': 'acceptance-test',
-                'driver_name': 'behave',
-                'driver_namespace': 'proman.workflows.qa',
-            },
         ]
     }
 )

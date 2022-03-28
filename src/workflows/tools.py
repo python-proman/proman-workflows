@@ -1,5 +1,5 @@
 # copyright: (c) 2021 by Jesse Johnson.
-# license: MPL-2.0, see LICENSE for more details.
+# license: Apache-2.0, see LICENSE for more details.
 """Provide convenience tool to manage projects with Python."""
 
 import logging
