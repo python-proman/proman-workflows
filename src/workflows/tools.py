@@ -8,20 +8,11 @@ from dataclasses import asdict
 from pprint import pprint  # noqa
 from typing import List
 
-from invoke import Program
 from common.config import Config
 from common.filepaths import AppDirs
+from invoke import Program
 
-from workflows import (
-    container,
-    docs,
-    exception,
-    package,
-    qa,
-    sca,
-    stlc,
-    utils,
-)
+from workflows import container, docs, exception, package, qa, sca, stlc, utils
 from workflows.collection import Collection
 from workflows.config import (  # WorkflowConfig,
     DocsConfig,

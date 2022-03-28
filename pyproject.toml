@@ -26,7 +26,6 @@ keyring = "^23.2.1"
 SecretStorage = {version = "^3.3.1", platform = "linux"}
 pygit2 = "^1.7"
 cached-property = {version = "^1.5.2", python = "~3.7"}
-igraph = "^0.9.9"
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
