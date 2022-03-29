@@ -51,11 +51,7 @@ def static_analysis(ctx):  # type: (Context) -> None
         pprint(ctx.plugins)
     else:
         pprint(ctx.config.__dict__)
-    print('task names', sca.namespace.task_names)
-    # Executor(
-    #     sca.namespace,
-    #     config=WorkflowConfig(ctx.config)
-    # ).execute('package.publish')
+    # print('task names', sca.namespace.task_names)
     execute(ctx, collection=sca.namespace, task_name='static-analysis')
 
 
@@ -81,7 +77,7 @@ def build(ctx):  # type: (Context) -> None
 @task
 def unit_test(ctx):  # type: (Context) -> None
     """Perform unit-testing."""
-    print(qa.namespace.task_names)
+    # print(qa.namespace.task_names)
     # pprint(ctx.config.__dict__['_defaults']['plugins'])
     ctx.project_dir = os.path.join(os.getcwd(), 'tests')
     execute(ctx, collection=qa.namespace, task_name='unit-test')
@@ -90,7 +86,7 @@ def unit_test(ctx):  # type: (Context) -> None
 @task
 def integration_test(ctx):  # type: (Context) -> None
     """Perform integration testing."""
-    print(qa.namespace.task_names)
+    # print(qa.namespace.task_names)
     ctx.project_dir = os.path.join(os.getcwd(), 'integration')
     execute(ctx, collection=qa.namespace, task_name='integration-test')
 
@@ -98,7 +94,7 @@ def integration_test(ctx):  # type: (Context) -> None
 @task
 def system_test(ctx):  # type: (Context) -> None
     """Perform system testing."""
-    print(system.namespace.task_names)
+    # print(system.namespace.task_names)
     execute(ctx, collection=system.namespace, task_name='system-test')
 
 
@@ -111,7 +107,7 @@ def acceptance_test(ctx):  # type: (Context) -> None
 @task
 def publish(ctx):  # type: (Context) -> None
     """Publish package."""
-    print(package.namespace.task_names)
+    # print(package.namespace.task_names)
     Executor(
         package.namespace,
         config=WorkflowConfig(ctx.config),

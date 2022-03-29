@@ -47,9 +47,8 @@ jobs:
       - name: Perform publish
         run: |
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
-          echo "${{ secrets.TESTPYPI_TOKEN }}"
           poetry config pypi-token.test-pypi "${{ secrets.TESTPYPI_TOKEN }}"
-          poetry run workflow-tools dist.package.publish
+          poetry run workflow-tools --echo dist.package.publish
   # test:
   #   runs-on: ubuntu-latest
   #   strategy:
