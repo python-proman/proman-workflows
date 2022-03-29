@@ -46,9 +46,9 @@ jobs:
         run: poetry run workflow-tools dist.package.build
       - name: Perform publish
         run: |
-          poetry run workflow-tools --echo dist.package.publish \
-            --repository-url=https://test.pypi.org/legacy/ \
-            --password=${{ secrets.TESTPYPI_TOKEN }}
+          poetry config repositories.test-pypi "https://test.pypi.org/legacy/"
+          poetry config pypi-token.test-pypi "${{ secrets.TESTPYPI_TOKEN }}"
+          poetry run workflow-tools --echo dist.package.publish
   # test:
   #   runs-on: ubuntu-latest
   #   strategy:
