@@ -21,9 +21,9 @@ jobs:
           poetry install
       - name: Bump version
         run: |
-          version info
-          version bump --commit
-          version info
+          poetry run version info
+          poetry run version bump --commit
+          poetry run version info
   sca:
     runs-on: ubuntu-latest
     steps:
