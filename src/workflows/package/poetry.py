@@ -42,7 +42,7 @@ def install(
 @task
 def publish(
     ctx,  # type: Context
-    repository_url=None,  # type: Optional[str]
+    repository=None,  # type: Optional[str]
     username=None,  # type: Optional[str]
     password=None,  # type: Optional[str]
     cert_path=None,  # type: Optional[str]
@@ -51,8 +51,8 @@ def publish(
     """Publish package to a PyPI repository."""
     args = ['--no-interaction']
     # TODO: check if credentials exist run setup otherwise
-    if repository_url:
-        args.append(f"--repository={repository_url}")
+    if repository:
+        args.append(f"--repository={repository}")
     if username:
         args.append(f"--username={username}")
         if password:
