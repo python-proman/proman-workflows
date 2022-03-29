@@ -48,7 +48,7 @@ jobs:
         run: |
           poetry config repositories.test-pypi "https://test.pypi.org/legacy/"
           poetry config pypi-token.test-pypi "${{ secrets.TESTPYPI_TOKEN }}"
-          poetry run workflow-tools --echo dist.package.publish
+          poetry run workflow-tools dist.package.publish --repository test-pypi
   # test:
   #   runs-on: ubuntu-latest
   #   strategy:
