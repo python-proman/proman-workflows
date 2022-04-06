@@ -1,5 +1,5 @@
 # copyright: (c) 2021 by Jesse Johnson.
-# license: Apache-2.0, see LICENSE for more details.
+# license: AGPL-3.0-or-later, see LICENSE for more details.
 """Provide convenience tool to manage projects with Python."""
 
 import logging
@@ -12,22 +12,24 @@ from common.config import Config
 from common.filepaths import AppDirs
 from invoke import Program
 
-from workflows import container, docs, exception, package, qa, sca, stlc, utils
+from workflows import (
+    __version__,
+    __title__,
+    container,
+    docs,
+    exception,
+    package,
+    qa,
+    sca,
+    stlc,
+    utils
+)
 from workflows.collection import Collection
 from workflows.config import (  # WorkflowConfig,
     DocsConfig,
     ProjectConfig,
     ProjectDirs,
 )
-
-__author__ = 'Jesse P. Johnson'
-__author_email__ = 'jpj6652@gmail.com'
-__title__ = 'workflows'
-__description__ = 'Convenience module to manage project tools with Python.'
-__version__ = '0.1.0a3'
-__license__ = 'MPL-2.0'
-__copyright__ = 'Copyright 2021 Jesse Johnson.'
-__all__ = ['workflow', 'workflow_tools']
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 

@@ -1,5 +1,5 @@
 # copyright: (c) 2021 by Jesse Johnson.
-# license: MPL-2.0, see LICENSE for more details.
+# license: AGPL-3.0-or-later, see LICENSE for more details.
 """Provide convenience tool to manage projects with Python."""
 
 import logging
@@ -36,7 +36,7 @@ __author_email__ = 'jpj6652@gmail.com'
 __title__ = 'workflows'
 __description__ = 'Convenience module to manage project tools with Python.'
 __version__ = '0.1.0a7'
-__license__ = 'MPL-2.0'
+__license__ = 'AGPL-3.0-or-later'
 __copyright__ = 'Copyright 2021 Jesse Johnson.'
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

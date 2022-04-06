@@ -1,15 +1,24 @@
 [tool.poetry]
 name = "proman-workflows"
 version = "0.1.0a7"
-description = "Task-runner to automate projects."
+description = "Task-runner for project automation."
 authors = ["Jesse P. Johnson <jpj6652@gmail.com>"]
-license = "MPL-2.0"
+license = "AGPL-3.0-or-later"
 readme = "README.md"
 homepage = "https://github.com/python-protools/proman-workflows"
 # documentation = "https://python-protools.github.io/proman-workflows"
-keywords = ["package management"]
-classifiers = ["License :: OSI Approved :: Apache Software License"]
-include = ["proman.workflows/_vendor/gitignore", "proman.workflows/templates"]
+keywords = ["project management"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+include = ["workflows/_vendor/gitignore", "workflows/templates"]
 packages = [
     {include = "workflows", from = "src"},
 ]
