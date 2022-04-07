@@ -28,6 +28,7 @@ jobs:
           poetry run version info
           poetry run version bump --commit
           poetry run version info
+          git push origin master
   sca:
     runs-on: ubuntu-latest
     steps:
