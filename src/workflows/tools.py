@@ -13,8 +13,8 @@ from common.filepaths import AppDirs
 from invoke import Program
 
 from workflows import (
-    __version__,
     __title__,
+    __version__,
     container,
     docs,
     exception,
@@ -22,7 +22,7 @@ from workflows import (
     qa,
     sca,
     stlc,
-    utils
+    utils,
 )
 from workflows.collection import Collection
 from workflows.config import (  # WorkflowConfig,
