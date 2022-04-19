@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 #     current_path = os.path.abspath(path)
 #     for _ in path.split(os.sep):
 #         yield current_path
-#         current_path = os.path.abspath(os.path.join(current_path, '..'))
+#         current_path = os.path.abspath(os.path.join(current_path, os.pardir))
 
 
 @task
