@@ -14,6 +14,7 @@ from stevedore.driver import DriverManager
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
+# TODO: Create statemachine integration based on data model and needs
 class Collection(InvokeCollection):
     """Provide Invoke integration with Stevedore."""
 
@@ -62,20 +63,14 @@ class Collection(InvokeCollection):
         return collection
 
     def load_collection(
-        self,
-        name: str,
-        default: Optional[str] = None,
-        **kwargs: Any,
+        self, name: str, default: Optional[str] = None, **kwargs: Any
     ) -> None:
         """Add collection from entrypoint."""
         driver_manager = self._get_driver(name=name, **kwargs)
-        self.add_collection(
-            driver_manager.driver,
-            name=name,
-            default=default,
-        )
+        self.add_collection(driver_manager.driver, name=name, default=default)
 
     def load_collections(self, plugins: List[Dict[str, Any]] = []) -> None:
         """Load collections from configuration."""
+        # TODO: move to program reimplementation
         for plugin in plugins or self._configuration['plugins']:
             self.load_collection(**plugin)
