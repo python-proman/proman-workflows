@@ -72,4 +72,4 @@ A: While this project is inspired by Invocations, it does not support a pluggabl
 ## Refereces
 
 - https://theupdateframework.io/
-- https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.04232020.pdf
+- https://csrc.nist.gov/Projects/ssdf

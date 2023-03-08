@@ -1,6 +1,6 @@
 """Publish packages using Poetry."""
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from invoke import Collection, task
 
@@ -8,7 +8,23 @@ if TYPE_CHECKING:
     from invoke import Context
 
 
-# XXX: use build instead
+@task
+def requirements(
+    ctx,  # type: Context
+    output='requirements.txt',  # type: str
+    dev=False,  # type: bool
+    extras=None,  # type: Optional[List[str]]
+):  # type: (...) -> None
+    """Generate requirements file."""
+    args = ['--format requirements.txt', f"--output {output}"]
+    if dev:
+        args.append('--dev')
+    if extras is not None:
+        args.append(f"--extras {','.join(extras)}")
+    ctx.run(f"poetry export {' '.join(args)}")
+
+
+# XXX: use `python -m build` instead
 @task
 def build(ctx, kind=None):  # type: (Context, Optional[bool]) -> None
     """Build wheel package."""
